@@ -450,8 +450,12 @@ exports.registerApi = (env) => {
   });
 
   app.delete(`${exports.pathPrefix}/tags`, ensureAuthenticated, ensurePathExists, (req, res) => {
-    jsonResultOrFailProm(res, gitPromise(['tag', '-d', req.query.name.trim()], req.query.path))
-      .finally(emitGitDirectoryChanged.bind(null, req.query.path));
+    let pathToRepo = req.query.path;
+    let tagName = req.query.name.trim();
+    nodegit.Repository.open(pathToRepo).then(function(repo) {
+      jsonResultOrFailProm(res, nodegit.Tag.delete(repo, tagName))
+        .finally(emitGitDirectoryChanged.bind(null, req.query.path));
+    });
   });
 
   app.delete(`${exports.pathPrefix}/remote/tags`, ensureAuthenticated, ensurePathExists, (req, res) => {
