@@ -507,7 +507,11 @@ exports.registerApi = (env) => {
   });
 
   app.delete(`${exports.pathPrefix}/remotes/:name`, ensureAuthenticated, ensurePathExists, (req, res) => {
-    jsonResultOrFailProm(res, gitPromise(['remote', 'remove', req.params.name], req.query.path));
+    let name = req.params.name;
+    let pathToRepo = req.body.path
+    nodegit.Repository.open(pathToRepo).then(function(repo) {
+      jsonResultOrFailProm(res, nodegit.Remote.delete(repo, name));
+    });
   });
 
   app.post(`${exports.pathPrefix}/merge`, ensureAuthenticated, ensurePathExists, (req, res) => {
