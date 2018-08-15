@@ -423,9 +423,10 @@ exports.registerApi = (env) => {
   });
 
   app.get(`${exports.pathPrefix}/tags`, ensureAuthenticated, ensurePathExists, (req, res) => {
-    const task = gitPromise(['tag', '-l'], req.query.path)
-      .then(gitParser.parseGitTags);
-    jsonResultOrFailProm(res, task);
+    let pathToRepo = req.query.path;
+    nodegit.Repository.open(pathToRepo).then(function(repo) {
+      jsonResultOrFailProm(res, nodegit.Tag.list(repo));
+    });
   });
 
   app.get(`${exports.pathPrefix}/remote/tags`, ensureAuthenticated, ensurePathExists, ensureValidSocketId, (req, res) => {
