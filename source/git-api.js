@@ -482,7 +482,10 @@ exports.registerApi = (env) => {
   });
 
   app.get(`${exports.pathPrefix}/remotes`, ensureAuthenticated, ensurePathExists, (req, res) => {
-    jsonResultOrFailProm(res, gitPromise(['remote'], req.query.path).then(gitParser.parseGitRemotes));
+    let pathToRepo = req.query.path;
+    nodegit.Repository.open(pathToRepo).then(function(repo) {
+      jsonResultOrFailProm(res, nodegit.Remote.list(repo));
+    });
   });
 
   app.get(`${exports.pathPrefix}/remotes/:name`, ensureAuthenticated, ensurePathExists, (req, res) => {
