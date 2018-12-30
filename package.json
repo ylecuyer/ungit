@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node ./bin/ungit",
     "test": "grunt test",
-    "build": "grunt",
+    "build": "webpack",
     "watch": "grunt watch"
   },
   "repository": {
@@ -90,7 +90,9 @@
     "istanbul": "~0.4.5",
     "mocha": "~5.2.0",
     "nightmare": "~3.0.1",
-    "supertest": "~3.3.0"
+    "supertest": "~3.3.0",
+    "webpack": "^4.28.3",
+    "webpack-cli": "^3.1.2"
   },
   "engines": {
     "node": ">=0.10"
