@@ -1,6 +1,6 @@
 
 const ko = require('knockout');
-const components = require('ungit-components');
+const components = require('../../public/source/components');
 
 components.register('imagediff', args => new ImageDiffViewModel(args));
 

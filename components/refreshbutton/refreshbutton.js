@@ -1,7 +1,7 @@
 
 const ko = require('knockout');
-const components = require('ungit-components');
-const programEvents = require('ungit-program-events');
+const components = require('../../public/source/components');
+const programEvents = require('../../public/source/program-events');
 
 components.register('refreshbutton', () => new RefreshButton());
 

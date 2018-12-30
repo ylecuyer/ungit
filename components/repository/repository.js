@@ -1,8 +1,8 @@
 
 const ko = require('knockout');
-const components = require('ungit-components');
+const components = require('../../public/source/components');
 const _ = require('lodash');
-const programEvents = require('ungit-program-events');
+const programEvents = require('../../public/source/program-events');
 
 components.register('repository', args => new RepositoryViewModel(args.server, args.path));
 

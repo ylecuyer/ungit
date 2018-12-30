@@ -1,8 +1,8 @@
 const ko = require('knockout');
 const md5 = require('blueimp-md5');
 const Selectable = require('./selectable');
-const programEvents = require('ungit-program-events');
-const components = require('ungit-components');
+const programEvents = require('../../public/source/program-events');
+const components = require('../../public/source/components');
 const promise = require('bluebird');
 
 class RefViewModel extends Selectable {

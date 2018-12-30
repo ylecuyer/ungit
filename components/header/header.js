@@ -1,8 +1,8 @@
 
 const ko = require('knockout');
-const components = require('ungit-components');
-const navigation = require('ungit-navigation');
-const programEvents = require('ungit-program-events');
+const components = require('../../public/source/components');
+const navigation = require('../../public/source/navigation');
+const programEvents = require('../../public/source/program-events');
 
 components.register('header', args => new HeaderViewModel(args.app));
 

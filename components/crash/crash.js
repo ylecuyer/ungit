@@ -1,5 +1,5 @@
 const ko = require('knockout');
-const components = require('ungit-components');
+const components = require('../../public/source/components');
 
 components.register('crash', (err) => new CrashViewModel(err));
 
