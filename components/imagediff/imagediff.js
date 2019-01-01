@@ -2,6 +2,8 @@
 const ko = require('knockout');
 const components = require('../../public/source/components');
 
+require('./imagediff.less');
+
 components.register('imagediff', args => new ImageDiffViewModel(args));
 
 class ImageDiffViewModel {

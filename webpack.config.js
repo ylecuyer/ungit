@@ -14,6 +14,12 @@ configurations = [
     },
     externals: {
       knockout: 'ko'
+    },
+    module: {
+      rules: [{
+        test: /\.(css|less)$/,
+        use: ['style-loader', { loader: 'css-loader',  options: { url: false } }, 'less-loader']
+      }]
     }
   }
 ]
@@ -28,6 +34,12 @@ fs.readdirSync('components').forEach((component) => {
     },
     externals: {
       knockout: 'ko'
+    },
+    module: {
+      rules: [{
+        test: /\.less$/,
+        use: ['style-loader', { loader: 'css-loader', options: { url: false } }, 'less-loader']
+      }]
     }
   })
 })

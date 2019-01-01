@@ -8,6 +8,8 @@ const showBranch = 'showBranch';
 const showTag = 'showTag';
 const Bluebird = require('bluebird');
 
+require('./branches.less');
+
 components.register('branches', (args) => {
   return new BranchesViewModel(args.server, args.graph, args.repoPath);
 });

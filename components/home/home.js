@@ -2,6 +2,8 @@
 const ko = require('knockout');
 const components = require('../../public/source/components');
 
+require('./home.less');
+
 components.register('home', args => new HomeViewModel(args.app));
 
 class HomeRepositoryViewModel {

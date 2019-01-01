@@ -8,6 +8,8 @@ var moment = require('moment');
 var EdgeViewModel = require('./edge');
 var numberOfNodesPerLoad = ungit.config.numberOfNodesPerLoad;
 
+require('./graph.less');
+
 components.register('graph', function(args) {
   return new GraphViewModel(args.server, args.repoPath);
 });

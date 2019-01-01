@@ -4,6 +4,8 @@ const components = require('../../public/source/components');
 const navigation = require('../../public/source/navigation');
 const programEvents = require('../../public/source/program-events');
 
+require('./header.less');
+
 components.register('header', args => new HeaderViewModel(args.app));
 
 class HeaderViewModel {

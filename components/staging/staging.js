@@ -10,6 +10,8 @@ var filesToDisplayLimit = filesToDisplayIncrmentBy;
 var muteGraceTimeDuration = 60 * 1000 * 5;
 var mergeTool = ungit.config.mergeTool;
 
+require('./staging.less')
+
 components.register('staging', function(args) {
   return new StagingViewModel(args.server, args.repoPath, args.graph);
 });

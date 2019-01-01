@@ -3,6 +3,8 @@ const ko = require('knockout');
 const components = require('../../public/source/components');
 const programEvents = require('../../public/source/program-events');
 
+require('./refreshbutton.less');
+
 components.register('refreshbutton', () => new RefreshButton());
 
 class RefreshButton {

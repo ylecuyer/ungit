@@ -6,6 +6,8 @@ const programEvents = require('../../public/source/program-events');
 const md5 = require('blueimp-md5');
 const moment = require('moment');
 
+require('./commit.less')
+
 components.register('commit', args => new CommitViewModel(args));
 
 class CommitViewModel {

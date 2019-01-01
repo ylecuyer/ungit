@@ -16,6 +16,10 @@ var navigation = require('./navigation');
 var storage = require('./storage');
 var adBlocker = require('just-detect-adblock');
 
+require('../less/styles.less');
+require('../vendor/css/animate.css');
+require('../less/d2h.less');
+
 // Request animation frame polyfill
 (function() {
   var lastTime = 0;

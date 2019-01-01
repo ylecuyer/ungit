@@ -4,6 +4,8 @@ const moment = require('moment');
 const components = require('../../public/source/components');
 const storage = require('../../public/source/storage');
 
+require('./stash.less');
+
 components.register('stash', args => new StashViewModel(args.server, args.repoPath));
 
 class StashItemViewModel {

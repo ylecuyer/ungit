@@ -4,6 +4,8 @@ const components = require('../../public/source/components');
 const _ = require('lodash');
 const programEvents = require('../../public/source/program-events');
 
+require('./repository.less')
+
 components.register('repository', args => new RepositoryViewModel(args.server, args.path));
 
 class RepositoryViewModel {
