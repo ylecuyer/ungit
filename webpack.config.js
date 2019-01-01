@@ -2,20 +2,6 @@ const path = require('path');
 const fs = require('fs');
 
 configurations = [
-  {
-    mode: 'development',
-    entry: {
-      ungit: './public/source/main.js'
-    },
-    output: {
-      filename: "[name].js",
-      path: path.resolve('./public/js')
-    },
-    externals: {
-      knockout: 'ko'
-    }
-  }
-  ,
   { 
     mode: 'development',
     entry: {
