@@ -303,7 +303,7 @@ eval("var programEvents = __webpack_require__(/*! ./program-events */ \"./public
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("\nvar signals = __webpack_require__(/*! signals */ \"./node_modules/signals/dist/signals.js\");\n\nvar programEvents = new signals.Signal();\nmodule.exports = programEvents;\n\nprogramEvents.add(function(event) {\n  console.log('Event:', event);\n});\n\n\n//# sourceURL=webpack://Ungit/./public/source/program-events.js?");
+eval("var signals = __webpack_require__(/*! signals */ \"./node_modules/signals/dist/signals.js\");\n\nif (window.programEvents) {\n  console.log('ProgramEvents already defined')\n}\nelse {\n  window.programEvents = new signals.Signal();\n\n  window.programEvents.add(function(event) {\n    console.log('Event:', event);\n  });\n}\n\nmodule.exports = window.programEvents;\n\n\n\n//# sourceURL=webpack://Ungit/./public/source/program-events.js?");
 
 /***/ }),
 
