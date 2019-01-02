@@ -16,10 +16,16 @@ configurations = [
       knockout: 'ko'
     },
     module: {
-      rules: [{
-        test: /\.(css|less)$/,
-        use: ['style-loader', { loader: 'css-loader',  options: { url: false } }, 'less-loader']
-      }]
+      rules: [
+        {
+          test: /\.(css|less)$/,
+          use: ['style-loader', { loader: 'css-loader',  options: { url: false } }, 'less-loader']
+        },
+        {
+          test: /\.html$/,
+          use: [{ loader: 'file-loader', options: { name: '[name].[ext]' } }]
+        }
+      ]
     }
   }
 ]
@@ -30,7 +36,7 @@ fs.readdirSync('./client/src/components').forEach((component) => {
     entry: `./client/src/components/${component}/${component}.js`,
     output: {
       filename: `${component}.bundle.js`,
-      path: path.resolve('./client/dist/components/', component)
+      path: path.resolve('./client/dist/plugins/', component)
     },
     externals: {
       knockout: 'ko'

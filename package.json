@@ -8,6 +8,7 @@
     "start": "node ./bin/ungit",
     "test": "grunt test",
     "build": "webpack",
+    "clean": "rm -rf ./client/dist",
     "watch": "grunt watch"
   },
   "repository": {
@@ -74,6 +75,7 @@
     "electron-packager": "~12.1.2",
     "expect.js": "~0.3.1",
     "extract-zip": "~1.6.7",
+    "file-loader": "^3.0.1",
     "grunt": "1.0.3",
     "grunt-babel": "~7.0.0",
     "grunt-contrib-clean": "~2.0.0",
