@@ -57,7 +57,7 @@ class UngitPlugin {
     }).then((result) => {
       if (exports.javascript) {
         return result + assureArray(exports.javascript).map(filename => {
-          return `<script type="text/javascript" src="${config.rootPath}/plugins/${this.name}/${filename}"></script>`;
+          return `<script type="text/javascript" src="${config.rootPath}/dist/plugins/${this.name}/${filename}"></script>`;
         }).join('\n');
       } else {
         return result;
@@ -77,7 +77,7 @@ class UngitPlugin {
     }).then((result) => {
       if (exports.css) {
         return result + assureArray(exports.css).map((cssSource) => {
-          return `<link rel="stylesheet" type="text/css" href="${config.rootPath}/plugins/${this.name}/${cssSource}" />`;
+          return `<link rel="stylesheet" type="text/css" href="${config.rootPath}/dist/plugins/${this.name}/${cssSource}" />`;
         }).join('\n');
       } else {
         return result;

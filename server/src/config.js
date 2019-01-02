@@ -290,7 +290,7 @@ try {
   throw e;
 }
 
-module.exports.ungitPackageVersion = require('../package.json').version;
+module.exports.ungitPackageVersion = require('../../package.json').version;
 
 if (fs.existsSync(path.join(__dirname, '..', '.git'))){
   const revision = child_process.execSync('git rev-parse --short HEAD', { cwd: path.join(__dirname, '..') })

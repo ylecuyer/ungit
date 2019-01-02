@@ -172,7 +172,7 @@ if (config.authentication) {
 
 const indexHtmlCacheKey = cache.registerFunc(() => {
   return cache.resolveFunc(pluginsCacheKey).then((plugins) => {
-    return fs.readFileAsync(__dirname + '/../client/dist/index.html').then((data) => {
+    return fs.readFileAsync(__dirname + '/../../client/index.html').then((data) => {
       return Bluebird.all(Object.keys(plugins).map((pluginName) => {
         return plugins[pluginName].compile();
       })).then((results) => {
@@ -195,7 +195,7 @@ app.get('/', (req, res) => {
   });
 });
 
-app.use(serveStatic(__dirname + '/../client/dist/'));
+app.use(serveStatic(__dirname + '/../../client/'));
 
 // Socket-IO
 const socketIO = require('socket.io');
@@ -256,7 +256,7 @@ const loadPlugins = (plugins, pluginBasePath) => {
 }
 const pluginsCacheKey = cache.registerFunc(() => {
   const plugins = [];
-  loadPlugins(plugins, path.join(__dirname, '..', 'components'));
+  loadPlugins(plugins, path.join(__dirname, '../../client/src', 'components'));
   if (fs.existsSync(config.pluginDirectory)) {
     loadPlugins(plugins, config.pluginDirectory);
   }
@@ -270,7 +270,7 @@ app.get('/serverdata.js', (req, res) => {
         `ungit.userHash = "${hash}";\n` +
         `ungit.version = "${config.ungitDevVersion}";\n` +
         `ungit.platform = "${os.platform()}"\n` +
-        `ungit.pluginApiVersion = "${require('../package.json').ungitPluginApiVersion}"\n`;
+        `ungit.pluginApiVersion = "${require('../../package.json').ungitPluginApiVersion}"\n`;
       res.send(text);
     });
 });
