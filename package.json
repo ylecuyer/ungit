@@ -6,12 +6,12 @@
   "ungitPluginApiVersion": "0.2.0",
   "scripts": {
     "start": "node ./server/bin/ungit",
-    "test": "grunt test",
+    "test": "npm run unittest && npm run clicktest",
     "build": "webpack",
     "clean": "rm -rf ./client/dist",
     "watch": "grunt watch",
     "unittest": "cd server && mocha --reporter dot --require ./test/spec.helper.js test/*.js",
-    "clicktest": "cd server && mocha --reporter dot --bail --timeout 15000 --require ./test/spec.helper.js nmclicktests/*.js"
+    "clicktest": "cd server && mocha --reporter dot --timeout 30000 --require ./test/spec.helper.js nmclicktests/*.js"
   },
   "repository": {
     "type": "git",
