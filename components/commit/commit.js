@@ -1,10 +1,12 @@
 
 const ko = require('knockout');
-const components = require('ungit-components');
-const navigation = require('ungit-navigation');
-const programEvents = require('ungit-program-events');
+const components = require('../../public/source/components');
+const navigation = require('../../public/source/navigation');
+const programEvents = require('../../public/source/program-events');
 const md5 = require('blueimp-md5');
 const moment = require('moment');
+
+require('./commit.less')
 
 components.register('commit', args => new CommitViewModel(args));
 

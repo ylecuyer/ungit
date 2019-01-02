@@ -1,9 +1,15 @@
-
 var signals = require('signals');
 
-var programEvents = new signals.Signal();
-module.exports = programEvents;
+if (window.programEvents) {
+  console.log('ProgramEvents already defined')
+}
+else {
+  window.programEvents = new signals.Signal();
 
-programEvents.add(function(event) {
-  console.log('Event:', event);
-});
+  window.programEvents.add(function(event) {
+    console.log('Event:', event);
+  });
+}
+
+module.exports = window.programEvents;
+

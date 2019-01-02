@@ -1,9 +1,9 @@
 
 const ko = require('knockout');
-const components = require('ungit-components');
-const addressParser = require('ungit-address-parser');
-const navigation = require('ungit-navigation');
-const programEvents = require('ungit-program-events');
+const components = require('../../public/source/components');
+const addressParser = require('../../source/address-parser');
+const navigation = require('../../public/source/navigation');
+const programEvents = require('../../public/source/program-events');
 
 components.register('path', (args) => {
   return new PathViewModel(args.server, args.path);

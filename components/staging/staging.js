@@ -1,7 +1,7 @@
 var ko = require('knockout');
 var inherits = require('util').inherits;
-var components = require('ungit-components');
-var programEvents = require('ungit-program-events');
+var components = require('../../public/source/components');
+var programEvents = require('../../public/source/program-events');
 var _ = require('lodash');
 var Promise = require("bluebird");
 var filesToDisplayIncrmentBy = 50;
@@ -9,6 +9,8 @@ var filesToDisplayLimit = filesToDisplayIncrmentBy;
 // when discard button is clicked and disable discard warning is selected, for next 5 minutes disable discard warnings
 var muteGraceTimeDuration = 60 * 1000 * 5;
 var mergeTool = ungit.config.mergeTool;
+
+require('./staging.less')
 
 components.register('staging', function(args) {
   return new StagingViewModel(args.server, args.repoPath, args.graph);

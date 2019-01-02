@@ -1,8 +1,10 @@
 
 const ko = require('knockout');
 const moment = require('moment');
-const components = require('ungit-components');
-const storage = require('ungit-storage');
+const components = require('../../public/source/components');
+const storage = require('../../public/source/storage');
+
+require('./stash.less');
 
 components.register('stash', args => new StashViewModel(args.server, args.repoPath));
 

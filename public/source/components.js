@@ -1,16 +1,12 @@
+window.components = window.components || {};
+window.components.registered = window.components.registered || {};
 
-
-var components = {};
-module.exports = components;
-
-components.registered = {};
-
-components.register = function(name, creator) {
-  components.registered[name] = creator;
+exports.register = function(name, creator) {
+  window.components.registered[name] = creator;
 }
 
-components.create = function(name, args) {
-  var componentConstructor = components.registered[name];
+exports.create = function(name, args) {
+  var componentConstructor = window.components.registered[name];
   if (!componentConstructor) throw new Error('No component found: ' + name);
   return componentConstructor(args);
 }

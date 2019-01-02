@@ -1,6 +1,8 @@
 const ko = require('knockout');
 const CommitLineDiff = require('./commitlinediff.js').CommitLineDiff;
-const components = require('ungit-components');
+const components = require('../../public/source/components');
+
+require('./commitdiff.less');
 
 components.register('commitDiff', args => new CommitDiff(args));
 

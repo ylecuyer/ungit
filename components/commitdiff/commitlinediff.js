@@ -1,7 +1,7 @@
 const ko = require('knockout');
-const components = require('ungit-components');
+const components = require('../../public/source/components');
 const inherits = require('util').inherits;
-const programEvents = require('ungit-program-events');
+const programEvents = require('../../public/source/program-events');
 
 class CommitLineDiff {
   constructor(args, fileLineDiff) {

@@ -1,8 +1,8 @@
 
 const ko = require('knockout');
-const components = require('ungit-components');
-const programEvents = require('ungit-program-events');
-const navigation = require('ungit-navigation');
+const components = require('../../public/source/components');
+const programEvents = require('../../public/source/program-events');
+const navigation = require('../../public/source/navigation');
 
 components.register('gitErrors', args => new GitErrorsViewModel(args.server, args.repoPath));
 

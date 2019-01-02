@@ -1,12 +1,14 @@
 const ko = require('knockout');
 const _ = require('lodash');
-const components = require('ungit-components');
-const programEvents = require('ungit-program-events');
-const storage = require('ungit-storage');
+const components = require('../../public/source/components');
+const programEvents = require('../../public/source/program-events');
+const storage = require('../../public/source/storage');
 const showRemote = 'showRemote';
 const showBranch = 'showBranch';
 const showTag = 'showTag';
 const Bluebird = require('bluebird');
+
+require('./branches.less');
 
 components.register('branches', (args) => {
   return new BranchesViewModel(args.server, args.graph, args.repoPath);

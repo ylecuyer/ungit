@@ -1,6 +1,6 @@
 
 const ko = require('knockout');
-const components = require('ungit-components');
+const components = require('../../public/source/components');
 const signals = require('signals');
 
 components.register('login', args => new LoginViewModel(args.server));

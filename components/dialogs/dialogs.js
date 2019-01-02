@@ -1,9 +1,9 @@
 
 const ko = require('knockout');
 const inherits = require('util').inherits;
-const components = require('ungit-components');
+const components = require('../../public/source/components');
 const Bluebird = require('bluebird');
-const programEvents = require('ungit-program-events');
+const programEvents = require('../../public/source/program-events');
 
 components.register('formdialog', args => new FormDialogViewModel(args.title));
 components.register('credentialsdialog', args => new CredentialsDialogViewModel({remote: args.remote}));

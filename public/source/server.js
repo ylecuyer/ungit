@@ -1,6 +1,6 @@
 
 var signals = require('signals');
-var programEvents = require('ungit-program-events');
+var programEvents = require('./program-events');
 var _ = require('lodash');
 var Promise = require("bluebird");
 var rootPath = ungit.config && ungit.config.rootPath || '';

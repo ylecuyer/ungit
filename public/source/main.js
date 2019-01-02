@@ -9,12 +9,16 @@ require('../vendor/js/bootstrap/dropdown');
 require('../vendor/js/bootstrap/tooltip');
 require('jquery-ui-bundle');
 require('./knockout-bindings');
-var components = require('ungit-components');
+var components = require('./components');
 var Server = require('./server');
-var programEvents = require('ungit-program-events');
-var navigation = require('ungit-navigation');
-var storage = require('ungit-storage');
+var programEvents = require('./program-events');
+var navigation = require('./navigation');
+var storage = require('./storage');
 var adBlocker = require('just-detect-adblock');
+
+require('../less/styles.less');
+require('../vendor/css/animate.css');
+require('../less/d2h.less');
 
 // Request animation frame polyfill
 (function() {

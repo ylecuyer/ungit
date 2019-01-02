@@ -1,7 +1,7 @@
 const ko = require('knockout');
 const Selectable = require('./selectable');
 
-require('mina');
+require('../../node_modules/snapsvg/src/mina.js')
 
 class Animateable extends Selectable {
   constructor(graph) {
