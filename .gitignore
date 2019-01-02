@@ -40,3 +40,5 @@ report/
 coverage
 
 /src
+
+client/dist

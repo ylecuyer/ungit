@@ -172,7 +172,7 @@ if (config.authentication) {
 
 const indexHtmlCacheKey = cache.registerFunc(() => {
   return cache.resolveFunc(pluginsCacheKey).then((plugins) => {
-    return fs.readFileAsync(__dirname + '/../public/index.html').then((data) => {
+    return fs.readFileAsync(__dirname + '/../client/dist/index.html').then((data) => {
       return Bluebird.all(Object.keys(plugins).map((pluginName) => {
         return plugins[pluginName].compile();
       })).then((results) => {
@@ -195,7 +195,7 @@ app.get('/', (req, res) => {
   });
 });
 
-app.use(serveStatic(__dirname + '/../public'));
+app.use(serveStatic(__dirname + '/../client/dist/'));
 
 // Socket-IO
 const socketIO = require('socket.io');

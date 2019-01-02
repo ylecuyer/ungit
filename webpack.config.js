@@ -9,7 +9,7 @@ configurations = [
     },
     output: {
       filename: "ungit-web.js",
-      path: path.resolve('./public/js'),
+      path: path.resolve('./client/dist'),
       library: 'Ungit'
     },
     externals: {
@@ -30,7 +30,7 @@ fs.readdirSync('components').forEach((component) => {
     entry: `./components/${component}/${component}.js`,
     output: {
       filename: `${component}.bundle.js`,
-      path: path.resolve('./components/', component)
+      path: path.resolve('./client/dist/components/', component)
     },
     externals: {
       knockout: 'ko'
