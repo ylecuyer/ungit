@@ -5,7 +5,7 @@ configurations = [
   { 
     mode: 'development',
     entry: {
-      ungit: './public/source/main.js'
+      ungit: './client/src/main.js'
     },
     output: {
       filename: "ungit-web.js",
@@ -24,10 +24,10 @@ configurations = [
   }
 ]
 
-fs.readdirSync('components').forEach((component) => {
+fs.readdirSync('./client/src/components').forEach((component) => {
   configurations.push({
     mode: 'development',
-    entry: `./components/${component}/${component}.js`,
+    entry: `./client/src/components/${component}/${component}.js`,
     output: {
       filename: `${component}.bundle.js`,
       path: path.resolve('./client/dist/components/', component)

@@ -1,10 +1,10 @@
 
 const ko = require('knockout');
 const inherits = require('util').inherits;
-const components = require('../../public/source/components');
+const components = require('../../components');
 const RefViewModel = require('./git-ref.js');
 const HoverActions = require('./hover-actions');
-const programEvents = require('../../public/source/program-events');
+const programEvents = require('../../program-events');
 const RebaseViewModel = HoverActions.RebaseViewModel;
 const MergeViewModel = HoverActions.MergeViewModel;
 const ResetViewModel = HoverActions.ResetViewModel;

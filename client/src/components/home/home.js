@@ -1,6 +1,6 @@
 
 const ko = require('knockout');
-const components = require('../../public/source/components');
+const components = require('../../components');
 
 require('./home.less');
 

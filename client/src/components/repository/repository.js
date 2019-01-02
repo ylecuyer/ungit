@@ -1,8 +1,8 @@
 
 const ko = require('knockout');
-const components = require('../../public/source/components');
+const components = require('../../components');
 const _ = require('lodash');
-const programEvents = require('../../public/source/program-events');
+const programEvents = require('../../program-events');
 
 require('./repository.less')
 

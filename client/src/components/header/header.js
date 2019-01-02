@@ -1,8 +1,8 @@
 
 const ko = require('knockout');
-const components = require('../../public/source/components');
-const navigation = require('../../public/source/navigation');
-const programEvents = require('../../public/source/program-events');
+const components = require('../../components');
+const navigation = require('../../navigation');
+const programEvents = require('../../program-events');
 
 require('./header.less');
 

@@ -1,9 +1,9 @@
 
 const ko = require('knockout');
-const components = require('../../public/source/components');
-const addressParser = require('../../source/address-parser');
-const navigation = require('../../public/source/navigation');
-const programEvents = require('../../public/source/program-events');
+const components = require('../../components');
+const addressParser = require('../../address-parser');
+const navigation = require('../../navigation');
+const programEvents = require('../../program-events');
 
 components.register('path', (args) => {
   return new PathViewModel(args.server, args.path);

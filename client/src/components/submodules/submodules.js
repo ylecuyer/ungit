@@ -1,7 +1,7 @@
 
 const ko = require('knockout');
-const components = require('../../public/source/components');
-const programEvents = require('../../public/source/program-events');
+const components = require('../../components');
+const programEvents = require('../../program-events');
 
 components.register('submodules', args => new SubmodulesViewModel(args.server, args.repoPath));
 

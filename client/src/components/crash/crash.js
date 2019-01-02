@@ -1,5 +1,5 @@
 const ko = require('knockout');
-const components = require('../../public/source/components');
+const components = require('../../components');
 
 components.register('crash', (err) => new CrashViewModel(err));
 

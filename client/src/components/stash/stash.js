@@ -1,8 +1,8 @@
 
 const ko = require('knockout');
 const moment = require('moment');
-const components = require('../../public/source/components');
-const storage = require('../../public/source/storage');
+const components = require('../../components');
+const storage = require('../../storage');
 
 require('./stash.less');
 

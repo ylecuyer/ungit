@@ -1,8 +1,8 @@
 
 const ko = require('knockout');
-const components = require('../../public/source/components');
+const components = require('../../components');
 const diff2html = require('diff2html').Diff2Html;
-const programEvents = require('../../public/source/program-events');
+const programEvents = require('../../program-events');
 const promise = require("bluebird");
 const sideBySideDiff = 'sidebysidediff';
 const textDiff = 'textdiff';

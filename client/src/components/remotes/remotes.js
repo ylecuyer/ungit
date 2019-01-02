@@ -1,8 +1,8 @@
 
 const ko = require('knockout');
 const _ = require('lodash');
-const components = require('../../public/source/components');
-const programEvents = require('../../public/source/program-events');
+const components = require('../../components');
+const programEvents = require('../../program-events');
 const promise = require('bluebird');
 
 components.register('remotes', args => new RemotesViewModel(args.server, args.repoPath));

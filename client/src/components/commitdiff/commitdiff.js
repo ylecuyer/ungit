@@ -1,6 +1,6 @@
 const ko = require('knockout');
 const CommitLineDiff = require('./commitlinediff.js').CommitLineDiff;
-const components = require('../../public/source/components');
+const components = require('../../components');
 
 require('./commitdiff.less');
 

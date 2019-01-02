@@ -1,9 +1,9 @@
 const $ = require('jquery');
 const ko = require('knockout');
-const components = require('../../public/source/components');
+const components = require('../../components');
 const Selectable = require('./selectable');
 const Animateable = require('./animateable');
-const programEvents = require('../../public/source/program-events');
+const programEvents = require('../../program-events');
 const GraphActions = require('./git-graph-actions');
 
 const maxBranchesToDisplay = parseInt(ungit.config.numRefsToShow / 5 * 3);  // 3/5 of refs to show to branches
