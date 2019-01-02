@@ -5,7 +5,7 @@
   "version": "1.4.36",
   "ungitPluginApiVersion": "0.2.0",
   "scripts": {
-    "start": "node ./bin/ungit",
+    "start": "node ./server/bin/ungit",
     "test": "grunt test",
     "build": "webpack",
     "clean": "rm -rf ./client/dist",
