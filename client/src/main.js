@@ -16,8 +16,6 @@ var navigation = require('./navigation');
 var storage = require('./storage');
 var adBlocker = require('just-detect-adblock');
 
-require('./index.html');
-
 require('./less/styles.less');
 require('./vendor/css/animate.css');
 require('./less/d2h.less');

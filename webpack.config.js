@@ -20,10 +20,6 @@ configurations = [
         {
           test: /\.(css|less)$/,
           use: ['style-loader', { loader: 'css-loader',  options: { url: false } }, 'less-loader']
-        },
-        {
-          test: /\.html$/,
-          use: [{ loader: 'file-loader', options: { name: '[name].[ext]' } }]
         }
       ]
     }

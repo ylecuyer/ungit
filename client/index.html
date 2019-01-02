@@ -3,12 +3,11 @@
 <head>
 	<meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0 ">
-	<link rel="stylesheet" type="text/css" href="__ROOT_PATH__/css/styles.css" />
-  <link rel="stylesheet" type="text/css" href="__ROOT_PATH__/css/nprogress.css" />
-  <link rel="stylesheet" type="text/css" href="__ROOT_PATH__/css/jquery-ui.min.css" />
 	<link rel="shortcut icon" href="__ROOT_PATH__/favicon.ico" >
   <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0-rc2/knockout-debug.js" integrity="sha256-I23XWOWIXmwmfO9yUm4m44weu+1xbLybrlPjufhy0tI=" crossorigin="anonymous"></script>
   <link rel="shortcut icon" href="/images/icon.png" >
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha256-rByPlHULObEjJ6XQxW/flG2r+22R5dKiAoef+aXWfik=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" integrity="sha256-pMhcV6/TBDtqH9E9PWKgS+P32PVguLG8IipkPyqMtfY=" crossorigin="anonymous" />
 	<title>ungit</title>
 </head>
 <body>
@@ -17,7 +16,7 @@
 
 <script type="text/javascript">ungit = {}</script>
 <script type="text/javascript" src="__ROOT_PATH__/serverdata.js"></script>
-<script type="text/javascript" src="__ROOT_PATH__/js/raven.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raven.js/3.26.2/raven.min.js" integrity="sha256-SwNT3bdv1zGK2V0mAEIMIdSEhIR+HbhYHLMkmR6U7D8=" crossorigin="anonymous"></script>
 <script type="text/javascript">
 	console.log('App version: ' + ungit.version);
 	if (ungit.config.bugtracking) {
@@ -44,7 +43,7 @@
   }
 </script>
 <script type="text/javascript" src="__ROOT_PATH__/socket.io/socket.io.js"></script>
-<script type="text/javascript" src="__ROOT_PATH__/ungit-web.js"></script>
+<script type="text/javascript" src="__ROOT_PATH__/dist/ungit-web.js"></script>
 
 <!-- ungit-plugins-placeholder -->
 
