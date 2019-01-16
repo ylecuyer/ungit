@@ -43,6 +43,7 @@
     "mkdirp": "~0.5.1",
     "moment": "~2.22.2",
     "node-cache": "~4.2.0",
+    "nodemon": "^1.18.9",
     "npm": "6.4.1",
     "npm-registry-client": "~8.6.0",
     "nprogress": "^0.2.0",

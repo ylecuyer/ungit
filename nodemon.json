@@ -1,0 +1,6 @@
+{
+  "watch": [
+    "bin/ungit.js",
+    "source"
+  ]
+}
