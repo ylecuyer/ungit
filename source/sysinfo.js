@@ -8,9 +8,17 @@ const winston = require('winston');
 
 exports.getUngitLatestVersion = () => latestVersion('ungit');
 
+function md5(string) {
+  return crypto.createHash('md5').update(string).digest('hex');
+}
+
 exports.getUserHash = async () => {
-  mac = await getMac()
-  return crypto.createHash('md5').update(mac).digest('hex');
+  const mac = await getMac()
+  try {
+    return md5(mac);
+  } catch (e) {
+    return md5('abcde');
+  }
 };
 
 exports.getGitVersionInfo = () => {
