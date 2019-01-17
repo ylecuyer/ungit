@@ -37,6 +37,7 @@
     "just-detect-adblock": "~1.0.0",
     "keen.io": "~0.1.5",
     "knockout": "~3.5.0-rc2",
+    "latest-version": "^4.0.0",
     "locks": "~0.2.2",
     "lodash": "~4.17.11",
     "memorystore": "~1.6.0",

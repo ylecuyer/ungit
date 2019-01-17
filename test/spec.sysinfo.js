@@ -1,5 +1,5 @@
 const expect = require('expect.js');
-const sysinfo = require('../src/sysinfo.js');
+const sysinfo = require('../source/sysinfo.js');
 
 describe('sysinfo', () => {
   describe('getUngitLatestVersion', () => {
@@ -20,13 +20,11 @@ describe('sysinfo', () => {
 
   describe('getGitVersionInfo', () => {
     it('returns the git version', () => {
-      sysinfo.getGitVersionInfo().then((version) => {
-        expect(version).to.eql({
-          requiredVersion: '>=1.8.x',
-          version: '2.14.1',
-          satisfied: true,
-        });
-      })
+      expect(sysinfo.getGitVersionInfo()).to.eql({
+        requiredVersion: '>=1.8.x',
+        version: '2.14.1',
+        satisfied: true,
+      });
     });
   });
 })
