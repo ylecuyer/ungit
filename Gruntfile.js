@@ -24,10 +24,11 @@ module.exports = (grunt) => {
     },
     watch: {
       scripts: {
-        files: ['public/source/**/*.js', 'source/**/*.js', 'components/**/*.js'],
+        files: ['public/source/**/*.js', 'components/**/*.js'],
         tasks: ['browserify-common', 'browserify-components', 'babel:prod'],
         options: {
           spawn: false,
+          livereload: true
         },
       },
       less: {
@@ -35,6 +36,7 @@ module.exports = (grunt) => {
         tasks: ['less:production'],
         options: {
           spawn: false,
+          livereload: true
         },
       }
     },
