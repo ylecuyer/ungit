@@ -2,13 +2,8 @@ const latestVersion = require('latest-version');
 const util = require('util');
 const getMac = util.promisify(require('getmac').getMac);
 const crypto = require('crypto');
-
-const md5 = require('blueimp-md5');
 const semver = require('semver');
-const npm = require('npm');
-const RegClient = require('npm-registry-client');
 const config = require('./config');
-const Bluebird = require('bluebird');
 const winston = require('winston');
 
 exports.getUngitLatestVersion = () => latestVersion('ungit');
