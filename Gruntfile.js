@@ -149,7 +149,7 @@ module.exports = (grunt) => {
         options: {
           node: true
         },
-        src: ['source/**/*.js']
+        src: ['source/**/*.js', '!source/sysinfo.js']
       },
       bin: {
         options: {
@@ -176,7 +176,8 @@ module.exports = (grunt) => {
         },
         src: [
           'test/**/*.js',
-          'nmclicktests/**/*.js'
+          'nmclicktests/**/*.js',
+          '!test/spec.sysinfo.js'
         ]
       }
     },
