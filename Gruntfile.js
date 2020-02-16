@@ -6,7 +6,7 @@ const electronPackager = require('electron-packager');
 const path = require('path');
 const pkgVersions = require('pkg-versions');
 const semver = require('semver');
-const fs = require('./source/utils/fs-async');
+const fs = require('./back/utils/fs-async');
 const maxConcurrency = 5;
 
 module.exports = (grunt) => {
@@ -14,7 +14,7 @@ module.exports = (grunt) => {
   const lessFiles = {
     'public/css/styles.css': ['public/less/styles.less', 'public/vendor/css/animate.css', 'public/less/d2h.less']
   };
-  fs.readdirSync('./front/components').map((component) => `components/${component}/${component}`)
+  fs.readdirSync('./front/components').map((component) => `front/components/${component}/${component}`)
     .forEach((str) => lessFiles[`${str}.css`] = `${str}.less`);
 
   grunt.initConfig({
@@ -240,7 +240,7 @@ module.exports = (grunt) => {
     b.require('./public/source/navigation.js', { expose: 'ungit-navigation' });
     b.require('./public/source/storage.js', { expose: 'ungit-storage' });
     b.require('./public/source/main.js', { expose: 'ungit-main' });
-    b.require('./source/address-parser.js', { expose: 'ungit-address-parser' });
+    b.require('./back/address-parser.js', { expose: 'ungit-address-parser' });
     b.require('knockout', { expose: 'knockout' });
     b.require('lodash', { expose: 'lodash' });
     b.require('hasher', { expose: 'hasher' });

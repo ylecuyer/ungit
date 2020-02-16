@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 const startLaunchTime = Date.now();
-const config = require('../source/config');
+const config = require('../back/config');
 const open = require('open');
 const path = require('path');
 const child_process = require('child_process');
 
-const BugTracker = require('../source/bugtracker');
+const BugTracker = require('../back/bugtracker');
 const bugtracker = new BugTracker('launcher');
 const Bluebird = require('bluebird');
 // Fastest way to find out if a port is used or not/i.e. if ungit is running
@@ -56,7 +56,7 @@ const navigate = () => {
 
 const launch = () => {
   const child = child_process.spawn(process.argv[0], // because it's `nodejs` in some OS
-    [path.join(__dirname, '..', 'source', 'server.js')].concat(process.argv.slice(2)),
+    [path.join(__dirname, '..', 'back', 'server.js')].concat(process.argv.slice(2)),
     { cwd: path.join(process.cwd(), '..') }
   );
 
