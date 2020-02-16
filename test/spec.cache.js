@@ -1,6 +1,6 @@
 
 const expect = require('expect.js');
-const cache = require('../source/utils/cache');
+const cache = require('../back/utils/cache');
 const Bluebird = require('bluebird');
 
 describe('cache', () => {

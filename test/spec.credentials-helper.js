@@ -2,7 +2,7 @@
 const expect = require('expect.js');
 const child_process = require('child_process');
 const http = require('http');
-const config = require('../source/config');
+const config = require('../back/config');
 const url = require('url');
 const querystring = require('querystring');
 

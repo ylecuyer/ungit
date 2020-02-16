@@ -3,7 +3,7 @@ const request = require('supertest');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const restGit = require('../source/git-api');
+const restGit = require('../back/git-api');
 const common = require('./common-es6.js');
 
 const app = express();

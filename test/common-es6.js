@@ -1,6 +1,6 @@
 const expect = require('expect.js');
 const path = require('path');
-const restGit = require('../source/git-api');
+const restGit = require('../back/git-api');
 const Bluebird = require('bluebird');
 
 exports.makeRequest = (method, req, path, payload) => {
