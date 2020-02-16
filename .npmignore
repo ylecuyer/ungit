@@ -19,7 +19,7 @@ node_modules/
 .travis.yml
 Gruntfile.js
 
-assets/
+front/assets/
 test/
 report/
 public/source/

@@ -93,7 +93,7 @@ module.exports = (grunt) => {
         },
         files: [{
           expand: true,
-          cwd: 'assets/client/images/',
+          cwd: 'front/assets/client/images/',
           src: ['**/*.png'],
           dest: 'public/images/'
         }]
