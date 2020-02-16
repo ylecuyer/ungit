@@ -14,7 +14,7 @@ module.exports = (grunt) => {
   const lessFiles = {
     'public/css/styles.css': ['public/less/styles.less', 'public/vendor/css/animate.css', 'public/less/d2h.less']
   };
-  fs.readdirSync('./components').map((component) => `components/${component}/${component}`)
+  fs.readdirSync('./front/components').map((component) => `components/${component}/${component}`)
     .forEach((str) => lessFiles[`${str}.css`] = `${str}.less`);
 
   grunt.initConfig({
@@ -266,13 +266,13 @@ module.exports = (grunt) => {
   });
 
   grunt.registerTask('browserify-components', '',  function() {
-    Bluebird.each(fs.readdirSync('components'), (component) => {
+    Bluebird.each(fs.readdirSync('./front/components'), (component) => {
       return new Bluebird((resolve, reject) => {
         const b = browserify({
           bundleExternal: false,
           debug: true
         });
-        const src = `./components/${component}/${component}.js`;
+        const src = `./front/components/${component}/${component}.js`;
         if (!fs.existsSync(src)) {
           grunt.log.error(`${src} does not exist. If this component is obsolete, please remove that directory or perform a clean build.`);
           return;
@@ -292,7 +292,7 @@ module.exports = (grunt) => {
                 'moment',
                 'blueimp-md5']);
 
-        const outFile = fs.createWriteStream(`./components/${component}/${component}.bundle.js`);
+        const outFile = fs.createWriteStream(`./front/components/${component}/${component}.bundle.js`);
         outFile.on('close', () => resolve());
         b.bundle().pipe(outFile);
       });

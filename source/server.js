@@ -254,7 +254,7 @@ const loadPlugins = (plugins, pluginBasePath) => {
 };
 const pluginsCacheKey = cache.registerFunc(() => {
   const plugins = [];
-  loadPlugins(plugins, path.join(__dirname, '..', 'components'));
+  loadPlugins(plugins, path.join(__dirname, '..', 'front', 'components'));
   if (fs.existsSync(config.pluginDirectory)) {
     loadPlugins(plugins, config.pluginDirectory);
   }

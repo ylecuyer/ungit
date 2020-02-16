@@ -34,7 +34,7 @@ report/
 /nw.exe
 /nw.pak
 
-/components/**/*.css
-/components/**/*.bundle.js
+/front/components/**/*.css
+/front/components/**/*.bundle.js
 
 coverage
