@@ -165,28 +165,19 @@ if (config.authentication) {
 }
 
 const indexHtmlCacheKey = cache.registerFunc(() => {
-  return cache.resolveFunc(pluginsCacheKey).then((plugins) => {
-    return fs.readFile(__dirname + '/../public/index.html', { encoding: 'utf8' }).then((data) => {
-      return Promise.all(
-        Object.values(plugins).map((plugin) => {
-          return plugin.compile();
-        })
-      ).then((results) => {
-        data = data.replace('<!-- ungit-plugins-placeholder -->', results.join('\n\n'));
-
-        return data;
-      });
-    });
-  });
+  return cache.resolveFunc(pluginsCacheKey)
 });
 
 app.get('/', (req, res) => {
-  if (config.dev) {
-    cache.invalidateFunc(pluginsCacheKey);
-    cache.invalidateFunc(indexHtmlCacheKey);
-  }
-  cache.resolveFunc(indexHtmlCacheKey).then((data) => {
-    res.end(data);
+  cache.invalidateFunc(pluginsCacheKey);
+  cache.invalidateFunc(indexHtmlCacheKey);
+  cache.resolveFunc(indexHtmlCacheKey) // side effect to ensure plugins are loaded
+  // return static index.html
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'), (err) => {
+    if (err) {
+      logger.error('Error sending index.html: ' + err);
+      res.status(err.status).end();
+    }
   });
 });
 

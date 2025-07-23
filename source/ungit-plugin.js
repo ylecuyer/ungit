@@ -40,32 +40,5 @@ class UngitPlugin {
     }
     env.app.use(`/plugins/${this.name}`, express.static(this.path));
   }
-
-  compile() {
-    logger.info(`Compiling plugin ${this.path}`);
-    const exports = this.manifest.exports || {};
-
-    return Promise.resolve()
-      .then(() => {
-        if (exports.raw) {
-          return Promise.all(
-            assureArray(exports.raw).map((rawSource) => {
-              return fs
-                .readFile(path.join(this.path, rawSource), { encoding: 'utf8' })
-                .then((text) => {
-                  return text + '\n';
-                });
-            })
-          ).then((result) => {
-            return result.join('\n');
-          });
-        } else {
-          return '';
-        }
-      })
-      .then((result) => {
-        return `<!-- Component: ${this.name} -->\n${result}`;
-      });
-  }
 }
 module.exports = UngitPlugin;
