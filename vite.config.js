@@ -1,10 +1,19 @@
 export default {
-    root: 'public',
+    css: {
+        preprocessorOptions: {
+            less: {}
+        }
+    },
     server: {
         proxy: {
             '/plugins': {
                 target: 'http://localhost:8448',
-                changeOrigin: true
+                changeOrigin: true,
+                bypass: (req, res, options) => {
+                    if (req.url.endsWith('.less')) {
+                        return req.url;
+                    }
+                }
             },
             '/socket.io': {
                 target: 'http://localhost:8448',
@@ -18,7 +27,11 @@ export default {
             '/api': {
                 target: 'http://localhost:8448',
                 changeOrigin: true
-            }
+            },
+            '/js': {
+                target: 'http://localhost:8448',
+                changeOrigin: true
+            },
         }
     }
 }

@@ -163,7 +163,7 @@ if (config.authentication) {
 }
 
 app.use(`/plugins`, express.static(path.join(__dirname, '..', 'components')));
-app.use(serveStatic(__dirname + '/../public'));
+app.use(serveStatic(__dirname + '/../notpublic'));
 
 // Socket-IO
 const socketIO = require('socket.io');

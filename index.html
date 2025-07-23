@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="shortcut icon" href="/images/icon.png" />
+    <title>ungit</title>
+  </head>
+  <body>
+    <!-- ko component: content --><!-- /ko -->
+    <script type="module" src="vite.js"></script>
+
+    <script type="text/javascript">
+      ungit = {};
+    </script>
+    <script type="text/javascript" src="/serverdata.js"></script>
+    <script type="text/javascript" src="/js/raven.min.js"></script>
+    <script type="text/javascript">
+      console.log('App version: ' + ungit.version);
+      if (ungit.config.bugtracking) {
+        console.log('Initing raven');
+
+        try {
+          Raven.config('https://58f16d6f010d4c77900bb1de9c02185f@app.getsentry.com/12434', {
+            logger: 'root',
+            tags: {
+              version: ungit.version,
+              subsystem: 'ui',
+              deployment: ungit.config.desktopMode ? 'desktop' : 'web',
+            },
+          }).install();
+          Raven.setUser({ id: ungit.userHash });
+        } catch (e) {
+          console.warn('Failed to initialize Raven.', e);
+          Raven = {
+            TraceKit: {
+              report: { subscribe: function () {} },
+            },
+          };
+        }
+      }
+    </script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/js/ungit.js"></script>
+
+    <script type="text/javascript" src="/plugins/app/app.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/branches/branches.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/commit/commit.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/commitdiff/commitdiff.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/crash/crash.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/gitErrors/gitErrors.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/graph/graph.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/header/header.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/home/home.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/imagediff/imagediff.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/login/login.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/modals/modals.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/path/path.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/refreshbutton/refreshbutton.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/remotes/remotes.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/repository/repository.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/staging/staging.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/stash/stash.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/submodules/submodules.bundle.js"></script>
+    <script type="text/javascript" src="/plugins/textdiff/textdiff.bundle.js"></script>
+
+    <!-- Knockout Templates: app -->
+    <script type="text/html" id="app">
+    <!-- ko component: header -->
+    <!-- /ko -->
+
+    <div class="app">
+      <div class="container" data-bind="shown: shown">
+        <div class="alert alert-danger" data-bind="visible: gitVersionErrorVisible">
+          <span data-bind="text: gitVersionError"></span>
+          <button type="button" class="close" data-bind="click: dismissGitVersionError">&times;</button>
+        </div>
+
+        <div class="alert alert-info" data-bind="visible: showNewVersionAvailable">
+          A new version of ungit (<span data-bind="text: latestVersion"></span>) is
+          <a href="https://github.com/FredrikNoren/ungit">available</a>! Run
+          <code data-bind="text: newVersionInstallCommand"></code> to install. See what's new in the
+          <a href="https://github.com/FredrikNoren/ungit/blob/master/CHANGELOG.md">changelog</a>.
+          <button type="button" class="close" data-bind="click: dismissNewVersion">&times;</button>
+        </div>
+
+        <div class="alert alert-info clearfix" data-bind="visible: showBugtrackingNagscreen">
+          <button type="button" class="close" data-bind="click: dismissBugtrackingNagscreen">
+            &times;
+          </button>
+          <p><strong>Help make ungit better with the press of a button!</strong></p>
+
+          <button class="btn btn-primary" data-bind="click: enableBugtracking">
+            Enable automatic bug reports
+          </button>
+          <button class="btn btn-default" data-bind="click: dismissBugtrackingNagscreen">
+            Naah, I&#39;ll skip that
+          </button>
+        </div>
+      </div>
+
+      <!-- ko if: content -->
+      <div class="container-fluid" data-bind="component: content"></div>
+      <!-- /ko -->
+    </div>
+
+    <!-- ko if: modal -->
+    <!-- ko template: { name: templateChooser, data: modal } -->
+    <!-- /ko -->
+    <!-- /ko -->
+    </script>
+
+    <!-- End Knockout Templates: app -->
+    <!-- Knockout Templates: branches -->
+    <script type="text/html" id="branches">
+    <div class="btn-group branch">
+      <button type="button" class="btn btn-default btn-main" data-bind="click: updateRefs">
+        <span data-bind="html: branchIcon"></span>
+        <span data-bind="text: refsLabel"></span>
+      </button>
+      <button
+        type="button"
+        class="btn btn-default dropdown-toggle"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Branch List</span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        <li class="dropdown-header options" onclick="event.stopPropagation()">
+          <label>
+            <input
+              class="glyphicon"
+              type="checkbox"
+              data-bind="checked: isShowRemote, css: { 'glyphicon-check': isShowRemote, 'glyphicon-unchecked': !isShowRemote() }"
+            />
+            Remote
+          </label>
+          <label>
+            <input
+              class="glyphicon"
+              type="checkbox"
+              data-bind="checked: isShowBranch, css: { 'glyphicon-check': isShowBranch, 'glyphicon-unchecked': !isShowBranch() }"
+            />
+            Branch
+          </label>
+          <label>
+            <input
+              class="glyphicon"
+              type="checkbox"
+              data-bind="checked: isShowTag, css: { 'glyphicon-check': isShowTag, 'glyphicon-unchecked': !isShowTag() }"
+            />
+            Tag
+          </label>
+        </li>
+        <li class="divider" role="separator"></li>
+        <!-- ko foreach: branchesAndLocalTags -->
+        <li>
+          <a
+            class="linked-remove"
+            href="#"
+            data-bind="html: displayHtml(), click: $parent.checkoutBranch.bind($parent), attr: { 'data-ta-clickable': 'checkout' + name }"
+          ></a>
+          <a
+            class="list-link list-remove"
+            href="#"
+            data-bind="html: $parent.closeIcon, click: $parent.branchRemove.bind($parent), attr: { 'data-ta-clickable': name + '-remove' }"
+          ></a>
+        </li>
+        <!-- /ko -->
+      </ul>
+    </div>
+
+    </script>
+
+    <!-- End Knockout Templates: branches -->
+
+    <!-- Knockout Templates: commitdiff -->
+
+    <script type="text/html" id="commitdiff">
+    <div class="btn-toolbar" data-bind="visible: showDiffButtons">
+      <div class="btn-group btn-group-xs">
+        <button
+          class="btn btn-default commit-whitespace"
+          data-bind="click: whiteSpace.toggle, css: {active: whiteSpace.isActive}"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          data-container="body"
+          title="Hide whitespace changes in diff"
+        >
+          <span data-bind="text: whiteSpace.text"></span>
+        </button>
+      </div>
+      <div class="btn-group btn-group-xs">
+        <button
+          class="btn btn-default commit-sideBySideDiff"
+          data-bind="click: textDiffType.toggle, css: {active: textDiffType.isActive}"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          data-container="body"
+          title="Show side by side diff view"
+        >
+          <span data-bind="text: textDiffType.text"></span>
+        </button>
+      </div>
+      <div class="btn-group btn-group-xs">
+        <button
+          class="btn btn-default commit-wordwrap"
+          data-bind="click: wordWrap.toggle, css: {active: wordWrap.isActive}"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          data-container="body"
+          title="Wrap words per line"
+        >
+          <span data-bind="text: wordWrap.text"></span>
+        </button>
+      </div>
+    </div>
+
+    <div data-bind="foreach: commitLineDiffs" class="commitdiff">
+      <div class="file">
+        <div class="head commit-diff-filename" data-bind="click: fileNameClick">
+          <span data-bind="text: displayName"></span>
+          <span class="file-stats" data-bind="visible: added() != '-'">
+            (
+            <span data-bind="text: added"></span>
+            <span data-bind="text: removed"></span>
+            )
+          </span>
+        </div>
+        <div class="diffContainer commit-line-diffs" data-bind="component: specificDiff"></div>
+      </div>
+    </div>
+
+    </script>
+
+    <!-- End Knockout Templates: commitdiff -->
+
+    <!-- Knockout Templates: commit -->
+
+    <script type="text/html" id="commit">
+    <div
+      class="commit"
+      data-bind="css: { highlighted: highlighted, hover: nodeIsMousehover, selected: selected }"
+    >
+      <div
+        class="commit-box panel panel-default"
+        data-bind="element: element, click: stopClickPropagation"
+      >
+        <div class="panel-body">
+          <div class="arrow shadow"></div>
+          <div class="arrow"></div>
+          <div class="clearfix">
+            <img
+              class="pull-left img-circle gravatar"
+              data-bind="attr: { src: `https://www.gravatar.com/avatar/${authorGravatar()}?default=404`, alt: `Profile Picture of ${authorName()}` }"
+              onerror="this.style.display='none';"
+            />
+            <div>
+              <div>
+                <span
+                  class="title"
+                  data-bind="text: (title().length > 72 ? title().substring(0, 72) + '...' : title)"
+                ></span>
+                <span class="text-muted"
+                  >by <a data-bind="text: authorName, attr: { href: 'mailto:' + authorEmail() }"></a
+                ></span>
+                <!-- ko if: pgpVerifiedString() -->
+                <span
+                  class="text-muted"
+                  data-bind="html: pgpIcon, attr: { title: pgpVerifiedString() }"
+                  data-toggle="tooltip"
+                ></span>
+                <!-- /ko -->
+              </div>
+              <div class="text-muted nodeSummaryContainer">
+                <span
+                  data-bind="text: authorDateFromNow, attr: { title: authorDate }"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                ></span>
+                | +<span data-bind="text: numberOfAddedLines"></span>, -<span
+                  data-bind="text: numberOfRemovedLines"
+                ></span>
+                |
+                <span title="Commit" data-bind="text: sha1.substring(0, 8)"></span>
+                <!-- ko if: navigator.clipboard -->
+                <button class="btn btn-default btn-xs" type="button" data-bind="click: copyHash"><span class="glyphicon glyphicon-copy"></span></button>
+                <!-- /ko -->
+                <!-- ko foreach: parents -->
+                | <a href="#" title="Parent Commit" data-bind="text: $data.substring(0, 8), click: $parent.gotoCommit.bind($parent, $data)"></a>
+                <!-- /ko -->
+              </div>
+            </div>
+          </div>
+          <!-- ko if: selected() || nodeIsMousehover() -->
+          <div class="details">
+            <div
+              class="body"
+              data-bind="visible: title().length > 72, text: '...' + title().substring(72)"
+            ></div>
+            <div class="body" data-bind="text: body, visible: body"></div>
+            <div
+              class="diff-wrapper"
+              data-bind="visible: showCommitDiff, style: diffStyle, click: stopClickPropagation"
+            >
+              <div class="diff-inner" data-bind="component: commitDiff"></div>
+            </div>
+          </div>
+          <!-- /ko -->
+        </div>
+      </div>
+    </div>
+
+    </script>
+
+    <!-- End Knockout Templates: commit -->
+
+    <!-- Knockout Templates: crash -->
+
+    <script type="text/html" id="crash">
+    <div class="container">
+      <div class="panel panel-default crash">
+        <div class="panel-body">
+          <h1>Whooops</h1>
+          Unfortunately ungit interrupted its work because: <code data-bind="html: eventcause"></code
+          ><br />
+          The following tips will help solve this problem depending on the error:
+          <br /><br />
+          <ul>
+            <li>
+              General:
+              <ul>
+                <li>something went wrong, reload the page to start over</li>
+                <li>check server out or logs for errors</li>
+                <li>~/.ungitrc must contain valid JSON. Minimal valid json is "{}"</li>
+              </ul>
+            </li>
+
+            <li>
+              Connection Lost:
+              <ul>
+                <li>check status of server or network connection to the ungit server</li>
+              </ul>
+            </li>
+
+            <li>
+              Ad Blockers and Privacy Extensions:
+              <ul>
+                <li>
+                  add ungit server url to adblocker exception (with port definition) or disable for a
+                  while
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              Git does not have enough permissions:
+              <ul>
+                <li>check if you could write to .git directory (preferably on unix systems)</li>
+              </ul>
+            </li>
+
+            <li>
+              Other:
+              <ul>
+                <li>
+                  Find or report bug at
+                  <a href="https://github.com/FredrikNoren/ungit/issues">ungit github</a>.<br />
+                  Just common sense; do a quick search before posting, someone might already have
+                  created an issue (or resolved the problem!).<br />
+                  If you're posting a bug; try to include as much relevant information as possible
+                  (ungit version, node and npm version, os, any git errors displayed, output from cli
+                  console and output from the browser console).
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    </script>
+    <!-- End Knockout Templates: crash -->
+
+    <!-- Knockout Templates: gitErrors -->
+
+    <script type="text/html" id="gitErrors">
+    <!-- ko foreach: gitErrors -->
+    <div class="alert" data-bind="css: { 'alert-danger': !isWarning, 'alert-warning': isWarning }">
+      <button type="button" class="close" data-bind="html: $parent.closeIcon, click: dismiss"></button>
+      <h3>
+        <span data-bind="html: $parent.alertIcon"></span>
+        Unhandled git error!
+      </h3>
+      <p>
+        Ungit tried to run a git command that resulted in an unhandled error.
+        <span data-bind="visible: bugReportWasSent">An automatic bug report was sent.</span>
+      </p>
+      <p data-bind="visible: tip, text: tip"></p>
+      <h4>Command</h4>
+      <pre data-bind="text: command"></pre>
+      <h4>Error</h4>
+      <pre data-bind="text: error"></pre>
+      <h4>Stderr</h4>
+      <pre data-bind="text: stderr"></pre>
+      <h4>Stdout</h4>
+      <pre data-bind="text: stdout"></pre>
+    </div>
+    <!-- /ko -->
+
+    </script>
+
+    <!-- End Knockout Templates: gitErrors -->
+
+    <!-- Knockout Templates: graph -->
+
+    <script type="text/html" id="graph">
+    <div class="graph" data-bind="scrolledToEnd: scrolledToEnd, click: handleBubbledClick">
+      <!-- ko template: { name: 'graphGraphics' } --><!-- /ko -->
+
+      <div class="nodes" data-bind="foreach: nodes">
+        <div
+          class="nodeContainer animation"
+          data-bind="style: { left: '0px', top: cy() + 'px' }, attr: { 'data-ta-node-title': title }"
+        >
+          <div
+            class="commit-container animation"
+            data-bind="visible: commitContainerVisible, style: { left: cx() - 620 + 'px' }"
+          >
+            <!-- ko component: commitComponent -->
+            <!-- /ko -->
+          </div>
+
+          <div class="rightSideContainer" data-bind="style: { left: cx() + r() - 433 + 'px' }">
+            <!-- ko foreach: branchesToDisplay -->
+            <span
+              class="ref branch"
+              draggable="true"
+              tabIndex="-1"
+              data-bind="css: { current: current, remote: isRemoteBranch, dragging: isDragging, focused: selected },
+                  html: displayHtml(true),
+                  click: selected,
+                  event: { dblclick: checkout },
+                  dragStart: dragStart, dragEnd: dragEnd, attr: { 'data-ta-name': localRefName, 'data-ta-local': isLocal }"
+            >
+            </span>
+            <!-- /ko -->
+
+            <!-- ko foreach: tagsToDisplay -->
+            <span
+              class="ref tag"
+              draggable="true"
+              tabIndex="0"
+              data-bind="css: { current: current, remote: isRemoteTag, dragging: isDragging, focused: selected },
+                  html: displayHtml(true),
+                  click: selected,
+                  event: { dblclick: checkout },
+                  dragStart: dragStart, dragEnd: dragEnd, attr: { 'data-ta-name': localRefName }"
+            >
+            </span>
+            <!-- /ko -->
+
+            <!-- ko foreach: dropareaGraphActions -->
+            <span
+              class="graphAction"
+              data-bind="css: cssClasses, visible: visible, attr: { 'data-ta-action': style }, event: { mouseover: mouseover, mouseout: mouseout }"
+            >
+              <span data-bind="html: icon"></span>
+              <span data-bind="text: text"></span>
+              <div
+                class="dropmask"
+                tabindex="0"
+                role="button"
+                data-bind="dropOver: visible, drop: doPerform, dragEnter: dragEnter, dragLeave: dragLeave, click: doPerform"
+              ></div>
+            </span>
+            <!-- /ko -->
+
+            <!-- ko if: showNewRefAction -->
+            <span class="ref-icons new-ref" data-bind="css: { editing: branchingFormVisible }">
+              <button
+                class="showBranchingForm"
+                type="button"
+                data-bind="html: $parent.plusIcon, click: showBranchingForm, visible: !branchingFormVisible()"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Create a branch or tag"
+              ></button>
+              <!-- ko if: branchingFormVisible -->
+              <form
+                class="form-inline"
+                data-bind="hasfocus2: branchingFormVisible, submit: createBranch"
+              >
+                <input
+                  class="name form-control"
+                  type="text"
+                  aria-label="New branch name"
+                  data-bind="value: newBranchName, hasfocus: newBranchNameHasFocus, valueUpdate: 'afterkeydown'"
+                />
+                <button
+                  class="btn btn-primary"
+                  type="submit"
+                  data-bind="click: createBranch, enable: canCreateRef"
+                >
+                  Branch
+                </button>
+                <button
+                  class="btn btn-default"
+                  type="button"
+                  data-bind="click: createTag, enable: canCreateRef"
+                >
+                  Tag
+                </button>
+              </form>
+              <!-- /ko -->
+            </span>
+            <!-- /ko -->
+
+            <!-- ko if: showRefSearch -->
+            <span class="ref-icons" data-bind="css: { editing: branchingFormVisible }">
+              <button
+                class="showSearchForm"
+                type="button"
+                data-bind="html: $parent.searchIcon, click: showRefSearchForm, visible: !refSearchFormVisible()"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Search for a branch or tag"
+              ></button>
+              <div class="form-inline branch-search" data-bind="visible: refSearchFormVisible()">
+                <input
+                  class="name form-control"
+                  type="search"
+                  aria-label="Filter branches and tags"
+                  data-bind="hasfocus: refSearchFormVisible, valueUpdate: 'afterkeyup'"
+                />
+              </div>
+            </span>
+            <!-- /ko -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </script>
+    <script type="text/html" id="graphGraphics">
+    <svg
+      class="graphLog"
+      xmlns="http://www.w3.org/2000/svg"
+      version="1.1"
+      data-bind="attr: { width: graphWidth, height: graphHeight }"
+    >
+      <defs>
+        <marker
+          id="rebaseArrowEnd"
+          viewBox="0 0 10 10"
+          refX="0"
+          refY="5"
+          markerUnits="strokeWidth"
+          markerWidth="4"
+          markerHeight="3"
+          orient="auto"
+        >
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#22252E" />
+        </marker>
+        <marker
+          id="pushArrowEnd"
+          viewBox="0 0 10 10"
+          refX="0"
+          refY="5"
+          markerUnits="strokeWidth"
+          markerWidth="4"
+          markerHeight="3"
+          orient="auto"
+        >
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="rgb(61, 139, 255)" />
+        </marker>
+      </defs>
+      <g>
+        <!-- ko if: commitNodeEdge -->
+        <g
+          class="load-ahead-button"
+          data-bind="attr: { opacity: commitOpacity, visible: commitNodeEdge}, click: loadAhead"
+        >
+          <path
+            data-bind="attr: { d: commitNodeEdge }"
+            stroke="#4A4A4A"
+            stroke-width="8"
+            stroke-dasharray="10, 5"
+          />
+          <circle
+            data-bind="attr: { stroke: commitNodeColor }"
+            cx="610"
+            cy="35"
+            r="30"
+            stroke-dasharray="10, 7"
+            stroke-width="10"
+            fill="transparent"
+          />
+          <!-- ko if: skip() > 0 -->
+          <circle
+            class="loadAhead"
+            data-bind="attr: { fill: commitNodeColor }"
+            cx="610"
+            cy="35"
+            r="15"
+          />
+          <!-- /ko -->
+        </g>
+        <!-- /ko -->
+
+        <!-- ko with: hoverGraphActionGraphic -->
+        <!-- ko foreach: bgEdges -->
+        <path
+          data-bind="attr: { d: d, stroke: stroke, 'stroke-width': strokeWidth, 'stroke-dasharray': strokeDasharray, 'marker-end': markerEnd }"
+        />
+        <!-- /ko -->
+        <!-- /ko -->
+
+        <!-- ko foreach: edges -->
+        <path
+          data-bind="element: element, event: { mouseover: edgeMouseOver, mouseout: edgeMouseOut }"
+          stroke="#4A4A4A"
+          stroke-width="8"
+        />
+        <!-- /ko -->
+
+        <!-- ko foreach: nodes -->
+        <svg data-bind="element: element">
+          <circle
+            data-bind="attr: { r: r, fill: color, 'data-ta-clickable': 'node-clickable-' + $index() }, event: { mouseover: nodeMouseover, mouseout: nodeMouseout }, click: toggleSelected"
+            cx="30"
+            cy="30"
+          />
+          <!-- ko if: isNodeAccented -->
+          <circle
+            data-bind=" attr: { r: r() - 4 }, click: toggleSelected"
+            stroke="#252833"
+            stroke-width="4"
+            fill="transparent"
+            cx="30"
+            cy="30"
+          />
+          <!-- /ko -->
+        </svg>
+        <!-- /ko -->
+
+        <!-- ko with: hoverGraphActionGraphic -->
+        <!-- ko foreach: nodes -->
+        <circle
+          data-bind="attr: { cx: cx, cy: cy, r: r, fill: fill, stroke: stroke, 'stroke-width': strokeWidth, 'stroke-dasharray': strokeDasharray }"
+        />
+        <!-- /ko -->
+        <!-- ko foreach: fgEdges -->
+        <path
+          data-bind="attr: { d: d, stroke: stroke, 'stroke-width': strokeWidth, 'stroke-dasharray': strokeDasharray, 'marker-end': markerEnd }"
+        />
+        <!-- /ko -->
+        <!-- /ko -->
+      </g>
+    </svg>
+
+    </script>
+
+    <!-- End Knockout Templates: graph -->
+
+    <!-- Knockout Templates: home -->
+
+    <script type="text/html" id="home">
+    <div class="container home animated fadeInLeft" data-bind="shown: shown">
+      <div class="nux" data-bind="visible: showNux">
+        <img src="images/logo.png" class="logo-large" />
+        <div class="alert alert-info">
+          <h4>Enter a path to a repository to get started!</h4>
+          Then press the <span data-bind="html: addIcon"></span> symbol to make it show up here.
+        </div>
+      </div>
+      <div class="list-group" data-bind="foreach: repos">
+        <a
+          class="list-group-item repository"
+          data-bind="attr: { href: link }, css: { 'path-removed': pathRemoved }"
+        >
+          <span class="arrow-icon octicon-circled pull-left" data-bind="html: arrowIcon"></span>
+          <h4 class="list-group-item-heading" data-bind="text: title"></h4>
+          <p class="list-group-item-text" data-bind="text: remote"></p>
+          <button
+            type="button"
+            class="btn btn-default list-item-remove"
+            data-bind="html: removeIcon, click: remove"
+          ></button>
+        </a>
+      </div>
+    </div>
+
+    </script>
+
+    <!-- End Knockout Templates: home -->
+
+    <!-- Knockout Templates: imagediff -->
+
+    <script type="text/html" id="imagediff">
+    <!-- ko if: isShowingDiffs -->
+    <!-- ko if: state() == 'new' -->
+    <div class="imageDiff img-added">
+      <img data-bind="attr: { src: newImageSrc }" class="img-responsive" />
+    </div>
+    <!-- /ko -->
+    <!-- ko if: state() == 'removed' -->
+    <div class="imageDiff img-removed">
+      <img data-bind="attr: { src: oldImageSrc }" class="img-responsive" />
+    </div>
+    <!-- /ko -->
+    <!-- ko if: state() == 'changed' -->
+    <div class="imageDiff">
+      <div class="row">
+        <div class="col-lg-5">
+          <img
+            data-bind="event: {error: oldImageError }, attr: { src: oldImageSrc }"
+            class="img-responsive"
+          />
+        </div>
+        <div class="col-lg-2">
+          <span class="visible-lg" data-bind="html: rightArrowIcon"></span>
+          <span class="hidden-lg" data-bind="html: downArrowIcon"></span>
+        </div>
+        <div class="col-lg-5">
+          <img
+            data-bind="event: {error: newImageError }, attr: { src: newImageSrc }"
+            class="img-responsive"
+          />
+        </div>
+      </div>
+    </div>
+    <!-- /ko -->
+    <!-- /ko -->
+
+    </script>
+
+    <!-- End Knockout Templates: imagediff -->
+    <!-- Knockout Templates: login -->
+
+    <script type="text/html" id="login">
+    <div class="container">
+      <div data-bind="visible: status() == 'loading'"></div>
+
+      <div class="login col-lg-6" data-bind="visible: status() == 'login'">
+        <h1>Login</h1>
+        <!-- ko if: loginError -->
+        <div class="alert alert-danger loginError" role="alert" data-bind="text: loginError"></div>
+        <!-- /ko -->
+        <form data-bind="submit: login">
+          <div class="form-group">
+            <label for="inputUsername">Username</label>
+            <input
+              id="inputUsername"
+              class="form-control"
+              type="text"
+              autocomplete="username"
+              data-bind="value: username"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="inputPassword">Password</label>
+            <input
+              id="inputPassword"
+              class="form-control"
+              type="password"
+              autocomplete="current-password"
+              data-bind="value: password"
+            />
+          </div>
+
+          <button class="btn btn-primary" type="submit">Login</button>
+        </form>
+      </div>
+    </div>
+
+    </script>
+
+    <!-- End Knockout Templates: login -->
+
+    <!-- Knockout Templates: modals -->
+
+    <script type="text/html" id="formModal">
+    <div class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" data-bind="text: title"></h4>
+          </div>
+          <!-- Autocomplete is off here because of https://github.com/FredrikNoren/ungit/issues/363 -->
+          <form class="form-horizontal" data-bind="submit: submit" autocomplete="off">
+            <div class="modal-body" data-bind="foreach: items">
+              <div class="form-group">
+                <label data-bind="text: name, attr: { for: name }" class="col-lg-2 control-label"></label>
+                <div class="col-lg-10">
+                  <input class="form-control"
+                    data-bind="value: value, attr: { id: name, type: type, autofocus: autoFocus }" />
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" data-bind="click: submit, class: 'btn btn-primary'">Submit</button>
+              <button type="button" data-bind="click: close, visible: showCancel, class: 'btn btn-default'">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    </script>
+    <script type="text/html" id="promptModal">
+    <div class="modal fade" tabindex="-1" role="dialog" data-bind="attr: { 'data-ta-container': taModalName }">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" data-bind="text: title"></h4>
+          </div>
+          <div class="modal-body">
+            <p data-bind="html: details"></p>
+          </div>
+          <div class="modal-footer">
+            <!-- ko foreach: promptOptions -->
+            <button type="button"
+              data-bind="css: { 'btn-primary': primary }, attr: { 'data-ta-action': taId }, text: label, click: close, class: 'btn btn-default'"></button>
+            <!-- /ko -->
+          </div>
+        </div>
+      </div>
+    </div>
+    </script>
+
+    <!-- End Knockout Templates: modals -->
+
+    <!-- Knockout Templates: header -->
+
+    <script type="text/html" id="header">
+    <div class="navbar navbar-default navbar-fixed-top">
+      <a
+        class="backlink"
+        href="#/"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Navigate to ungit home page"
+      >
+        <span
+          class="back-icon octicon-circled"
+          data-bind="html: backIcon, css: { 'back-icon-shown': showBackButton }"
+        ></span>
+        <img class="headerLogo" src="images/logo.png" alt="Ungit Logo" />
+      </a>
+
+      <div class="form-container">
+        <form class="path-input-form" data-bind="submit: submitPath">
+          <input
+            class="form-control input-lg"
+            type="text"
+            data-bind="value: path, autocomplete: path"
+            placeholder="Enter path to repository"
+            aria-label="Path to repository"
+          />
+          <button
+            class="btn btn-default add-to-repolist"
+            type="button"
+            data-bind="html: addIcon, visible: showAddToRepoListButton, click: addCurrentPathToRepoList"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Add current git directory to Ungit home page"
+          ></button>
+        </form>
+      </div>
+      <div class="toolbar"><!-- ko component: refreshButton --><!-- /ko --></div>
+
+      <div class="arrow"></div>
+      <div class="version">
+        <span data-bind="text: currentVersion" />
+      </div>
+    </div>
+
+    <div class="navbarPadder"></div>
+
+    </script>
+
+    <!-- End Knockout Templates: header -->
+
+    <!-- Knockout Templates: path -->
+
+    <script type="text/html" id="path">
+    <div class="path" data-bind="shown: shown">
+      <!-- ko if: status() == 'uninited' -->
+      <div class="uninited container">
+        <div class="alert alert-info" data-bind="visible: showDirectoryCreatedAlert">
+          Directory "<span data-bind="text: dirName"></span>" created.
+        </div>
+
+        <div class="row create-repo-container panel">
+          <h1>"<span data-bind="text: dirName"></span>" is not a git repository</h1>
+          <p>There is no git repository at the selected path.</p>
+          <div class="create-repo-toggle" data-bind="click: toggleShowCreateRepo">
+            <span class="expand-icon" data-bind="html: expandIcon"></span>
+          </div>
+
+          <div data-bind="visible: isShowCreateRepo">
+            <div class="col-lg-6">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  Create a new git repository in "<span data-bind="text: dirName"></span>"
+                </div>
+                <div class="panel-body">
+                  <button class="btn btn-primary btn-lg" data-bind="click: initRepository">
+                    Create Repository
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  Clone a git repository into a subfolder of "<span data-bind="text: dirName"></span>"
+                </div>
+                <div class="panel-body">
+                  <form data-bind="submit: cloneRepository">
+                    <div class="form-group">
+                      <label for="cloneFromInput">Clone from</label>
+                      <input class="form-control" id="cloneFromInput" type="text" placeholder="URL"
+                        data-bind="value: cloneUrl, valueUpdate: 'afterkeydown'" required />
+                    </div>
+                    <div class="form-group">
+                      <label for="cloneToInput">into</label>
+                      <input class="form-control" id="cloneToInput" type="text"
+                        data-bind="value: cloneDestination, attr: { placeholder: cloneDestinationImplicit }" />
+                    </div>
+                    <div class="form-group">
+                      <label>
+                        <input type="checkbox" data-bind="checked: isRecursiveSubmodule" />
+                        Recurse submodules
+                      </label>
+                    </div>
+                    <button class="btn btn-primary btn-lg" type="submit">Clone Repository</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="list-group" data-bind="foreach: subRepos">
+          <a class="list-group-item repository" data-bind="attr: { href: link }">
+            <span class="arrow-icon octicon-circled pull-left" data-bind="html: arrowIcon"></span>
+            <h4 class="list-group-item-heading" data-bind="text: title"></h4>
+            <p class="list-group-item-text" data-bind="text: remote"></p>
+          </a>
+        </div>
+      </div>
+      <!-- /ko -->
+
+      <!-- ko if: status() == 'no-such-path' -->
+      <div class="invalid-path container">
+        <h1>Invalid path</h1>
+        <p>"<span data-bind="text: repoPath"></span>" doesn't seem to be a valid path.</p>
+        <div class="create-dir">
+          <button class="btn btn-primary btn-lg" data-bind="click: createDir">Create Directory</button>
+        </div>
+      </div>
+      <!-- /ko -->
+
+      <!-- ko if: repository -->
+      <!-- ko component: repository -->
+      <!-- /ko -->
+      <!-- /ko -->
+    </div>
+    </script>
+
+    <!-- End Knockout Templates: path -->
+
+    <!-- Knockout Templates: refreshbutton -->
+
+    <script type="text/html" id="refreshbutton">
+    <button
+      class="btn btn-default refresh-button"
+      data-bind="html: refreshIcon, css: { 'btn-lg': isLarge }, click: refresh"
+      data-toggle="tooltip"
+      data-placement="bottom"
+      title="Refresh changes"
+    ></button>
+
+    </script>
+
+    <!-- End Knockout Templates: refreshbutton -->
+    <!-- Knockout Templates: remotes -->
+
+    <script type="text/html" id="remotes">
+    <div class="btn-group fetchButton">
+      <button
+        type="button"
+        class="btn btn-default btn-main"
+        data-bind="click: clickFetch, enable: fetchEnabled"
+      >
+        <span data-bind="html: remotesIcon"></span>
+        <span data-bind="text: fetchLabel"></span>
+      </button>
+      <button
+        type="button"
+        class="btn btn-default dropdown-toggle"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Remote List</span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        <!-- ko foreach: remotes -->
+        <li>
+          <a
+            class="linked-remove"
+            href="#"
+            data-bind="text: name, click: changeRemote, attr: { 'data-ta-clickable': name, title: title }"
+          ></a>
+          <a
+            class="list-link list-remove"
+            href="#"
+            data-bind="html: $parent.closeIcon, click: $parent.remoteRemove.bind($parent), attr: { 'data-ta-clickable': name + '-remove' }"
+          ></a>
+        </li>
+        <!-- /ko -->
+        <!-- ko if: remotes().length -->
+        <li class="divider" role="separator"></li>
+        <!-- /ko -->
+        <li>
+          <a href="#" class="add-new-remote" data-bind="click: showAddRemoteDialog">Add a new remote</a>
+        </li>
+      </ul>
+    </div>
+
+    </script>
+
+    <!-- End Knockout Templates: remotes -->
+
+    <!-- Knockout Templates: repository -->
+
+    <script type="text/html" id="repository">
+    <div class="repository-view animated fadeInLeft" data-bind="attr: { style: 'tab-size: ' + ungit.config.tabSize }">
+      <!-- ko component: gitErrors --><!-- /ko -->
+
+      <!-- ko if: isSubmodule -->
+      <div class="submodule alert alert-warning">
+        <h4>This is a submodule</h4>
+        Base repository: <a data-bind="text: parentModulePath, attr: { href: parentModuleLink}"></a>
+      </div>
+      <!-- /ko -->
+
+      <!-- ko component: stash --><!-- /ko -->
+
+      <!-- ko component: staging --><!-- /ko -->
+
+      <!-- ko if: staging.conflictText -->
+      <h2 class="text-muted">
+        <span data-bind="text: staging.conflictText" /> in progress
+        <small>resolve conflicts to continue</small>
+      </h2>
+      <!-- /ko -->
+
+      <!-- ko if: showLog -->
+
+      <div class="repository-actions">
+        <!-- ko if: refreshButton -->
+        <!-- ko component: refreshButton --><!-- /ko -->
+        <!-- /ko -->
+        <!-- ko component: remotes --><!-- /ko -->
+        <!-- ko component: submodules --><!-- /ko -->
+        <!-- ko component: branches --><!-- /ko -->
+
+        <div class="btn-group branch">
+          <button type="button" class="btn btn-default btn-main" data-bind="click: editGitignore">
+            <span data-bind="html: ignoreIcon"></span>
+            <span>.gitignore</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ko component: graph --><!-- /ko -->
+
+      <!-- /ko -->
+    </div>
+
+    </script>
+
+    <!-- End Knockout Templates: repository -->
+
+    <!-- Knockout Templates: staging -->
+
+    <script type="text/html" id="staging">
+    <div
+      class="staging panel panel-default"
+      data-bind="css: { commitValidationError: commitValidationError }"
+    >
+      <div class="panel-body">
+        <div class="arrow"></div>
+        <div data-bind="visible: showNux" class="nux">
+          Nothing to commit.
+          <a class="amend-link" href="#" data-bind="click: toggleAmend, visible: canAmend"
+            >Amend previous commit?</a
+          >
+          <a
+            class="empty-commit-link"
+            href="#"
+            data-bind="click: toggleEmptyCommit, visible: canEmptyCommit"
+            >Create an empty commit?</a
+          >
+        </div>
+        <div class="row" data-bind="visible: !showNux()">
+          <div class="col-lg-3">
+            <input
+              class="form-control"
+              type="text"
+              placeholder="Title (required)"
+              aria-label="Commit message title"
+              data-bind="value: commitMessageTitle, valueUpdate: 'afterkeydown', enable: !inRebase(), event: {keypress: onEnter}"
+            />
+            <textarea
+              class="form-control commit-body"
+              rows="2"
+              placeholder="Body"
+              aria-label="Commit message body"
+              data-bind="value: commitMessageBody, valueUpdate: 'afterkeydown', enable: !inRebase(), event: {keypress: onAltEnter}"
+            ></textarea>
+            <div>
+              <button
+                class="amend-button btn btn-link"
+                data-bind="visible: canAmend, click: toggleAmend"
+              >
+                <div class="checkmark" data-bind="css: { checked: amend }">
+                  <span
+                    class="glyphicon"
+                    data-bind="css: { 'glyphicon-check': amend, 'glyphicon-unchecked': !amend() }"
+                  ></span>
+                </div>
+                <span>Amend last commit</span>
+              </button>
+              <span class="commit-message-title-counter" data-bind="text: commitMessageTitleCount" />
+            </div>
+            <div class="btn-group commit-grp" data-bind="visible: isStageValid">
+              <button
+                class="btn btn-primary btn-lg commit-btn"
+                data-bind="click: commit, enable: !commitValidationError()"
+              >
+                Commit
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary btn-lg dropdown-toggle"
+                data-toggle="dropdown"
+                data-bind="enable: !commitValidationError()"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Commit Options</span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li>
+                  <a
+                    href="#"
+                    data-bind="click: commitnpush, css: { disabled: !canPush() }"
+                    class="commitnpush"
+                    >Commit & Push</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <button
+              class="btn btn-warning btn-lg btn-stg-cancel"
+              data-bind="click: cancelAmendEmpty, visible: showCancelButton"
+            >
+              Cancel
+            </button>
+            <button
+              class="btn btn-primary"
+              data-bind="click: conflictContinue, visible: conflictText, enable: !commitValidationError()"
+            >
+              Continue <span data-bind="text: conflictText" />
+            </button>
+            <button
+              class="btn btn-warning btn-stg-abort"
+              data-bind="click: conflictAbort, visible: conflictText"
+            >
+              Abort <span data-bind="text: conflictText" />
+            </button>
+            <span
+              class="validationError"
+              data-bind="text: commitValidationError, visible: commitValidationError"
+            ></span>
+          </div>
+          <div class="col-lg-9 file-area">
+            <div class="btn-toolbar">
+              <div class="commands btn-group btn-group-sm">
+                <button class="btn btn-default" disabled data-bind="text: stats"></button>
+                <button
+                  class="btn btn-default"
+                  data-bind="click: toggleAllStages"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  data-container="body"
+                  title="Toggle all uncommitted files for commit"
+                >
+                  <span class="glyphicon" data-bind="css: toggleSelectAllGlyphClass"></span>
+                  Toggle all
+                </button>
+                <button
+                  class="btn btn-default"
+                  data-bind="click: discardAllChanges"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  data-container="body"
+                  title="Discard all uncommitted file changes, including not showing files"
+                >
+                  <span data-bind="html: discardAllIcon"></span>
+                  Discard all
+                </button>
+                <button
+                  class="btn btn-default stash-all"
+                  data-bind="click: stashAll, css: { disabled: !canStashAll() }"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  data-container="body"
+                  title="Stash all uncommitted file changes, including not showing files"
+                >
+                  <span data-bind="html: stashIcon"></span>
+                  Stash all
+                </button>
+              </div>
+              <div class="btn-group btn-group-sm pull-right">
+                <button
+                  class="btn btn-default"
+                  data-bind="click: wordWrap.toggle, css: {active: wordWrap.isActive}"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  data-container="body"
+                  title="Wrap words per line"
+                >
+                  <span data-bind="text: wordWrap.text"></span>
+                </button>
+              </div>
+              <div class="btn-group btn-group-sm pull-right">
+                <button
+                  class="btn btn-default"
+                  data-bind="click: textDiffType.toggle, css: {active: textDiffType.isActive}"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  data-container="body"
+                  title="Show side by side diff view"
+                >
+                  <span data-bind="text: textDiffType.text"></span>
+                </button>
+              </div>
+              <div class="btn-group btn-group-sm pull-right">
+                <button
+                  class="btn btn-default"
+                  data-bind="click: whiteSpace.toggle, css: {active: whiteSpace.isActive}"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  data-container="body"
+                  title="Hide whitespace changes in diff"
+                >
+                  <span data-bind="text: whiteSpace.text"></span>
+                </button>
+              </div>
+            </div>
+
+            <div class="files" data-bind="foreach: files">
+              <div class="file" data-bind="css: { showingDiffs: isShowingDiffs }">
+                <div
+                  class="checkmark"
+                  data-bind="click: toggleStaged, css: { checked: editState() !== 'none' }"
+                >
+                  <span
+                    class="glyphicon"
+                    data-bind="css: { 'glyphicon-check': editState() === 'staged', 'glyphicon-unchecked': editState() === 'none', 'glyphicon-list-alt': editState() === 'patched'}"
+                  ></span>
+                </div>
+                <button class="name btn btn-default" data-bind="click: toggleDiffs">
+                  <span data-bind="text: displayName"></span>
+                </button>
+                <span class="new" data-bind="visible: isNew">New</span>
+                <span class="deleted" data-bind="visible: removed">Removed</span>
+                <span class="additions" data-bind="text: additions"></span>
+                <span class="deletions" data-bind="text: deletions"></span>
+                <span class="modified" data-bind="visible: modified">Modified</span>
+                <span class="conflict" data-bind="visible: conflict"
+                  ><span class="temporary">Conflicts</span
+                  ><span
+                    class="launchmergetool explanation"
+                    data-bind="visible: mergeTool, click: launchMergeTool"
+                    >Launch Merge Tool</span
+                  ><span class="markresolved explanation" data-bind="click: resolveConflict"
+                    >Mark as Resolved</span
+                  ></span
+                >
+                <button
+                  class="patch btn"
+                  data-bind="visible: isShowPatch(), click: patchClick"
+                  data-toggle="tooltip"
+                  title="Patch changes"
+                >
+                  Patch
+                </button>
+                <button
+                  class="ignore btn"
+                  data-bind="html: $parent.ignoreIcon, click: ignoreFile"
+                  data-toggle="tooltip"
+                  title="Add to .gitignore"
+                ></button>
+                <button
+                  class="discard btn"
+                  data-bind="html: $parent.discardIcon, click: discardChanges"
+                  data-toggle="tooltip"
+                  title="Discard changes"
+                ></button>
+                <!-- ko if: isShowingDiffs -->
+                <div class="diffContainer" data-bind="component: diff"></div>
+                <!-- /ko -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </script>
+
+    <!-- End Knockout Templates: staging -->
+
+    <!-- Knockout Templates: stash -->
+
+    <script type="text/html" id="stash">
+    <div class="stash-toggle stash-toggle-text" data-bind="click: toggleShowStash, visible: !isShow()">
+      <span class="expand-icon" data-bind="html: expandIcon"></span>
+      Stash (<span data-bind="text: stashedChanges().length"></span>)
+    </div>
+    <div class="panel panel-default stash" data-bind="visible: visible">
+      <div class="panel-body">
+        <h4 class="stash-toggle-text" data-bind="click: toggleShowStash">
+          <span class="expand-icon" data-bind="html: expandedIcon"></span>
+          Stashed changes (<span data-bind="text: stashedChanges().length"></span>)
+        </h4>
+        <div class="list-group" data-bind="foreach: stashedChanges">
+          <div class="list-group-item">
+            <a
+              href="#"
+              class="stash-apply octicon-circled"
+              data-bind="html: applyIcon, click: apply"
+              data-toggle="tooltip"
+              title="Apply this stash"
+            ></a>
+            <a
+              href="#"
+              class="toggle-show-commit-diffs"
+              data-bind="click: toggleShowCommitDiffs"
+              data-toggle="tooltip"
+              title="Show stash diff"
+            >
+              <h4 class="list-group-item-heading" data-bind="text: title"></h4>
+              <p class="list-group-item-text" data-bind="text: message"></p>
+            </a>
+            <!-- ko if: showCommitDiff() -->
+            <div class="diff-wrapper">
+              <div class="diff-inner" data-bind="component: commitDiff"></div>
+            </div>
+            <!-- /ko -->
+            <button
+              type="button"
+              class="btn btn-default list-item-remove"
+              data-bind="html: dropIcon, click: drop"
+              data-toggle="tooltip"
+              title="Drop this stash"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </script>
+
+    <!-- End Knockout Templates: stash -->
+
+    <!-- Knockout Templates: submodules -->
+
+    <script type="text/html" id="submodules">
+    <div class="btn-group fetchButton submodule">
+      <button type="button" class="btn btn-default btn-main" data-bind="click: function() {}">
+        <span data-bind="html: submodulesIcon"></span>
+        <span data-bind="text: 'Submodules'"></span>
+      </button>
+      <button
+        type="button"
+        class="btn btn-default dropdown-toggle"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Submodule List</span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        <!-- ko foreach: submodules -->
+        <li>
+          <a
+            class="linked-url"
+            href="#"
+            data-bind="text: name, click: $parent.submodulePathClick, attr: { 'data-ta-clickable': name }"
+          ></a>
+          <a
+            class="list-link list-url"
+            href="#"
+            data-bind="html: $parent.linkIcon, click: $parent.submoduleLinkClick, attr: { 'data-ta-clickable': name + '-weblink' }"
+          ></a>
+          <a
+            class="list-link list-remove"
+            href="#"
+            data-bind="html: $parent.closeIcon, click: $parent.submoduleRemove.bind($parent), attr: { 'data-ta-clickable': name + '-remove' }"
+          ></a>
+        </li>
+        <!-- /ko -->
+        <!-- ko if: submodules().length-->
+        <li class="divider" role="separator"></li>
+        <li>
+          <a href="#" class="update-submodule" data-bind="click: updateSubmodules">Update Submodules</a>
+        </li>
+        <li class="divider" role="separator"></li>
+        <!-- /ko -->
+        <li>
+          <a href="#" class="add-submodule" data-bind="click: showAddSubmoduleDialog">Add Submodules</a>
+        </li>
+      </ul>
+    </div>
+
+    </script>
+
+    <!-- End Knockout Templates: submodules -->
+    <!-- Knockout Templates: textdiff -->
+
+    <script type="text/html" id="textdiff">
+    <!-- ko if: isShowingDiffs -->
+    <div class="textdiff">
+      <!-- ko if: isParsed -->
+      <div
+        data-bind="template: {nodes: ko.utils.parseHtmlFragment(htmlSrc)}, css: {'word-wrap': wordWrap.value}"
+      ></div>
+      <!-- /ko -->
+      <div class="load-more" data-bind="visible: hasMore">
+        <button class="btn btn-default" data-bind="click: loadMore">Load more</button>
+      </div>
+    </div>
+    <!-- /ko -->
+
+    </script>
+
+    <!-- End Knockout Templates: textdiff -->
+
+
+    <script type="text/javascript">
+      require('ungit-main').start();
+    </script>
+  </body>
+</html>
