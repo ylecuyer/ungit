@@ -4,6 +4,7 @@
       "staging": "staging.html"
     },
     "javascript": "staging.bundle.js",
-    "css": "staging.css"
+    "css": "staging.css",
+    "ts": true
   }
 }

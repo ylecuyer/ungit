@@ -4,6 +4,7 @@
       "path": "path.html"
     },
     "javascript": "path.bundle.js",
-    "css": "path.css"
+    "css": "path.css",
+    "ts": true
   }
 }

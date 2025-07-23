@@ -80,14 +80,23 @@ const baseDir = path.join(__dirname, '..');
     const destination = path.join(baseDir, `components/${component}/${component}.bundle.js`);
 
     const jsSource = `${sourcePrefix}.js`;
+
+    // read ungit-plugin.json
+    const pluginFile = path.join(baseDir, `components/${component}/ungit-plugin.json`);
+    let plugin = await fs.readFile(pluginFile, { encoding: 'utf8' });
+    plugin = JSON.parse(plugin);
+    console.log(`plugin: ${JSON.stringify(plugin)}`);
+
+    ts = false || plugin.exports.ts;
+    
     try {
       await fs.access(jsSource);
-      await browserifyFile(jsSource, destination);
+      await browserifyFile(jsSource, destination, ts);
     } catch {
       const tsSource = `${sourcePrefix}.ts`;
       try {
         await fs.access(tsSource);
-        await browserifyFile(tsSource, destination);
+        await browserifyFile(tsSource, destination, ts);
       } catch {
         console.warn(
           `${sourcePrefix} does not exist. If this component is obsolete, please remove that directory or perform a clean build.`
@@ -134,13 +143,15 @@ async function lessFile(source, destination) {
   console.log(`less ${path.relative(baseDir, destination)}`);
 }
 
-async function browserifyFile(source, destination) {
+async function browserifyFile(source, destination, ts = false) {
   const mapDestination = `${destination}.map`;
   await new Promise((resolve) => {
     const b = browserify(source, {
       bundleExternal: false,
       debug: true,
-    }).plugin(tsify, {});
+    })
+    
+    if (ts) b.plugin(tsify, { });
 
     const outFile = fsSync.createWriteStream(destination);
     outFile.on('close', () => resolve());

@@ -4,6 +4,7 @@
       "stash": "stash.html"
     },
     "javascript": "stash.bundle.js",
-    "css": "stash.css"
+    "css": "stash.css",
+    "ts": true
   }
 }

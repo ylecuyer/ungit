@@ -4,6 +4,7 @@
       "formModal": "formModal.html",
       "promptModal": "promptModal.html"
     },
-    "javascript": "modals.bundle.js"
+    "javascript": "modals.bundle.js",
+    "ts": true
   }
 }
