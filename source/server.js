@@ -214,8 +214,7 @@ app.get('/serverdata.js', (req, res) => {
     `ungit.config = ${JSON.stringify(config)};\n` +
     `ungit.userHash = "${sysinfo.getUserHash()}";\n` +
     `ungit.version = "${config.ungitDevVersion}";\n` +
-    `ungit.platform = "${os.platform()}";\n` +
-    `ungit.pluginApiVersion = "${require('../package.json').ungitPluginApiVersion}";\n`;
+    `ungit.platform = "${os.platform()}";\n`;
   res.set('Content-Type', 'application/javascript');
   res.send(text);
 });
