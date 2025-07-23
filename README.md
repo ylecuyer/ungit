@@ -16,7 +16,6 @@ Ungit brings user friendliness to git without sacrificing the versatility of git
  * Runs on any platform that node.js & git supports.
  * Web-based, meaning you can run it on your cloud/pure shell machine and use the ui from your browser (just browse to http://your-cloud-machine.com:8448).
  * Works well with GitHub.
- * [Gerrit](https://code.google.com/p/gerrit/) integration through plugin: https://github.com/FredrikNoren/ungit-gerrit
 
 [Follow @ungitui on twitter](https://twitter.com/ungitui)
 

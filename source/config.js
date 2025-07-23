@@ -256,12 +256,6 @@ const argv = yargs
     'Automatically remove remote tracking branches that have been removed on the server when fetching. (git fetch -p)'
   )
   .boolean('autoPruneOnFetch')
-  .describe('pluginDirectory', 'Directory to look for plugins')
-  // --pluginConfigs doesn't work...  Probably only works in .ungitrc as a json file
-  .describe(
-    'pluginConfigs',
-    'No supported as a command line argument, use ungitrc config file.  See README.md'
-  )
   .describe('autoStashAndPop', 'Used for development purposes')
   .boolean('autoStashAndPop')
   .describe('fileSeparator', 'OS dependent file separator')
