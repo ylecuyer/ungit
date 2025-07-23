@@ -1,6 +1,5 @@
 var programEvents = require('ungit-program-events');
 
-var rootPath = (ungit.config && ungit.config.rootPath) || '';
 var nprogress;
 if (ungit.config.isDisableProgressBar) {
   nprogress = {
@@ -26,7 +25,7 @@ module.exports = Server;
 Server.prototype.initSocket = function () {
   var self = this;
   this.socket = io('', {
-    path: rootPath + '/socket.io',
+    path: '/socket.io',
   });
   this.socket.on('connect_error', function (err) {
     self._isConnected(function (connected) {
@@ -95,7 +94,7 @@ Server.prototype._httpJsonRequest = function (request, callback) {
 };
 // Check if the server is still alive
 Server.prototype._isConnected = function (callback) {
-  this._httpJsonRequest({ method: 'GET', url: rootPath + '/api/ping' }, function (err, res) {
+  this._httpJsonRequest({ method: 'GET', url: '/api/ping' }, function (err, res) {
     callback(!err && res);
   });
 };
@@ -123,7 +122,7 @@ Server.prototype.queryPromise = function (method, path, body) {
   if (body) body.socketId = this.socketId;
   var request = {
     method: method,
-    url: rootPath + '/api' + path,
+    url: '/api' + path,
   };
   if (method == 'GET' || method == 'DELETE') request.query = body;
   else request.body = body;

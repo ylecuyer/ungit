@@ -17,7 +17,7 @@ class SubRepositoryViewModel {
   constructor(server, path) {
     this.path = path;
     this.title = path;
-    this.link = `${ungit.config.rootPath}/#/repository?path=${encodePath(path)}`;
+    this.link = `/#/repository?path=${encodePath(path)}`;
     this.arrowIcon = octicons['arrow-right'].toSVG({ height: 24 });
     this.remote = ko.observable('...');
 

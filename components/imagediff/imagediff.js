@@ -18,7 +18,7 @@ class ImageDiffViewModel {
       if (this.isRemoved()) return 'removed';
       return 'changed';
     });
-    const gitDiffURL = `${ungit.config.rootPath}/api/diff/image?path=${encodePath(
+    const gitDiffURL = `/api/diff/image?path=${encodePath(
       this.repoPath()
     )}`;
     this.oldImageSrc =

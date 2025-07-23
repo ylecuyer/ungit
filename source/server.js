@@ -47,21 +47,6 @@ const server = require('http').createServer(app);
 
 gitApi.pathPrefix = '/api';
 
-app.use((req, res, next) => {
-  const rootPath = config.rootPath;
-  if (req.url === rootPath) {
-    // always have a trailing slash
-    res.redirect(req.url + '/');
-    return;
-  }
-  if (req.url.indexOf(rootPath) === 0) {
-    req.url = req.url.substring(rootPath.length);
-    next();
-    return;
-  }
-  res.status(400).end();
-});
-
 if (config.logRESTRequests) {
   app.use((req, res, next) => {
     logger.info(req.method + ' ' + req.url);
@@ -188,7 +173,6 @@ const indexHtmlCacheKey = cache.registerFunc(() => {
         })
       ).then((results) => {
         data = data.replace('<!-- ungit-plugins-placeholder -->', results.join('\n\n'));
-        data = data.replace(/__ROOT_PATH__/g, config.rootPath);
 
         return data;
       });
@@ -213,7 +197,7 @@ const socketIO = require('socket.io');
 const socketsById = {};
 let socketIdCounter = 0;
 const io = socketIO(server, {
-  path: config.rootPath + '/socket.io',
+  path: '/socket.io',
   logger: {
     debug: logger.debug.bind(logger),
     info: logger.info.bind(logger),

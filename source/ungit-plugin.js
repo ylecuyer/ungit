@@ -69,7 +69,7 @@ class UngitPlugin {
             result +
             assureArray(exports.javascript)
               .map((filename) => {
-                return `<script type="text/javascript" src="${config.rootPath}/plugins/${this.name}/${filename}"></script>`;
+                return `<script type="text/javascript" src="/plugins/${this.name}/${filename}"></script>`;
               })
               .join('\n')
           );
@@ -102,7 +102,7 @@ class UngitPlugin {
             result +
             assureArray(exports.css)
               .map((cssSource) => {
-                return `<link rel="stylesheet" type="text/css" href="${config.rootPath}/plugins/${this.name}/${cssSource}" />`;
+                return `<link rel="stylesheet" type="text/css" href="/plugins/${this.name}/${cssSource}" />`;
               })
               .join('\n')
           );

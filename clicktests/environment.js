@@ -23,7 +23,6 @@ const prependLines = (pre, text) => {
 class Environment {
   constructor(config) {
     this.config = config || {};
-    this.config.rootPath = typeof this.config.rootPath === 'string' ? this.config.rootPath : '';
     this.config.serverTimeout = this.config.serverTimeout || 35000;
     this.config.headless = this.config.headless === undefined ? true : this.config.headless;
     this.config.viewWidth = 1920;
@@ -55,7 +54,7 @@ class Environment {
 
   async startServer() {
     this.port = await portfinder.getPortPromise({ port: portrange });
-    this.rootUrl = `http://127.0.0.1:${this.port}${this.config.rootPath}`;
+    this.rootUrl = `http://127.0.0.1:${this.port}`;
     logger.info(`Starting ungit server:${this.port} with ${this.config.serverStartupOptions}`);
 
     this.hasStarted = false;
@@ -63,7 +62,6 @@ class Environment {
       'bin/ungit',
       '--cliconfigonly',
       `--port=${this.port}`,
-      `--rootPath=${this.config.rootPath}`,
       '--no-launchBrowser',
       '--dev',
       '--no-bugtracking',

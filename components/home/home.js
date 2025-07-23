@@ -12,7 +12,7 @@ class HomeRepositoryViewModel {
     this.server = this.app.server;
     this.path = path;
     this.title = path;
-    this.link = `${ungit.config.rootPath}/#/repository?path=${encodePath(path)}`;
+    this.link = `/#/repository?path=${encodePath(path)}`;
     this.pathRemoved = ko.observable(false);
     this.remote = ko.observable('...');
     this.updateState();
