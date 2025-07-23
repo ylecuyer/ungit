@@ -64,25 +64,6 @@ class UngitPlugin {
         }
       })
       .then((result) => {
-        if (exports.knockoutTemplates) {
-          return Promise.all(
-            Object.keys(exports.knockoutTemplates).map((templateName) => {
-              return fs
-                .readFile(path.join(this.path, exports.knockoutTemplates[templateName]), {
-                  encoding: 'utf8',
-                })
-                .then((text) => {
-                  return `<script type="text/html" id="${templateName}">\n${text}\n</script>`;
-                });
-            })
-          ).then((templates) => {
-            return result + templates.join('\n');
-          });
-        } else {
-          return result;
-        }
-      })
-      .then((result) => {
         return `<!-- Component: ${this.name} -->\n${result}`;
       });
   }
