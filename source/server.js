@@ -163,16 +163,6 @@ if (config.authentication) {
 }
 
 app.use(`/plugins`, express.static(path.join(__dirname, '..', 'components')));
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'), (err) => {
-    if (err) {
-      logger.error('Error sending index.html: ' + err);
-      res.status(err.status).end();
-    }
-  });
-});
-
 app.use(serveStatic(__dirname + '/../public'));
 
 // Socket-IO
