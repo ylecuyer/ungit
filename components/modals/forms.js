@@ -1,22 +1,18 @@
-import * as ko from 'knockout';
-import { ModalViewModel, FormItems } from './modalBase';
-declare const ungit: any;
+const ko = require('knockout');
+const { ModalViewModel, FormItems } = require('./modalBase');
 
 ungit.components.register(
   'credentialsmodal',
-  (args: any) => new CredentialsModalViewModel(args.remote)
+  (args) => new CredentialsModalViewModel(args.remote)
 );
-ungit.components.register('addremotemodal', (arg: any) => new AddRemoteModalViewModel(arg.path));
-ungit.components.register('addsubmodulemodal', (arg: any) => new AddSubmoduleModalViewModel(arg.path));
+ungit.components.register('addremotemodal', (arg) => new AddRemoteModalViewModel(arg.path));
+ungit.components.register('addsubmodulemodal', (arg) => new AddSubmoduleModalViewModel(arg.path));
 
 /**
  * Form receives collection of user inputs, i.e. username, password and etc.
  */
 class FormModalViewModel extends ModalViewModel {
-  items: Array<FormItems>
-  showCancel: boolean
-  template: string
-  constructor(title: string, taModalName: string, showCancel: boolean) {
+  constructor(title, taModalName, showCancel) {
     super(title, taModalName);
     this.items = [];
     this.showCancel = showCancel;
@@ -29,10 +25,10 @@ class FormModalViewModel extends ModalViewModel {
 }
 
 class CredentialsModalViewModel extends FormModalViewModel {
-  constructor(remote: string) {
+  constructor(remote) {
     super(`Remote ${remote} requires authentication`, 'credentials-dialog', false);
-    this.items.push(new FormItems('Username', ko.observable(), 'text', true))
-    this.items.push(new FormItems('Password', ko.observable(), 'password', false))
+    this.items.push(new FormItems('Username', ko.observable(), 'text', true));
+    this.items.push(new FormItems('Password', ko.observable(), 'password', false));
   }
 
   submit() {
@@ -46,12 +42,11 @@ class CredentialsModalViewModel extends FormModalViewModel {
 }
 
 class AddRemoteModalViewModel extends FormModalViewModel {
-  repoPath: string
-  constructor(path: string) {
+  constructor(path) {
     super('Add new remote', 'add-remote', true);
     this.repoPath = path;
-    this.items.push(new FormItems('Name', ko.observable(), 'text', true))
-    this.items.push(new FormItems('Url', ko.observable(), 'text', false))
+    this.items.push(new FormItems('Name', ko.observable(), 'text', true));
+    this.items.push(new FormItems('Url', ko.observable(), 'text', false));
   }
 
   async submit() {
@@ -69,12 +64,11 @@ class AddRemoteModalViewModel extends FormModalViewModel {
 }
 
 class AddSubmoduleModalViewModel extends FormModalViewModel {
-  repoPath: string
-  constructor(path: string) {
+  constructor(path) {
     super('Add new submodule', 'add-submodule', true);
     this.repoPath = path;
-    this.items.push(new FormItems('Path', ko.observable(), 'text', true))
-    this.items.push(new FormItems('Url', ko.observable(), 'text', false))
+    this.items.push(new FormItems('Path', ko.observable(), 'text', true));
+    this.items.push(new FormItems('Url', ko.observable(), 'text', false));
   }
 
   async submit() {

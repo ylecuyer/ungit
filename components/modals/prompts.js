@@ -1,17 +1,16 @@
-import * as ko from 'knockout';
-import { ModalViewModel, PromptOptions } from './modalBase';
-declare const ungit: any;
+const ko = require('knockout');
+const { ModalViewModel, PromptOptions } = require('./modalBase');
 
-ungit.components.register('yesnomodal', (args: any) => new YesNoModalViewModel(args.title, args.details, args.closeFunc));
+ungit.components.register('yesnomodal', (args) => new YesNoModalViewModel(args.title, args.details, args.closeFunc));
 ungit.components.register(
   'yesnomutemodal',
-  (args: any) => new YesNoMuteModalViewModel(args.title, args.details, args.closeFunc)
+  (args) => new YesNoMuteModalViewModel(args.title, args.details, args.closeFunc)
 );
 ungit.components.register(
   'toomanyfilesmodal',
-  (args: any) => new TooManyFilesModalViewModel(args.title, args.details, args.closeFunc)
+  (args) => new TooManyFilesModalViewModel(args.title, args.details, args.closeFunc)
 );
-ungit.components.register('texteditmodal', (args: any) => new TextEditModal(args.title, args.content, args.closeFunc));
+ungit.components.register('texteditmodal', (args) => new TextEditModal(args.title, args.content, args.closeFunc));
 
 
 /**
@@ -19,11 +18,7 @@ ungit.components.register('texteditmodal', (args: any) => new TextEditModal(args
  * button clicks.
  */
 class PromptModalViewModel extends ModalViewModel {
-  promptOptions: Array<PromptOptions>
-  details: ko.Observable
-  template: string
-  closeFunc: Function
-  constructor(title: string, taModalName: string, details: string, closeFunc: Function) {
+  constructor(title, taModalName, details, closeFunc) {
     super(title, taModalName);
     this.promptOptions = [];
     this.details = ko.observable(details);
@@ -31,7 +26,7 @@ class PromptModalViewModel extends ModalViewModel {
     this.closeFunc = closeFunc;
   }
 
-  close(isYes: boolean = false, isMute: boolean = false) {
+  close(isYes = false, isMute = false) {
     this.closeFunc(isYes, isMute);
     super.close();
   }
@@ -50,7 +45,7 @@ class PromptModalViewModel extends ModalViewModel {
 }
 
 class YesNoModalViewModel extends PromptModalViewModel {
-  constructor(title: string, details: string, closeFunc: Function) {
+  constructor(title, details, closeFunc) {
     super(title, 'yes-no-modal', details, closeFunc);
     this.promptOptions.push(new PromptOptions('Yes', true, 'yes', this.closeYes.bind(this)));
     this.promptOptions.push(new PromptOptions('No', false, 'no', this.closeNo.bind(this)));
@@ -58,7 +53,7 @@ class YesNoModalViewModel extends PromptModalViewModel {
 }
 
 class YesNoMuteModalViewModel extends PromptModalViewModel {
-  constructor(title: string, details: string, closeFunc: Function) {
+  constructor(title, details, closeFunc) {
     super(title, 'yes-no-mute-modal', details, closeFunc);
     this.promptOptions.push(new PromptOptions('Yes', true, 'yes', this.closeYes.bind(this)));
     this.promptOptions.push(new PromptOptions('Yes and mute for awhile', false, 'mute', this.closeYesMute.bind(this)));
@@ -67,7 +62,7 @@ class YesNoMuteModalViewModel extends PromptModalViewModel {
 }
 
 class TooManyFilesModalViewModel extends PromptModalViewModel {
-  constructor(title: string, details: string, closeFunc: Function) {
+  constructor(title, details, closeFunc) {
     super(title, 'yes-no-modal', details, closeFunc);
     this.promptOptions.push(new PromptOptions(`Don't load`, true, 'noLoad', this.closeYes.bind(this)));
     this.promptOptions.push(new PromptOptions(`Load anyway`, false, 'loadAnyway', this.closeNo.bind(this)));
@@ -75,7 +70,7 @@ class TooManyFilesModalViewModel extends PromptModalViewModel {
 }
 
 class TextEditModal extends PromptModalViewModel {
-  constructor(title: string, details: string, closeFunc: Function) {
+  constructor(title, details, closeFunc) {
     super(
       title,
       'text-edit-modal',

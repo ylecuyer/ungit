@@ -6,7 +6,6 @@ const browserify = require('browserify');
 const exorcist = require('exorcist');
 const less = require('less');
 const mkdirp = require('mkdirp').mkdirp;
-const tsify = require('tsify');
 
 const baseDir = path.join(__dirname, '..');
 
@@ -81,27 +80,13 @@ const baseDir = path.join(__dirname, '..');
 
     const jsSource = `${sourcePrefix}.js`;
 
-    // read ungit-plugin.json
-    const pluginFile = path.join(baseDir, `components/${component}/ungit-plugin.json`);
-    let plugin = await fs.readFile(pluginFile, { encoding: 'utf8' });
-    plugin = JSON.parse(plugin);
-    console.log(`plugin: ${JSON.stringify(plugin)}`);
-
-    ts = false || plugin.exports.ts;
-    
     try {
       await fs.access(jsSource);
-      await browserifyFile(jsSource, destination, ts);
+      await browserifyFile(jsSource, destination);
     } catch {
-      const tsSource = `${sourcePrefix}.ts`;
-      try {
-        await fs.access(tsSource);
-        await browserifyFile(tsSource, destination, ts);
-      } catch {
-        console.warn(
-          `${sourcePrefix} does not exist. If this component is obsolete, please remove that directory or perform a clean build.`
-        );
-      }
+      console.warn(
+        `${sourcePrefix} does not exist. If this component is obsolete, please remove that directory or perform a clean build.`
+      );
     }
   }
 
@@ -143,7 +128,7 @@ async function lessFile(source, destination) {
   console.log(`less ${path.relative(baseDir, destination)}`);
 }
 
-async function browserifyFile(source, destination, ts = false) {
+async function browserifyFile(source, destination) {
   const mapDestination = `${destination}.map`;
   await new Promise((resolve) => {
     const b = browserify(source, {
@@ -151,8 +136,6 @@ async function browserifyFile(source, destination, ts = false) {
       debug: true,
     })
     
-    if (ts) b.plugin(tsify, { });
-
     const outFile = fsSync.createWriteStream(destination);
     outFile.on('close', () => resolve());
     b.bundle().pipe(exorcist(mapDestination)).pipe(outFile);
