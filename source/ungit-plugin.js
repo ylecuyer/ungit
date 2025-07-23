@@ -64,20 +64,6 @@ class UngitPlugin {
         }
       })
       .then((result) => {
-        if (exports.javascript) {
-          return (
-            result +
-            assureArray(exports.javascript)
-              .map((filename) => {
-                return `<script type="text/javascript" src="/plugins/${this.name}/${filename}"></script>`;
-              })
-              .join('\n')
-          );
-        } else {
-          return result;
-        }
-      })
-      .then((result) => {
         if (exports.knockoutTemplates) {
           return Promise.all(
             Object.keys(exports.knockoutTemplates).map((templateName) => {
@@ -92,20 +78,6 @@ class UngitPlugin {
           ).then((templates) => {
             return result + templates.join('\n');
           });
-        } else {
-          return result;
-        }
-      })
-      .then((result) => {
-        if (exports.css) {
-          return (
-            result +
-            assureArray(exports.css)
-              .map((cssSource) => {
-                return `<link rel="stylesheet" type="text/css" href="/plugins/${this.name}/${cssSource}" />`;
-              })
-              .join('\n')
-          );
         } else {
           return result;
         }
