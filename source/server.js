@@ -12,7 +12,6 @@ const path = require('path');
 const fs = require('fs').promises;
 const signals = require('signals');
 const os = require('os');
-const cache = require('./utils/cache');
 const serveStatic = require('serve-static');
 
 process.on('uncaughtException', (err) => {
