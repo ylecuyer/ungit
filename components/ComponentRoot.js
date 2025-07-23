@@ -1,16 +1,14 @@
-declare var ungit: any;
-
-export class ComponentRoot {
-  _apiCache: string;
-  defaultDebounceOption = {
-    maxWait: 1500,
-    leading: false,
-    trailing: true
+class ComponentRoot {
+  constructor() {
+    this._apiCache = undefined;
+    this.defaultDebounceOption = {
+      maxWait: 1500,
+      leading: false,
+      trailing: true
+    };
   }
 
-  constructor() { }
-
-  isSamePayload(value: any) {
+  isSamePayload(value) {
     const jsonString = JSON.stringify(value);
 
     if (this._apiCache === jsonString) {
@@ -19,11 +17,13 @@ export class ComponentRoot {
     }
     ungit.logger.debug(`redrawing ${this.constructor.name} payload.  \n${jsonString}`);
 
-    this._apiCache = jsonString
+    this._apiCache = jsonString;
     return false;
   }
 
   clearApiCache() {
-    this._apiCache = undefined
+    this._apiCache = undefined;
   }
 }
+
+module.exports = { ComponentRoot };

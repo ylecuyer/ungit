@@ -5,7 +5,6 @@
       "graphGraphics": "graph-graphics.html"
     },
     "javascript": "graph.bundle.js",
-    "css": "graph.css",
-    "ts": true
+    "css": "graph.css"
   }
 }

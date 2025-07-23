@@ -4,7 +4,6 @@
       "branches": "branches.html"
     },
     "javascript": "branches.bundle.js",
-    "css": "branches.css",
-    "ts": true
+    "css": "branches.css"
   }
 }
