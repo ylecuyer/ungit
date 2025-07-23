@@ -22,22 +22,6 @@ class UngitPlugin {
   }
 
   init(env) {
-    if (this.manifest.server) {
-      const serverScript = require(path.join(this.path, this.manifest.server));
-      serverScript.install({
-        app: env.app,
-        httpServer: env.httpServer,
-        ensureAuthenticated: env.ensureAuthenticated,
-        ensurePathExists: env.ensurePathExists,
-        git: require('./git-promise'),
-        config: env.config,
-        socketIO: env.socketIO,
-        socketsById: env.socketsById,
-        pluginConfig: this.config,
-        httpPath: `${env.pathPrefix}/plugins/${this.name}`,
-        pluginApiVersion: require('../package.json').ungitPluginApiVersion,
-      });
-    }
     env.app.use(`/plugins/${this.name}`, express.static(this.path));
   }
 }

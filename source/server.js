@@ -164,15 +164,9 @@ if (config.authentication) {
   };
 }
 
-const indexHtmlCacheKey = cache.registerFunc(() => {
-  return cache.resolveFunc(pluginsCacheKey)
-});
+app.use(`/plugins`, express.static(path.join(__dirname, '..', 'components')));
 
 app.get('/', (req, res) => {
-  cache.invalidateFunc(pluginsCacheKey);
-  cache.invalidateFunc(indexHtmlCacheKey);
-  cache.resolveFunc(indexHtmlCacheKey) // side effect to ensure plugins are loaded
-  // return static index.html
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'), (err) => {
     if (err) {
       logger.error('Error sending index.html: ' + err);
@@ -215,50 +209,6 @@ const apiEnvironment = {
 };
 
 gitApi.registerApi(apiEnvironment);
-
-// Init plugins
-const loadPlugins = (plugins, pluginBasePath) => {
-  return fs.readdir(pluginBasePath).then((pluginDirs) => {
-    return Promise.all(
-      pluginDirs.map((pluginDir) => {
-        const pluginPath = path.join(pluginBasePath, pluginDir);
-        return fs
-          .access(path.join(pluginPath, 'ungit-plugin.json'))
-          .then(() => {
-            logger.info('Loading plugin: ' + pluginPath);
-            const plugin = new UngitPlugin({
-              dir: pluginDir,
-              httpBasePath: 'plugins/' + pluginDir,
-              path: pluginPath,
-            });
-            if (plugin.manifest.disabled || plugin.config.disabled) {
-              logger.info('Plugin disabled: ' + pluginDir);
-              return;
-            }
-            plugin.init(apiEnvironment);
-            plugins.push(plugin);
-            logger.info('Plugin loaded: ' + pluginDir);
-          })
-          .catch(() => {
-            // Skip direcories that don't contain an "ungit-plugin.json".
-          });
-      })
-    );
-  });
-};
-const pluginsCacheKey = cache.registerFunc(() => {
-  const plugins = [];
-  return loadPlugins(plugins, path.join(__dirname, '..', 'components'))
-    .then(() => {
-      return fs
-        .access(config.pluginDirectory)
-        .then(() => loadPlugins(plugins, config.pluginDirectory))
-        .catch(() => {
-          /* ignore */
-        });
-    })
-    .then(() => plugins);
-});
 
 app.get('/serverdata.js', (req, res) => {
   const text =
