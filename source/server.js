@@ -13,7 +13,6 @@ const fs = require('fs').promises;
 const signals = require('signals');
 const os = require('os');
 const cache = require('./utils/cache');
-const UngitPlugin = require('./ungit-plugin');
 const serveStatic = require('serve-static');
 
 process.on('uncaughtException', (err) => {

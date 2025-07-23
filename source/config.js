@@ -91,13 +91,6 @@ const defaultConfig = {
   // server when fetching. (git fetch -p)
   autoPruneOnFetch: true,
 
-  // Directory to look for plugins
-  pluginDirectory: path.join(homedir, '.ungit', 'plugins'),
-
-  // Name-object pairs of configurations for plugins. To disable a plugin, use "disabled": true, for example:
-  // "pluginConfigs": { "gerrit": { "disabled": true } }
-  pluginConfigs: {},
-
   // Don't show errors when the user is using a bad or undecidable git version
   gitVersionCheckOverride: false,
 
