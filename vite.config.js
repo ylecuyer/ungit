@@ -1,9 +1,4 @@
 export default {
-    css: {
-        preprocessorOptions: {
-            less: {}
-        }
-    },
     server: {
         proxy: {
             '/plugins': {

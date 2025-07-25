@@ -1,11 +1,11 @@
-@import 'variables.less';
-@import 'bootstrap.less';
-@import (less) '../../node_modules/nprogress/nprogress.css';
-@import (less) '../../node_modules/jquery-ui/themes/base/core.css';
-@import (less) '../../node_modules/diff2html/bundles/css/diff2html.min.css';
-@import (less) '../../node_modules/@primer/octicons/build/build.css';
-@import (less) '../vendor/css/animate.css';
-@import 'd2h.less';
+@import 'variables';
+@import 'bootstrap';
+@import '../../node_modules/nprogress/nprogress.css';
+@import '../../node_modules/jquery-ui/themes/base/core.css';
+@import '../../node_modules/diff2html/bundles/css/diff2html.min.css';
+@import '../../node_modules/@primer/octicons/build/build.css';
+@import '../vendor/css/animate.css';
+@import 'd2h';
 
 // Font face declarations
 @font-face {
@@ -50,8 +50,8 @@
     cursor: pointer;
 
     &.ui-state-active {
-      color: @dropdown-link-hover-color;
-      background-color: @dropdown-link-hover-bg;
+      color: $dropdown-link-hover-color;
+      background-color: $dropdown-link-hover-bg;
       border: none;
       margin: 0;
     }
@@ -74,7 +74,7 @@
 
 div.list-group-item {
   &:hover {
-    background: @list-group-hover-bg;
+    background: $list-group-hover-bg;
   }
 
   a:hover {

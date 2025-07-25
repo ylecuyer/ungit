@@ -1,9 +1,9 @@
-@import 'notpublic/less/variables.less';
+@import '/notpublic/sass/variables';
 
 .branch {
   .options {
     font-size: inherit;
-    color: @gray-dark;
+    color: $gray-dark;
 
     label {
       cursor: pointer;
