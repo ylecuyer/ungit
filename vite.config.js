@@ -4,11 +4,10 @@ export default {
             '/plugins': {
                 target: 'http://localhost:8448',
                 changeOrigin: true,
-                bypass: (req, res, options) => {
-                    if (req.url.endsWith('.less')) {
-                        return req.url;
-                    }
-                }
+            },
+            '/fonts': {
+                target: 'http://localhost:8448',
+                changeOrigin: true,
             },
             '/socket.io': {
                 target: 'http://localhost:8448',
