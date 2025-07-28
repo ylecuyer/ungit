@@ -28,8 +28,4 @@ class PromptOptions {
   }
 }
 
-module.exports = {
-  ModalViewModel,
-  FormItems,
-  PromptOptions
-};
+export { ModalViewModel, FormItems, PromptOptions };

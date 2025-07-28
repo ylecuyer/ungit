@@ -1,2 +1,2 @@
-require('./forms');
-require('./prompts');
+import './forms.js';
+import './prompts.js';

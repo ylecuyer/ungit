@@ -1,5 +1,5 @@
-const ko = require('knockout');
-const { ModalViewModel, PromptOptions } = require('./modalBase');
+import ko from 'knockout';
+import { ModalViewModel, PromptOptions } from './modalBase';
 
 ungit.components.register('yesnomodal', (args) => new YesNoModalViewModel(args.title, args.details, args.closeFunc));
 ungit.components.register(
@@ -81,3 +81,11 @@ class TextEditModal extends PromptModalViewModel {
     this.promptOptions.push(new PromptOptions('Cancel', false, 'cancel', this.closeNo.bind(this)));
   }
 }
+
+export {
+  PromptModalViewModel,
+  YesNoModalViewModel,
+  YesNoMuteModalViewModel,
+  TooManyFilesModalViewModel,
+  TextEditModal
+};

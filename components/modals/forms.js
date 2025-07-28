@@ -1,5 +1,5 @@
-const ko = require('knockout');
-const { ModalViewModel, FormItems } = require('./modalBase');
+import ko from 'knockout';
+import { ModalViewModel, FormItems } from './modalBase';
 
 ungit.components.register(
   'credentialsmodal',
@@ -85,3 +85,10 @@ class AddSubmoduleModalViewModel extends FormModalViewModel {
     }
   }
 }
+
+export {
+  FormModalViewModel,
+  CredentialsModalViewModel,
+  AddRemoteModalViewModel,
+  AddSubmoduleModalViewModel
+};
