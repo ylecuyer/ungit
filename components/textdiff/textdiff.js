@@ -1,6 +1,6 @@
 import ko from 'knockout';
 import components from 'ungit-components';
-import diff2html from 'diff2html';
+import { parse as d2h_parse, html as d2h_html } from 'diff2html';
 
 const sideBySideDiff = 'sidebysidediff';
 const textDiff = 'textdiff';
@@ -122,7 +122,7 @@ class TextDiffViewModel {
                   --- a/${this.filename}
                   +++ b/${this.filename}`;
         }
-        this.diffJson = diff2html.parse(diffs);
+        this.diffJson = d2h_parse(diffs);
       })
       .catch((err) => {
         // The file existed before but has been removed, but we're trying to get a diff for it
@@ -161,7 +161,7 @@ class TextDiffViewModel {
       this.loadCount = loadCount;
       this.hasMore(lineCount > loadCount);
 
-      let html = diff2html.html(this.diffJson, {
+      let html = d2h_html(this.diffJson, {
         outputFormat:
           this.textDiffType.value() === sideBySideDiff ? 'side-by-side' : 'line-by-line',
         drawFileList: false,

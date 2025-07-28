@@ -1,6 +1,6 @@
-const ko = require('knockout');
-const components = require('ungit-components');
-const programEvents = require('ungit-program-events');
+import ko from 'knockout';
+import components from 'ungit-components';
+import programEvents from 'ungit-program-events';
 
 class CommitLineDiff {
   constructor(args, fileLineDiff) {
@@ -40,4 +40,4 @@ class CommitLineDiff {
   }
 }
 
-exports.CommitLineDiff = CommitLineDiff;
+export { CommitLineDiff };
