@@ -3,6 +3,7 @@ const fs = fsSync.promises;
 const path = require('path');
 
 const browserify = require('browserify');
+const babelify = require('babelify');
 const exorcist = require('exorcist');
 const mkdirp = require('mkdirp').mkdirp;
 
@@ -61,7 +62,8 @@ const baseDir = path.join(__dirname, '..');
     try {
       await fs.access(jsSource);
       await browserifyFile(jsSource, destination);
-    } catch {
+    } catch(e) {
+      console.error(`Error processing ${jsSource}: ${e.message}`);
       console.warn(
         `${sourcePrefix} does not exist. If this component is obsolete, please remove that directory or perform a clean build.`
       );
@@ -98,7 +100,9 @@ async function browserifyFile(source, destination) {
     const b = browserify(source, {
       bundleExternal: false,
       debug: true,
-    })
+    }).transform(babelify, {
+      presets: ['@babel/preset-env'],
+    });
     
     const outFile = fsSync.createWriteStream(destination);
     outFile.on('close', () => resolve());

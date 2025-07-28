@@ -26,4 +26,4 @@ class ComponentRoot {
   }
 }
 
-module.exports = { ComponentRoot };
+export { ComponentRoot };
