@@ -1,6 +1,6 @@
-const ko = require('knockout');
-const CommitLineDiff = require('./commitlinediff.js').CommitLineDiff;
-const components = require('ungit-components');
+import ko from 'knockout';
+import { CommitLineDiff } from './commitlinediff.js';
+import components from 'ungit-components';
 
 components.register('commitDiff', (args) => new CommitDiff(args));
 
@@ -22,3 +22,5 @@ class CommitDiff {
     ko.renderTemplate('commitdiff', this, {}, parentElement);
   }
 }
+
+export default CommitDiff;

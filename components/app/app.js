@@ -1,7 +1,7 @@
-const ko = require('knockout');
-const components = require('ungit-components');
-const storage = require('ungit-storage');
-const $ = require('jquery');
+import ko from 'knockout';
+import components from 'ungit-components';
+import storage from 'ungit-storage';
+import $ from 'jquery';
 
 components.register('app', (args) => {
   return new AppViewModel(args.appContainer, args.server);
@@ -167,3 +167,5 @@ class AppViewModel {
     return data.template;
   }
 }
+
+export default AppViewModel;

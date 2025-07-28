@@ -1,8 +1,8 @@
-const ko = require('knockout');
-const md5 = require('blueimp-md5');
-const moment = require('moment');
-const octicons = require('octicons');
-const components = require('ungit-components');
+import ko from 'knockout';
+import md5 from 'blueimp-md5';
+import moment from 'moment';
+import octicons from 'octicons';
+import components from 'ungit-components';
 
 components.register('commit', (args) => new CommitViewModel(args));
 
@@ -99,3 +99,5 @@ class CommitViewModel {
     }
   }
 }
+
+export default CommitViewModel;

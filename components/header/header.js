@@ -1,9 +1,9 @@
-const ko = require('knockout');
-const octicons = require('octicons');
-const components = require('ungit-components');
-const navigation = require('ungit-navigation');
-const programEvents = require('ungit-program-events');
-const { encodePath } = require('ungit-address-parser');
+import ko from 'knockout';
+import octicons from 'octicons';
+import components from 'ungit-components';
+import navigation from 'ungit-navigation';
+import programEvents from 'ungit-program-events';
+import { encodePath } from 'ungit-address-parser';
 
 components.register('header', (args) => new HeaderViewModel(args.app));
 
@@ -43,3 +43,5 @@ class HeaderViewModel {
     return true;
   }
 }
+
+export default HeaderViewModel;

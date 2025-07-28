@@ -1,12 +1,13 @@
-const ko = require('knockout');
-const _ = require('lodash');
-const octicons = require('octicons');
-const components = require('ungit-components');
-const storage = require('ungit-storage');
+import ko from 'knockout';
+import _ from 'lodash';
+import octicons from 'octicons';
+import components from 'ungit-components';
+import storage from 'ungit-storage';
+import { ComponentRoot } from '../ComponentRoot';
+
 const showRemote = 'showRemote';
 const showBranch = 'showBranch';
 const showTag = 'showTag';
-const { ComponentRoot } = require('../ComponentRoot');
 
 components.register('branches', (args) => {
   return new BranchesViewModel(args.server, args.graph, args.repoPath);
@@ -152,3 +153,5 @@ class BranchesViewModel extends ComponentRoot {
     });
   }
 }
+
+export default BranchesViewModel;

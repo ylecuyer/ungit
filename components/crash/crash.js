@@ -1,5 +1,5 @@
-const ko = require('knockout');
-const components = require('ungit-components');
+import ko from 'knockout';
+import components from 'ungit-components';
 
 components.register('crash', (err) => new CrashViewModel(err));
 
@@ -12,3 +12,5 @@ class CrashViewModel {
     ko.renderTemplate('crash', this, {}, parentElement);
   }
 }
+
+export default CrashViewModel;

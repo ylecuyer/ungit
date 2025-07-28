@@ -1,7 +1,7 @@
-const ko = require('knockout');
-const octicons = require('octicons');
-const components = require('ungit-components');
-const { encodePath } = require('ungit-address-parser');
+import ko from 'knockout';
+import octicons from 'octicons';
+import components from 'ungit-components';
+import { encodePath } from 'ungit-address-parser';
 
 components.register('home', (args) => new HomeViewModel(args.app));
 
@@ -78,3 +78,5 @@ class HomeViewModel {
     return 'home';
   }
 }
+
+export { HomeViewModel as default, HomeRepositoryViewModel };

@@ -1,6 +1,6 @@
-const ko = require('knockout');
-const octicons = require('octicons');
-const components = require('ungit-components');
+import ko from 'knockout';
+import octicons from 'octicons';
+import components from 'ungit-components';
 
 components.register('gitErrors', (args) => new GitErrorsViewModel(args.server, args.repoPath));
 
@@ -52,3 +52,5 @@ class GitErrorViewModel {
     this.gitErrors.gitErrors.remove(this);
   }
 }
+
+export { GitErrorsViewModel as default, GitErrorViewModel };

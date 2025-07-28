@@ -1,7 +1,7 @@
-const ko = require('knockout');
-const octicons = require('octicons');
-const components = require('ungit-components');
-const { encodePath } = require('ungit-address-parser');
+import ko from 'knockout';
+import octicons from 'octicons';
+import components from 'ungit-components';
+import { encodePath } from 'ungit-address-parser';
 
 components.register('imagediff', (args) => new ImageDiffViewModel(args));
 
@@ -44,3 +44,5 @@ class ImageDiffViewModel {
     this.isNew(true);
   }
 }
+
+export default ImageDiffViewModel;
