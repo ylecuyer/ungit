@@ -60,8 +60,6 @@ class MergeViewModel extends HoverViewModel {
   }
 }
 
-exports.MergeViewModel = MergeViewModel;
-
 class RebaseViewModel extends HoverViewModel {
   constructor(onto, nodesThatWillMove) {
     super();
@@ -79,7 +77,6 @@ class RebaseViewModel extends HoverViewModel {
     });
   }
 }
-exports.RebaseViewModel = RebaseViewModel;
 
 class ResetViewModel extends HoverViewModel {
   constructor(nodes) {
@@ -94,7 +91,6 @@ class ResetViewModel extends HoverViewModel {
     });
   }
 }
-exports.ResetViewModel = ResetViewModel;
 
 class PushViewModel extends HoverViewModel {
   constructor(fromNode, toNode) {
@@ -113,7 +109,6 @@ class PushViewModel extends HoverViewModel {
     ];
   }
 }
-exports.PushViewModel = PushViewModel;
 
 class SquashViewModel extends HoverViewModel {
   constructor(from, onto) {
@@ -133,4 +128,5 @@ class SquashViewModel extends HoverViewModel {
     });
   }
 }
-exports.SquashViewModel = SquashViewModel;
+
+export { MergeViewModel, RebaseViewModel, ResetViewModel, PushViewModel, SquashViewModel };

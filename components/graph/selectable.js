@@ -1,4 +1,4 @@
-var ko = require('knockout');
+import ko from 'knockout';
 
 class Selectable {
   constructor(graph) {
@@ -18,4 +18,5 @@ class Selectable {
     });
   }
 }
-module.exports = Selectable;
+
+export default Selectable;

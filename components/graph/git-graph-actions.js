@@ -1,15 +1,9 @@
-const ko = require('knockout');
-const octicons = require('octicons');
-const components = require('ungit-components');
-const programEvents = require('ungit-program-events');
-const RefViewModel = require('./git-ref.js');
-const HoverActions = require('./hover-actions');
-
-const RebaseViewModel = HoverActions.RebaseViewModel;
-const MergeViewModel = HoverActions.MergeViewModel;
-const ResetViewModel = HoverActions.ResetViewModel;
-const PushViewModel = HoverActions.PushViewModel;
-const SquashViewModel = HoverActions.SquashViewModel;
+import ko from 'knockout';
+import octicons from 'octicons';
+import components from 'ungit-components';
+import programEvents from 'ungit-program-events';
+import RefViewModel from './git-ref.js';
+import { MergeViewModel, RebaseViewModel, ResetViewModel, PushViewModel, SquashViewModel } from './hover-actions.js';
 
 class ActionBase {
   constructor(graph, text, style, icon) {
@@ -444,4 +438,5 @@ const GraphActions = {
   Revert: Revert,
   Squash: Squash,
 };
-module.exports = GraphActions;
+
+export default GraphActions;

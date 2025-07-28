@@ -1,7 +1,6 @@
-const ko = require('knockout');
-const Selectable = require('./selectable');
-
-require('mina');
+import ko from 'knockout';
+import Selectable from './selectable.js';
+import 'mina';
 
 class Animateable extends Selectable {
   constructor(graph) {
@@ -39,4 +38,5 @@ class Animateable extends Selectable {
     };
   }
 }
-module.exports = Animateable;
+
+export default Animateable;

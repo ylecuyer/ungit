@@ -1,9 +1,9 @@
-const ko = require('knockout');
-const md5 = require('blueimp-md5');
-const octicons = require('octicons');
-const programEvents = require('ungit-program-events');
-const components = require('ungit-components');
-const Selectable = require('./selectable');
+import ko from 'knockout';
+import md5 from 'blueimp-md5';
+import octicons from 'octicons';
+import programEvents from 'ungit-program-events';
+import components from 'ungit-components';
+import Selectable from './selectable.js';
 
 class RefViewModel extends Selectable {
   constructor(fullRefName, graph) {
@@ -282,4 +282,4 @@ class RefViewModel extends Selectable {
   }
 }
 
-module.exports = RefViewModel;
+export default RefViewModel;

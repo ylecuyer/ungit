@@ -1,5 +1,5 @@
-const ko = require('knockout');
-const Animateable = require('./animateable');
+import ko from 'knockout';
+import Animateable from './animateable.js';
 
 class EdgeViewModel extends Animateable {
   constructor(graph, nodeAsha1, nodeBsha1) {
@@ -59,4 +59,4 @@ class EdgeViewModel extends Animateable {
   }
 }
 
-module.exports = EdgeViewModel;
+export default EdgeViewModel;

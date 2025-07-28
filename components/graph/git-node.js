@@ -1,9 +1,9 @@
-const $ = require('jquery');
-const ko = require('knockout');
-const components = require('ungit-components');
-const programEvents = require('ungit-program-events');
-const Animateable = require('./animateable');
-const GraphActions = require('./git-graph-actions');
+import $ from 'jquery';
+import ko from 'knockout';
+import components from 'ungit-components';
+import programEvents from 'ungit-program-events';
+import Animateable from './animateable.js';
+import GraphActions from './git-graph-actions.js';
 
 const maxBranchesToDisplay = parseInt((ungit.config.numRefsToShow / 5) * 3); // 3/5 of refs to show to branches
 const maxTagsToDisplay = ungit.config.numRefsToShow - maxBranchesToDisplay; // 2/5 of refs to show to tags
@@ -327,4 +327,4 @@ class GitNodeViewModel extends Animateable {
   }
 }
 
-module.exports = GitNodeViewModel;
+export default GitNodeViewModel;

@@ -1,12 +1,13 @@
-const ko = require('knockout');
-const _ = require('lodash');
-const moment = require('moment');
-const octicons = require('octicons');
-const components = require('ungit-components');
-const GitNodeViewModel = require('./git-node');
-const GitRefViewModel = require('./git-ref');
-const EdgeViewModel = require('./edge');
-const { ComponentRoot } = require('../ComponentRoot');
+import ko from 'knockout';
+import _ from 'lodash';
+import moment from 'moment';
+import octicons from 'octicons';
+import components from 'ungit-components';
+import GitNodeViewModel from './git-node.js';
+import GitRefViewModel from './git-ref.js';
+import EdgeViewModel from './edge.js';
+import { ComponentRoot } from '../ComponentRoot.js';
+
 const numberOfNodesPerLoad = ungit.config.numberOfNodesPerLoad;
 
 components.register('graph', (args) => new GraphViewModel(args.server, args.repoPath));
@@ -347,3 +348,5 @@ class GraphViewModel extends ComponentRoot {
     }
   }
 }
+
+export default GraphViewModel;
