@@ -4,45 +4,23 @@ const path = require('path');
 
 const browserify = require('browserify');
 const exorcist = require('exorcist');
-const less = require('less');
 const mkdirp = require('mkdirp').mkdirp;
 
 const baseDir = path.join(__dirname, '..');
 
 (async () => {
-  await mkdirp(path.join(baseDir, 'public', 'css'));
-  await mkdirp(path.join(baseDir, 'public', 'js'));
+  await mkdirp(path.join(baseDir, 'notpublic', 'css'));
+  await mkdirp(path.join(baseDir, 'notpublic', 'js'));
 
   const dir = await fs.readdir('components', { withFileTypes: true });
   const components = dir
     .filter((component) => component.isDirectory())
     .map((component) => component.name);
 
-  // less
-  console.log('less:common');
-  await lessFile(
-    path.join(baseDir, 'public/less/styles.less'),
-    path.join(baseDir, 'public/css/styles.css')
-  );
-
-  console.log('less:components');
-  await Promise.all(
-    components.map(async (component) => {
-      const componentPath = path.join(baseDir, `components/${component}/${component}`);
-      try {
-        await fs.access(`${componentPath}.less`);
-      } catch {
-        /* ignore */
-        return;
-      }
-      return lessFile(`${componentPath}.less`, `${componentPath}.css`);
-    })
-  );
-
   // browserify
   console.log('browserify:common');
-  const publicSourceDir = path.join(baseDir, 'public/source');
-  const b = browserify(path.join(baseDir, 'public/source/main.js'), {
+  const publicSourceDir = path.join(baseDir, 'notpublic/source');
+  const b = browserify(path.join(baseDir, 'notpublic/source/main.js'), {
     noParse: ['dnd-page-scroll', 'jquery', 'knockout'],
     debug: true,
   });
@@ -63,8 +41,8 @@ const baseDir = path.join(__dirname, '..');
   b.require('@primer/octicons', { expose: 'octicons' });
   b.require('signals', { expose: 'signals' });
   b.require('winston', { expose: 'winston' });
-  const ungitjsFile = path.join(baseDir, 'public/js/ungit.js');
-  const mapFile = path.join(baseDir, 'public/js/ungit.js.map');
+  const ungitjsFile = path.join(baseDir, 'notpublic/js/ungit.js');
+  const mapFile = path.join(baseDir, 'notpublic/js/ungit.js.map');
   await new Promise((resolve) => {
     const outFile = fsSync.createWriteStream(ungitjsFile);
     outFile.on('close', () => resolve());
@@ -94,11 +72,11 @@ const baseDir = path.join(__dirname, '..');
   console.log('copy bootstrap fonts');
   await Promise.all(
     [
-      'node_modules/bootstrap/fonts/glyphicons-halflings-regular.eot',
-      'node_modules/bootstrap/fonts/glyphicons-halflings-regular.svg',
-      'node_modules/bootstrap/fonts/glyphicons-halflings-regular.ttf',
-      'node_modules/bootstrap/fonts/glyphicons-halflings-regular.woff',
-      'node_modules/bootstrap/fonts/glyphicons-halflings-regular.woff2',
+      'node_modules/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.eot',
+      'node_modules/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.svg',
+      'node_modules/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.ttf',
+      'node_modules/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.woff',
+      'node_modules/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.woff2',
     ].map(async (file) => {
       await copyToFolder(file, 'public/fonts');
     })
@@ -113,20 +91,6 @@ const baseDir = path.join(__dirname, '..');
     )
   );
 })();
-
-async function lessFile(source, destination) {
-  const input = await fs.readFile(source, { encoding: 'utf8' });
-  const output = await less.render(input, {
-    filename: source,
-    sourceMap: {
-      outputSourceFiles: true,
-      sourceMapURL: `${path.basename(destination)}.map`,
-    },
-  });
-  await fs.writeFile(destination, output.css);
-  await fs.writeFile(`${destination}.map`, output.map);
-  console.log(`less ${path.relative(baseDir, destination)}`);
-}
 
 async function browserifyFile(source, destination) {
   const mapDestination = `${destination}.map`;

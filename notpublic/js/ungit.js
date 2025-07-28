@@ -40996,11 +40996,11 @@ function extend() {
  * Import the Bootstrap components individually.
  */
 
-require('bootstrap/js/dropdown');
-require('bootstrap/js/modal');
-require('bootstrap/js/tooltip');
+require('bootstrap-sass/assets/javascripts/bootstrap/dropdown');
+require('bootstrap-sass/assets/javascripts/bootstrap/modal');
+require('bootstrap-sass/assets/javascripts/bootstrap/tooltip');
 
-},{"bootstrap/js/dropdown":48,"bootstrap/js/modal":49,"bootstrap/js/tooltip":50}],256:[function(require,module,exports){
+},{"bootstrap-sass/assets/javascripts/bootstrap/dropdown":48,"bootstrap-sass/assets/javascripts/bootstrap/modal":49,"bootstrap-sass/assets/javascripts/bootstrap/tooltip":50}],256:[function(require,module,exports){
 /*
  * Import the autocomplete widget and its dependencies.
  * The current order of the imports is required.
