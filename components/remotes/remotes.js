@@ -1,8 +1,8 @@
-const ko = require('knockout');
-const _ = require('lodash');
-const octicons = require('octicons');
-const components = require('ungit-components');
-const programEvents = require('ungit-program-events');
+import ko from 'knockout';
+import _ from 'lodash';
+import octicons from 'octicons';
+import components from 'ungit-components';
+import programEvents from 'ungit-program-events';
 
 components.register('remotes', (args) => new RemotesViewModel(args.server, args.repoPath));
 
@@ -171,3 +171,5 @@ class RemotesViewModel {
     });
   }
 }
+
+export default RemotesViewModel;

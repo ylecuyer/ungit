@@ -1,12 +1,13 @@
-const ko = require('knockout');
-const _ = require('lodash');
-const octicons = require('octicons');
-const components = require('ungit-components');
-const programEvents = require('ungit-program-events');
+import ko from 'knockout';
+import _ from 'lodash';
+import octicons from 'octicons';
+import components from 'ungit-components';
+import programEvents from 'ungit-program-events';
+import { ComponentRoot } from '../ComponentRoot';
+
 const filesToDisplayIncrmentBy = 50;
 const filesToDisplayLimit = filesToDisplayIncrmentBy;
 const mergeTool = ungit.config.mergeTool;
-const { ComponentRoot } = require('../ComponentRoot');
 
 components.register(
   'staging',
@@ -566,3 +567,5 @@ class FileViewModel {
     }
   }
 }
+
+export { StagingViewModel as default, FileViewModel };

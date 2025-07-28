@@ -1,6 +1,7 @@
-const ko = require('knockout');
-const components = require('ungit-components');
-const diff2html = require('diff2html');
+import ko from 'knockout';
+import components from 'ungit-components';
+import diff2html from 'diff2html';
+
 const sideBySideDiff = 'sidebysidediff';
 const textDiff = 'textdiff';
 
@@ -221,3 +222,5 @@ class TextDiffViewModel {
     return true;
   }
 }
+
+export { TextDiffViewModel as default, Type, WordWrap, WhiteSpace };

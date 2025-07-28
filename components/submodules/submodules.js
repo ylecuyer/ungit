@@ -1,9 +1,9 @@
-const ko = require('knockout');
-const _ = require('lodash');
-const octicons = require('octicons');
-const components = require('ungit-components');
-const programEvents = require('ungit-program-events');
-const { ComponentRoot } = require('../ComponentRoot');
+import ko from 'knockout';
+import _ from 'lodash';
+import octicons from 'octicons';
+import components from 'ungit-components';
+import programEvents from 'ungit-program-events';
+import { ComponentRoot } from '../ComponentRoot';
 
 components.register('submodules', (args) => new SubmodulesViewModel(args.server, args.repoPath));
 
@@ -80,3 +80,5 @@ class SubmodulesViewModel extends ComponentRoot {
     });
   }
 }
+
+export default SubmodulesViewModel;

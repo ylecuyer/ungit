@@ -1,7 +1,7 @@
-const ko = require('knockout');
-const octicons = require('octicons');
-const components = require('ungit-components');
-const programEvents = require('ungit-program-events');
+import ko from 'knockout';
+import octicons from 'octicons';
+import components from 'ungit-components';
+import programEvents from 'ungit-program-events';
 
 components.register('refreshbutton', (args) => new RefreshButton(args.isLarge));
 
@@ -20,3 +20,5 @@ class RefreshButton {
     ko.renderTemplate('refreshbutton', this, {}, parentElement);
   }
 }
+
+export default RefreshButton;

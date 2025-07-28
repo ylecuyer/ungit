@@ -1,10 +1,10 @@
-const ko = require('knockout');
-const _ = require('lodash');
-const octicons = require('octicons');
-const moment = require('moment');
-const components = require('ungit-components');
-const storage = require('ungit-storage');
-const { ComponentRoot } = require('../ComponentRoot');
+import ko from 'knockout';
+import _ from 'lodash';
+import octicons from 'octicons';
+import moment from 'moment';
+import components from 'ungit-components';
+import storage from 'ungit-storage';
+import { ComponentRoot } from '../ComponentRoot';
 
 components.register('stash', (args) => new StashViewModel(args.server, args.repoPath));
 
@@ -114,3 +114,5 @@ class StashViewModel extends ComponentRoot {
     storage.setItem('showStash', this.isShow());
   }
 }
+
+export { StashViewModel as default, StashItemViewModel };
