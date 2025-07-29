@@ -4,7 +4,7 @@ var _ = require('lodash');
 var ko = require('knockout');
 var $ = require('jquery');
 var { encodePath } = require('ungit-address-parser');
-var navigation = require('ungit-navigation');
+import navigation from 'ungit-navigation-es6';
 import storage from 'ungit-storage-es6';
 
 ko.bindingHandlers.debug = {

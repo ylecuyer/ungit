@@ -25,7 +25,7 @@ ungit.logger = winston.createLogger({
 import components from 'ungit-components-es6';
 var Server = require('./server');
 var programEvents = require('ungit-program-events');
-var navigation = require('ungit-navigation');
+import navigation from 'ungit-navigation-es6';
 var adBlocker = require('just-detect-adblock');
 
 // Request animation frame polyfill and init tooltips

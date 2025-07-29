@@ -2,7 +2,7 @@ const ko = require('knockout');
 const octicons = require('octicons');
 import components from 'ungit-components-es6';
 const addressParser = require('ungit-address-parser');
-const navigation = require('ungit-navigation');
+const navigation = require('ungit-navigation-es6');
 const programEvents = require('ungit-program-events');
 const { encodePath } = require('ungit-address-parser');
 import storage from 'ungit-storage-es6'

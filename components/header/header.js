@@ -1,7 +1,7 @@
 import ko from 'knockout';
 import octicons from 'octicons';
 import components from 'ungit-components-es6';
-import navigation from 'ungit-navigation';
+import navigation from 'ungit-navigation-es6';
 import programEvents from 'ungit-program-events';
 import { encodePath } from 'ungit-address-parser';
 

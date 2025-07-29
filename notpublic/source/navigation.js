@@ -1,10 +1,12 @@
-var programEvents = require('ungit-program-events');
+import programEvents from 'ungit-program-events';
+import hasher from 'hasher';
+import crossroads from 'crossroads';
 
-var navigation = {};
-module.exports = navigation;
+const navigation = {};
+export default navigation;
 
-var hasher = (navigation.hasher = require('hasher'));
-var crossroads = (navigation.crossroads = require('crossroads'));
+navigation.hasher = hasher;
+navigation.crossroads = crossroads;
 
 navigation.browseTo = function (path) {
   hasher.setHash(path);
