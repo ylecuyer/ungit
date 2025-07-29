@@ -3,7 +3,7 @@ const octicons = require('octicons');
 import components from 'ungit-components-es6';
 const addressParser = require('ungit-address-parser');
 const navigation = require('ungit-navigation-es6');
-const programEvents = require('ungit-program-events');
+import programEvents from 'ungit-program-events-es6';
 const { encodePath } = require('ungit-address-parser');
 import storage from 'ungit-storage-es6'
 const { ComponentRoot } = require('../ComponentRoot');

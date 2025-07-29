@@ -41095,7 +41095,8 @@ ko.bindingHandlers.autocomplete = {
 },{"jquery":"jquery","knockout":"knockout","lodash":"lodash","ungit-address-parser":"ungit-address-parser","ungit-navigation-es6":"ungit-navigation-es6","ungit-storage-es6":"ungit-storage-es6"}],257:[function(require,module,exports){
 "use strict";
 
-var programEvents = require('ungit-program-events');
+var _ungitProgramEventsEs = _interopRequireDefault(require("ungit-program-events-es6"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 var nprogress;
 if (ungit.config.isDisableProgressBar) {
   nprogress = {
@@ -41134,17 +41135,17 @@ Server.prototype.initSocket = function () {
   });
   this.socket.on('connected', function (data) {
     self.socketId = data.socketId;
-    programEvents.dispatch({
+    _ungitProgramEventsEs["default"].dispatch({
       event: 'connected'
     });
   });
   this.socket.on('working-tree-changed', function () {
-    programEvents.dispatch({
+    _ungitProgramEventsEs["default"].dispatch({
       event: 'working-tree-changed'
     });
   });
   this.socket.on('git-directory-changed', function () {
-    programEvents.dispatch({
+    _ungitProgramEventsEs["default"].dispatch({
       event: 'git-directory-changed'
     });
   });
@@ -41211,7 +41212,7 @@ Server.prototype._onDisconnect = function (err) {
   if (!this.isUnloading) {
     var stacktrace = Error().stack;
     console.warn('disconnecting...', err, stacktrace);
-    programEvents.dispatch({
+    _ungitProgramEventsEs["default"].dispatch({
       event: 'disconnected',
       stacktrace: stacktrace,
       error: err
@@ -41220,11 +41221,11 @@ Server.prototype._onDisconnect = function (err) {
 };
 Server.prototype._getCredentials = function (callback, args) {
   // Push out a program event, hoping someone will respond! (Which the app component will)
-  programEvents.dispatch({
+  _ungitProgramEventsEs["default"].dispatch({
     event: 'request-credentials',
     remote: args.remote
   });
-  var credentialsBinding = programEvents.add(function (event) {
+  var credentialsBinding = _ungitProgramEventsEs["default"].add(function (event) {
     if (event.event != 'request-credentials-response') return;
     credentialsBinding.detach();
     callback({
@@ -41299,7 +41300,7 @@ Server.prototype.putPromise = function (url, arg) {
 Server.prototype.unhandledRejection = function (err) {
   // Show a error screen for git errors (so that people have a chance to debug them)
   if (err.res && err.res.body && err.res.body.isGitError) {
-    programEvents.dispatch({
+    _ungitProgramEventsEs["default"].dispatch({
       event: 'git-error',
       data: {
         command: err.res.body.command,
@@ -41312,7 +41313,7 @@ Server.prototype.unhandledRejection = function (err) {
   } else {
     // Everything else is handled as a pure error, using the precreated error (to get a better stacktrace)
     console.trace('Unhandled Promise ERROR: ', err, JSON.stringify(err));
-    programEvents.dispatch({
+    _ungitProgramEventsEs["default"].dispatch({
       event: 'git-crash-error',
       error: err
     });
@@ -41320,7 +41321,7 @@ Server.prototype.unhandledRejection = function (err) {
   }
 };
 
-},{"nprogress":168,"ungit-program-events":"ungit-program-events"}],"bluebird":[function(require,module,exports){
+},{"nprogress":168,"ungit-program-events-es6":"ungit-program-events-es6"}],"bluebird":[function(require,module,exports){
 (function (process,global,setImmediate){(function (){
 /* @preserve
  * The MIT License (MIT)
@@ -82358,7 +82359,7 @@ require("./knockout-bindings.js");
 var _winston = _interopRequireDefault(require("winston"));
 var _ungitComponentsEs = _interopRequireDefault(require("ungit-components-es6"));
 var _server = _interopRequireDefault(require("./server.js"));
-var _ungitProgramEvents = _interopRequireDefault(require("ungit-program-events"));
+var _ungitProgramEventsEs = _interopRequireDefault(require("ungit-program-events-es6"));
 var _ungitNavigationEs = _interopRequireDefault(require("ungit-navigation-es6"));
 var _justDetectAdblock = _interopRequireDefault(require("just-detect-adblock"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
@@ -82435,7 +82436,7 @@ function start() {
     server: server
   });
   ungit.__app = app;
-  _ungitProgramEvents["default"].add(/*#__PURE__*/function () {
+  _ungitProgramEventsEs["default"].add(/*#__PURE__*/function () {
     var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(event) {
       var err, _t, _t2;
       return _regenerator().w(function (_context) {
@@ -82502,7 +82503,7 @@ function start() {
     server.initSocket();
   }
   Raven.TraceKit.report.subscribe(function (event, err) {
-    _ungitProgramEvents["default"].dispatch({
+    _ungitProgramEventsEs["default"].dispatch({
       event: 'raven-crash',
       error: err || event.event
     });
@@ -82526,7 +82527,7 @@ function start() {
     windowTitle.update();
   });
   _ungitNavigationEs["default"].crossroads.addRoute('/repository{?query}', function (query) {
-    _ungitProgramEvents["default"].dispatch({
+    _ungitProgramEventsEs["default"].dispatch({
       event: 'navigated-to-path',
       path: query.path
     });
@@ -82541,14 +82542,14 @@ function start() {
 }
 ;
 
-},{"./bootstrap.js":254,"./jquery-ui.js":255,"./knockout-bindings.js":256,"./server.js":257,"jquery":"jquery","just-detect-adblock":136,"knockout":"knockout","ungit-components-es6":"ungit-components-es6","ungit-navigation-es6":"ungit-navigation-es6","ungit-program-events":"ungit-program-events","winston":"winston"}],"ungit-navigation-es6":[function(require,module,exports){
+},{"./bootstrap.js":254,"./jquery-ui.js":255,"./knockout-bindings.js":256,"./server.js":257,"jquery":"jquery","just-detect-adblock":136,"knockout":"knockout","ungit-components-es6":"ungit-components-es6","ungit-navigation-es6":"ungit-navigation-es6","ungit-program-events-es6":"ungit-program-events-es6","winston":"winston"}],"ungit-navigation-es6":[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-var _ungitProgramEvents = _interopRequireDefault(require("ungit-program-events"));
+var _ungitProgramEventsEs = _interopRequireDefault(require("ungit-program-events-es6"));
 var _hasher = _interopRequireDefault(require("hasher"));
 var _crossroads = _interopRequireDefault(require("crossroads"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
@@ -82563,7 +82564,7 @@ navigation.init = function () {
   //setup hasher
   function parseHash(newHash, oldHash) {
     _crossroads["default"].parse(newHash);
-    _ungitProgramEvents["default"].dispatch({
+    _ungitProgramEventsEs["default"].dispatch({
       event: 'navigation-changed',
       path: newHash,
       oldPath: oldHash
@@ -82575,12 +82576,17 @@ navigation.init = function () {
   _hasher["default"].init();
 };
 
-},{"crossroads":76,"hasher":116,"ungit-program-events":"ungit-program-events"}],"ungit-program-events":[function(require,module,exports){
+},{"crossroads":76,"hasher":116,"ungit-program-events-es6":"ungit-program-events-es6"}],"ungit-program-events-es6":[function(require,module,exports){
 "use strict";
 
-var signals = require('signals');
-var programEvents = new signals.Signal();
-module.exports = programEvents;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var _signals = _interopRequireDefault(require("signals"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+var programEvents = new _signals["default"].Signal();
+var _default = exports["default"] = programEvents;
 ungit.programEvents = programEvents;
 programEvents.add(function (event) {
   console.log('Event:', event.event);

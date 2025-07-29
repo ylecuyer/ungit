@@ -2,7 +2,7 @@ import ko from 'knockout';
 import _ from 'lodash';
 import octicons from 'octicons';
 import components from 'ungit-components-es6';
-import programEvents from 'ungit-program-events';
+import programEvents from 'ungit-program-events-es6';
 import { ComponentRoot } from '../ComponentRoot';
 
 components.register('submodules', (args) => new SubmodulesViewModel(args.server, args.repoPath));

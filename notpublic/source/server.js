@@ -1,4 +1,4 @@
-var programEvents = require('ungit-program-events');
+import programEvents from 'ungit-program-events-es6';
 
 var nprogress;
 if (ungit.config.isDisableProgressBar) {

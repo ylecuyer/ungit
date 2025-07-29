@@ -1,7 +1,7 @@
-const signals = require('signals');
+import signals from 'signals';
 
 const programEvents = new signals.Signal();
-module.exports = programEvents;
+export default programEvents;
 ungit.programEvents = programEvents;
 
 programEvents.add(function (event) {

@@ -1,7 +1,7 @@
 import ko from 'knockout';
 import md5 from 'blueimp-md5';
 import octicons from 'octicons';
-import programEvents from 'ungit-program-events';
+import programEvents from 'ungit-program-events-es6';
 import components from 'ungit-components-es6';
 import Selectable from './selectable.js';
 

@@ -6,7 +6,7 @@ import './knockout-bindings.js';
 import winston from 'winston';
 import components from 'ungit-components-es6';
 import Server from './server.js';
-import programEvents from 'ungit-program-events';
+import programEvents from 'ungit-program-events-es6';
 import navigation from 'ungit-navigation-es6';
 import adBlocker from 'just-detect-adblock';
 
