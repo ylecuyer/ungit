@@ -2,7 +2,7 @@ import ko from 'knockout';
 import md5 from 'blueimp-md5';
 import octicons from 'octicons';
 import programEvents from 'ungit-program-events';
-import components from 'ungit-components';
+import components from 'ungit-components-es6';
 import Selectable from './selectable.js';
 
 class RefViewModel extends Selectable {

@@ -1,7 +1,7 @@
 import ko from 'knockout';
 import _ from 'lodash';
 import octicons from 'octicons';
-import components from 'ungit-components';
+import components from 'ungit-components-es6';
 import programEvents from 'ungit-program-events';
 import { ComponentRoot } from '../ComponentRoot';
 

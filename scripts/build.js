@@ -30,7 +30,7 @@ const baseDir = path.join(__dirname, '..');
       }),
     ],
   });
-  b.require(path.join(publicSourceDir, 'components.js'), { expose: 'ungit-components' });
+  b.require(path.join(publicSourceDir, 'components.js'), { expose: 'ungit-components-es6' });
   b.require(path.join(publicSourceDir, 'main.js'), { expose: 'ungit-main' });
   b.require(path.join(publicSourceDir, 'navigation.js'), { expose: 'ungit-navigation' });
   b.require(path.join(publicSourceDir, 'program-events.js'), { expose: 'ungit-program-events' });

@@ -1,6 +1,6 @@
 import ko from 'knockout';
 import { CommitLineDiff } from './commitlinediff.js';
-import components from 'ungit-components';
+import components from 'ungit-components-es6';
 
 components.register('commitDiff', (args) => new CommitDiff(args));
 

@@ -2,7 +2,7 @@ import ko from 'knockout';
 import _ from 'lodash';
 import moment from 'moment';
 import octicons from 'octicons';
-import components from 'ungit-components';
+import components from 'ungit-components-es6';
 import GitNodeViewModel from './git-node.js';
 import GitRefViewModel from './git-ref.js';
 import EdgeViewModel from './edge.js';

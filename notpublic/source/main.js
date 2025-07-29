@@ -22,7 +22,7 @@ ungit.logger = winston.createLogger({
   ),
   transports: [new winston.transports.Console()],
 });
-var components = require('ungit-components');
+import components from 'ungit-components-es6';
 var Server = require('./server');
 var programEvents = require('ungit-program-events');
 var navigation = require('ungit-navigation');

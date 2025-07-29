@@ -1,6 +1,6 @@
 import ko from 'knockout';
 import octicons from 'octicons';
-import components from 'ungit-components';
+import components from 'ungit-components-es6';
 import programEvents from 'ungit-program-events';
 import RefViewModel from './git-ref.js';
 import { MergeViewModel, RebaseViewModel, ResetViewModel, PushViewModel, SquashViewModel } from './hover-actions.js';

@@ -1,6 +1,6 @@
 import ko from 'knockout';
 import octicons from 'octicons';
-import components from 'ungit-components';
+import components from 'ungit-components-es6';
 import { encodePath } from 'ungit-address-parser';
 
 components.register('imagediff', (args) => new ImageDiffViewModel(args));

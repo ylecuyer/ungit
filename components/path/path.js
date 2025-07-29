@@ -1,6 +1,6 @@
 const ko = require('knockout');
 const octicons = require('octicons');
-const components = require('ungit-components');
+import components from 'ungit-components-es6';
 const addressParser = require('ungit-address-parser');
 const navigation = require('ungit-navigation');
 const programEvents = require('ungit-program-events');

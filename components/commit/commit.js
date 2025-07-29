@@ -2,7 +2,7 @@ import ko from 'knockout';
 import md5 from 'blueimp-md5';
 import moment from 'moment';
 import octicons from 'octicons';
-import components from 'ungit-components';
+import components from 'ungit-components-es6';
 
 components.register('commit', (args) => new CommitViewModel(args));
 

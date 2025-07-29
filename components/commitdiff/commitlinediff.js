@@ -1,5 +1,5 @@
 import ko from 'knockout';
-import components from 'ungit-components';
+import components from 'ungit-components-es6';
 import programEvents from 'ungit-program-events';
 
 class CommitLineDiff {

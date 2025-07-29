@@ -2,7 +2,7 @@ import ko from 'knockout';
 import _ from 'lodash';
 import octicons from 'octicons';
 import moment from 'moment';
-import components from 'ungit-components';
+import components from 'ungit-components-es6';
 import storage from 'ungit-storage-es6';
 import { ComponentRoot } from '../ComponentRoot';
 
