@@ -41028,6 +41028,8 @@ require('jquery-ui/ui/widgets/autocomplete');
 },{"jquery-ui/ui/keycode":130,"jquery-ui/ui/position":131,"jquery-ui/ui/unique-id":132,"jquery-ui/ui/version":133,"jquery-ui/ui/widget":134,"jquery-ui/ui/widgets/autocomplete":135,"jquery-ui/ui/widgets/menu":136}],257:[function(require,module,exports){
 "use strict";
 
+var _ungitStorageEs = _interopRequireDefault(require("ungit-storage-es6"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 /* eslint no-unused-vars: "off" */
 
 var _ = require('lodash');
@@ -41036,7 +41038,6 @@ var $ = require('jquery');
 var _require = require('ungit-address-parser'),
   encodePath = _require.encodePath;
 var navigation = require('ungit-navigation');
-var storage = require('ungit-storage');
 ko.bindingHandlers.debug = {
   init: function init(element, valueAccessor) {
     var value = ko.utils.unwrapObservable(valueAccessor());
@@ -41237,9 +41238,9 @@ ko.bindingHandlers.autocomplete = {
         // enter key is struck, navigate to the path
         event.preventDefault();
         navigation.browseTo("repository?path=".concat(encodePath(value)));
-      } else if (value === '' && storage.getItem('repositories')) {
+      } else if (value === '' && _ungitStorageEs["default"].getItem('repositories')) {
         // if path is emptied out, show save path options
-        var folderNames = JSON.parse(storage.getItem('repositories')).map(function (value) {
+        var folderNames = JSON.parse(_ungitStorageEs["default"].getItem('repositories')).map(function (value) {
           return {
             value: value,
             label: value.substring(value.lastIndexOf(ungit.config.fileSeparator) + 1)
@@ -41254,7 +41255,7 @@ ko.bindingHandlers.autocomplete = {
   }
 };
 
-},{"jquery":"jquery","knockout":"knockout","lodash":"lodash","ungit-address-parser":"ungit-address-parser","ungit-navigation":"ungit-navigation","ungit-storage":"ungit-storage"}],258:[function(require,module,exports){
+},{"jquery":"jquery","knockout":"knockout","lodash":"lodash","ungit-address-parser":"ungit-address-parser","ungit-navigation":"ungit-navigation","ungit-storage-es6":"ungit-storage-es6"}],258:[function(require,module,exports){
 "use strict";
 
 var programEvents = require('ungit-program-events');
@@ -82739,9 +82740,13 @@ programEvents.add(function (event) {
   console.log('Event:', event.event);
 });
 
-},{"signals":"signals"}],"ungit-storage":[function(require,module,exports){
+},{"signals":"signals"}],"ungit-storage-es6":[function(require,module,exports){
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
 /**
  * A wrapper around LocalStorage to support environments where LocalStorage is not available.
  * Stores and retrieves items from LocalStorage if available and uses a non-persistent cache otherwise.
@@ -82766,7 +82771,7 @@ if (!storage) {
     }
   };
 }
-module.exports = storage;
+var _default = exports["default"] = storage;
 
 },{}],"winston":[function(require,module,exports){
 /**

@@ -2,7 +2,7 @@ import ko from 'knockout';
 import _ from 'lodash';
 import octicons from 'octicons';
 import components from 'ungit-components';
-import storage from 'ungit-storage';
+import storage from 'ungit-storage-es6';
 import { ComponentRoot } from '../ComponentRoot';
 
 const showRemote = 'showRemote';

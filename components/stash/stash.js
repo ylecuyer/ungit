@@ -3,7 +3,7 @@ import _ from 'lodash';
 import octicons from 'octicons';
 import moment from 'moment';
 import components from 'ungit-components';
-import storage from 'ungit-storage';
+import storage from 'ungit-storage-es6';
 import { ComponentRoot } from '../ComponentRoot';
 
 components.register('stash', (args) => new StashViewModel(args.server, args.repoPath));

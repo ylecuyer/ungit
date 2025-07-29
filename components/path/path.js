@@ -5,7 +5,7 @@ const addressParser = require('ungit-address-parser');
 const navigation = require('ungit-navigation');
 const programEvents = require('ungit-program-events');
 const { encodePath } = require('ungit-address-parser');
-const storage = require('ungit-storage');
+import storage from 'ungit-storage-es6'
 const { ComponentRoot } = require('../ComponentRoot');
 const showCreateRepoKey = 'isShowCreateRepo';
 

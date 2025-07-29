@@ -5,7 +5,7 @@ var ko = require('knockout');
 var $ = require('jquery');
 var { encodePath } = require('ungit-address-parser');
 var navigation = require('ungit-navigation');
-var storage = require('ungit-storage');
+import storage from 'ungit-storage-es6';
 
 ko.bindingHandlers.debug = {
   init: function (element, valueAccessor) {
