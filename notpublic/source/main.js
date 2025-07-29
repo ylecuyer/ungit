@@ -1,11 +1,16 @@
-var $ = require('jquery');
-global.jQuery = $; // this is for old backward compatability of bootrap modules
-var ko = require('knockout');
-var dndPageScroll = require('dnd-page-scroll');
-require('./bootstrap');
-require('./jquery-ui');
-require('./knockout-bindings');
-const winston = require('winston');
+import $ from 'jquery';
+import ko from 'knockout';
+import dndPageScroll from 'dnd-page-scroll';
+import './bootstrap.js';
+import './jquery-ui.js';
+import './knockout-bindings.js';
+import winston from 'winston';
+import components from 'ungit-components-es6';
+import Server from './server.js';
+import programEvents from 'ungit-program-events';
+import navigation from 'ungit-navigation-es6';
+import adBlocker from 'just-detect-adblock';
+
 ungit.logger = winston.createLogger({
   level: ungit.config.logLevel || 'error',
   format: winston.format.combine(
@@ -22,11 +27,6 @@ ungit.logger = winston.createLogger({
   ),
   transports: [new winston.transports.Console()],
 });
-import components from 'ungit-components-es6';
-var Server = require('./server');
-var programEvents = require('ungit-program-events');
-import navigation from 'ungit-navigation-es6';
-var adBlocker = require('just-detect-adblock');
 
 // Request animation frame polyfill and init tooltips
 (function () {
@@ -83,7 +83,6 @@ windowTitle.update();
 var AppContainerViewModel = function () {
   this.content = ko.observable();
 };
-exports.AppContainerViewModel = AppContainerViewModel;
 AppContainerViewModel.prototype.templateChooser = function (data) {
   if (!data) return '';
   return data.template;
@@ -91,7 +90,7 @@ AppContainerViewModel.prototype.templateChooser = function (data) {
 
 var app, appContainer, server;
 
-exports.start = function () {
+function start() {
   server = new Server();
   appContainer = new AppContainerViewModel();
   ungit.server = server;
@@ -161,3 +160,5 @@ exports.start = function () {
 $(document).ready(function () {
   dndPageScroll.default(); // Automatic page scrolling on drag-n-drop: http://www.planbox.com/blog/news/updates/html5-drag-and-drop-scrolling-the-page.html
 });
+
+export { AppContainerViewModel, start };

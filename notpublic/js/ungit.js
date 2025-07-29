@@ -40992,17 +40992,23 @@ function extend() {
 }
 
 },{}],255:[function(require,module,exports){
+(function (global){(function (){
 "use strict";
 
 /*
  * Import the Bootstrap components individually.
  */
 
+var $ = require('jquery');
+global.jQuery = $; // this is for old backward compatability of bootrap modules
+
 require('bootstrap-sass/assets/javascripts/bootstrap/dropdown');
 require('bootstrap-sass/assets/javascripts/bootstrap/modal');
 require('bootstrap-sass/assets/javascripts/bootstrap/tooltip');
 
-},{"bootstrap-sass/assets/javascripts/bootstrap/dropdown":48,"bootstrap-sass/assets/javascripts/bootstrap/modal":49,"bootstrap-sass/assets/javascripts/bootstrap/tooltip":50}],256:[function(require,module,exports){
+}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
+},{"bootstrap-sass/assets/javascripts/bootstrap/dropdown":48,"bootstrap-sass/assets/javascripts/bootstrap/modal":49,"bootstrap-sass/assets/javascripts/bootstrap/tooltip":50,"jquery":"jquery"}],256:[function(require,module,exports){
 "use strict";
 
 /*
@@ -82505,28 +82511,34 @@ components.showModal = function (name, args) {
   return modal;
 };
 
-},{}],"ungit-main":[function(require,module,exports){
-(function (global){(function (){
+},{}],"ungit-main-es6":[function(require,module,exports){
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.AppContainerViewModel = void 0;
+exports.start = start;
+var _jquery = _interopRequireDefault(require("jquery"));
+var _knockout = _interopRequireDefault(require("knockout"));
+var _dndPageScroll = _interopRequireDefault(require("dnd-page-scroll"));
+require("./bootstrap.js");
+require("./jquery-ui.js");
+require("./knockout-bindings.js");
+var _winston = _interopRequireDefault(require("winston"));
 var _ungitComponentsEs = _interopRequireDefault(require("ungit-components-es6"));
+var _server = _interopRequireDefault(require("./server.js"));
+var _ungitProgramEvents = _interopRequireDefault(require("ungit-program-events"));
 var _ungitNavigationEs = _interopRequireDefault(require("ungit-navigation-es6"));
+var _justDetectAdblock = _interopRequireDefault(require("just-detect-adblock"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { if (r) i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n;else { var o = function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); }; o("next", 0), o("throw", 1), o("return", 2); } }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
-var $ = require('jquery');
-global.jQuery = $; // this is for old backward compatability of bootrap modules
-var ko = require('knockout');
-var dndPageScroll = require('dnd-page-scroll');
-require('./bootstrap');
-require('./jquery-ui');
-require('./knockout-bindings');
-var winston = require('winston');
-ungit.logger = winston.createLogger({
+ungit.logger = _winston["default"].createLogger({
   level: ungit.config.logLevel || 'error',
-  format: winston.format.combine(winston.format.timestamp(), winston.format.colorize(), winston.format.printf(function (info) {
+  format: _winston["default"].format.combine(_winston["default"].format.timestamp(), _winston["default"].format.colorize(), _winston["default"].format.printf(function (info) {
     var splat = info[Symbol["for"]('splat')];
     if (splat) {
       var splatStr = splat.map(function (arg) {
@@ -82536,11 +82548,8 @@ ungit.logger = winston.createLogger({
     }
     return "".concat(info.timestamp, " - ").concat(info.level, ": ").concat(info.message);
   })),
-  transports: [new winston.transports.Console()]
+  transports: [new _winston["default"].transports.Console()]
 });
-var Server = require('./server');
-var programEvents = require('ungit-program-events');
-var adBlocker = require('just-detect-adblock');
 
 // Request animation frame polyfill and init tooltips
 (function () {
@@ -82562,7 +82571,7 @@ var adBlocker = require('just-detect-adblock');
   if (!window.cancelAnimationFrame) window.cancelAnimationFrame = function (id) {
     clearTimeout(id);
   };
-  $(document).tooltip({
+  (0, _jquery["default"])(document).tooltip({
     selector: '[data-toggle="tooltip"]'
   });
 })();
@@ -82579,17 +82588,16 @@ WindowTitle.prototype.update = function () {
 };
 var windowTitle = new WindowTitle();
 windowTitle.update();
-var AppContainerViewModel = function AppContainerViewModel() {
-  this.content = ko.observable();
+var AppContainerViewModel = exports.AppContainerViewModel = function AppContainerViewModel() {
+  this.content = _knockout["default"].observable();
 };
-exports.AppContainerViewModel = AppContainerViewModel;
 AppContainerViewModel.prototype.templateChooser = function (data) {
   if (!data) return '';
   return data.template;
 };
 var app, appContainer, server;
-exports.start = function () {
-  server = new Server();
+function start() {
+  server = new _server["default"]();
   appContainer = new AppContainerViewModel();
   ungit.server = server;
   app = _ungitComponentsEs["default"].create('app', {
@@ -82597,7 +82605,7 @@ exports.start = function () {
     server: server
   });
   ungit.__app = app;
-  programEvents.add(/*#__PURE__*/function () {
+  _ungitProgramEvents["default"].add(/*#__PURE__*/function () {
     var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(event) {
       var err, _t, _t2;
       return _regenerator().w(function (_context) {
@@ -82615,7 +82623,7 @@ exports.start = function () {
               break;
             }
             _context.n = 1;
-            return adBlocker.detectAnyAdblocker();
+            return _justDetectAdblock["default"].detectAnyAdblocker();
           case 1:
             _t = _context.v;
           case 2:
@@ -82664,7 +82672,7 @@ exports.start = function () {
     server.initSocket();
   }
   Raven.TraceKit.report.subscribe(function (event, err) {
-    programEvents.dispatch({
+    _ungitProgramEvents["default"].dispatch({
       event: 'raven-crash',
       error: err || event.event
     });
@@ -82677,7 +82685,7 @@ exports.start = function () {
     window.requestAnimationFrame(_updateAnimationFrame);
   };
   window.requestAnimationFrame(_updateAnimationFrame);
-  ko.applyBindings(appContainer);
+  _knockout["default"].applyBindings(appContainer);
 
   // routing
   _ungitNavigationEs["default"].crossroads.addRoute('/', function () {
@@ -82688,7 +82696,7 @@ exports.start = function () {
     windowTitle.update();
   });
   _ungitNavigationEs["default"].crossroads.addRoute('/repository{?query}', function (query) {
-    programEvents.dispatch({
+    _ungitProgramEvents["default"].dispatch({
       event: 'navigated-to-path',
       path: query.path
     });
@@ -82700,14 +82708,13 @@ exports.start = function () {
     windowTitle.update();
   });
   _ungitNavigationEs["default"].init();
-};
-$(document).ready(function () {
-  dndPageScroll["default"](); // Automatic page scrolling on drag-n-drop: http://www.planbox.com/blog/news/updates/html5-drag-and-drop-scrolling-the-page.html
+}
+;
+(0, _jquery["default"])(document).ready(function () {
+  _dndPageScroll["default"]["default"](); // Automatic page scrolling on drag-n-drop: http://www.planbox.com/blog/news/updates/html5-drag-and-drop-scrolling-the-page.html
 });
 
-}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-
-},{"./bootstrap":255,"./jquery-ui":256,"./knockout-bindings":257,"./server":258,"dnd-page-scroll":89,"jquery":"jquery","just-detect-adblock":137,"knockout":"knockout","ungit-components-es6":"ungit-components-es6","ungit-navigation-es6":"ungit-navigation-es6","ungit-program-events":"ungit-program-events","winston":"winston"}],"ungit-navigation-es6":[function(require,module,exports){
+},{"./bootstrap.js":255,"./jquery-ui.js":256,"./knockout-bindings.js":257,"./server.js":258,"dnd-page-scroll":89,"jquery":"jquery","just-detect-adblock":137,"knockout":"knockout","ungit-components-es6":"ungit-components-es6","ungit-navigation-es6":"ungit-navigation-es6","ungit-program-events":"ungit-program-events","winston":"winston"}],"ungit-navigation-es6":[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -82957,5 +82964,5 @@ warn.forFunctions(exports, 'useFormat', ['cli']);
 warn.forProperties(exports, 'useFormat', ['padLevels', 'stripColors']);
 warn.forFunctions(exports, 'deprecated', ['addRewriter', 'addFilter', 'clone', 'extend']);
 warn.forProperties(exports, 'deprecated', ['emitErrs', 'levelLength']);
-},{"../package.json":253,"./winston/common":237,"./winston/config":238,"./winston/container":239,"./winston/create-logger":240,"./winston/exception-handler":241,"./winston/logger":243,"./winston/rejection-handler":245,"./winston/transports":251,"logform":139,"winston-transport":232}]},{},["ungit-main"])
+},{"../package.json":253,"./winston/common":237,"./winston/config":238,"./winston/container":239,"./winston/create-logger":240,"./winston/exception-handler":241,"./winston/logger":243,"./winston/rejection-handler":245,"./winston/transports":251,"logform":139,"winston-transport":232}]},{},["ungit-main-es6"])
 //# sourceMappingURL=ungit.js.map
