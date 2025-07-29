@@ -1,12 +1,12 @@
-const ko = require('knockout');
-const octicons = require('octicons');
+import ko from 'knockout';
+import octicons from 'octicons';
 import components from 'ungit-components-es6';
 const addressParser = require('ungit-address-parser');
-const navigation = require('ungit-navigation-es6');
+import navigation from 'ungit-navigation-es6';
 import programEvents from 'ungit-program-events-es6';
 const { encodePath } = require('ungit-address-parser');
 import storage from 'ungit-storage-es6'
-const { ComponentRoot } = require('../ComponentRoot');
+import { ComponentRoot } from '../ComponentRoot';
 const showCreateRepoKey = 'isShowCreateRepo';
 
 components.register('path', (args) => {
