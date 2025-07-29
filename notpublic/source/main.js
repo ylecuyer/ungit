@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import ko from 'knockout';
-import dndPageScroll from 'dnd-page-scroll';
 import './bootstrap.js';
 import './jquery-ui.js';
 import './knockout-bindings.js';
@@ -156,9 +155,5 @@ function start() {
 
   navigation.init();
 };
-
-$(document).ready(function () {
-  dndPageScroll.default(); // Automatic page scrolling on drag-n-drop: http://www.planbox.com/blog/news/updates/html5-drag-and-drop-scrolling-the-page.html
-});
 
 export { AppContainerViewModel, start };
