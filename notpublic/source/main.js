@@ -1,5 +1,5 @@
 var $ = require('jquery');
-jQuery = $; // this is for old backward compatability of bootrap modules
+global.jQuery = $; // this is for old backward compatability of bootrap modules
 var ko = require('knockout');
 var dndPageScroll = require('dnd-page-scroll');
 require('./bootstrap');

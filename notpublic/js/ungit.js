@@ -40992,6 +40992,8 @@ function extend() {
 }
 
 },{}],255:[function(require,module,exports){
+"use strict";
+
 /*
  * Import the Bootstrap components individually.
  */
@@ -41001,6 +41003,8 @@ require('bootstrap-sass/assets/javascripts/bootstrap/modal');
 require('bootstrap-sass/assets/javascripts/bootstrap/tooltip');
 
 },{"bootstrap-sass/assets/javascripts/bootstrap/dropdown":48,"bootstrap-sass/assets/javascripts/bootstrap/modal":49,"bootstrap-sass/assets/javascripts/bootstrap/tooltip":50}],256:[function(require,module,exports){
+"use strict";
+
 /*
  * Import the autocomplete widget and its dependencies.
  * The current order of the imports is required.
@@ -41022,32 +41026,35 @@ require('jquery-ui/ui/widgets/menu');
 require('jquery-ui/ui/widgets/autocomplete');
 
 },{"jquery-ui/ui/keycode":130,"jquery-ui/ui/position":131,"jquery-ui/ui/unique-id":132,"jquery-ui/ui/version":133,"jquery-ui/ui/widget":134,"jquery-ui/ui/widgets/autocomplete":135,"jquery-ui/ui/widgets/menu":136}],257:[function(require,module,exports){
+"use strict";
+
 /* eslint no-unused-vars: "off" */
 
 var _ = require('lodash');
 var ko = require('knockout');
 var $ = require('jquery');
-var { encodePath } = require('ungit-address-parser');
+var _require = require('ungit-address-parser'),
+  encodePath = _require.encodePath;
 var navigation = require('ungit-navigation');
 var storage = require('ungit-storage');
-
 ko.bindingHandlers.debug = {
-  init: function (element, valueAccessor) {
+  init: function init(element, valueAccessor) {
     var value = ko.utils.unwrapObservable(valueAccessor());
     console.log('DEBUG INIT', value);
   },
-  update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+  update: function update(element, valueAccessor, allBindingsAccessor, viewModel) {
     var value = ko.utils.unwrapObservable(valueAccessor());
     console.log('DEBUG UPDATE', value);
-  },
+  }
 };
-
 ko.bindingHandlers.component = {
-  init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+  init: function init(element, valueAccessor, allBindingsAccessor, viewModel) {
     ko.virtualElements.emptyNode(element);
-    return { controlsDescendantBindings: true };
+    return {
+      controlsDescendantBindings: true
+    };
   },
-  update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+  update: function update(element, valueAccessor, allBindings, viewModel, bindingContext) {
     var component = ko.utils.unwrapObservable(valueAccessor());
     if (!component || !component.updateNode) {
       ko.virtualElements.emptyNode(element);
@@ -41055,27 +41062,24 @@ ko.bindingHandlers.component = {
     }
     var node = component.updateNode(element);
     if (node) ko.virtualElements.setDomNodeChildren(element, [node]);
-  },
+  }
 };
 ko.virtualElements.allowedBindings.component = true;
-
 ko.bindingHandlers.editableText = {
-  init: function (element, valueAccessor) {
+  init: function init(element, valueAccessor) {
     $(element).on('blur', function () {
       var observable = valueAccessor();
       observable($(this).text());
     });
   },
-  update: function (element, valueAccessor) {
+  update: function update(element, valueAccessor) {
     var value = ko.utils.unwrapObservable(valueAccessor());
     $(element).text(value);
-  },
+  }
 };
-
 var currentlyDraggingViewModel = null;
-
 ko.bindingHandlers.dragStart = {
-  init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+  init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     var value = valueAccessor();
     element.addEventListener('dragstart', function (e) {
       e.dataTransfer.setData('Text', 'ungit');
@@ -41083,21 +41087,20 @@ ko.bindingHandlers.dragStart = {
       var valueUnwrapped = ko.utils.unwrapObservable(value);
       valueUnwrapped.call(viewModel, true);
     });
-  },
+  }
 };
 ko.bindingHandlers.dragEnd = {
-  init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+  init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     var value = valueAccessor();
     element.addEventListener('dragend', function () {
       currentlyDraggingViewModel = null;
       var valueUnwrapped = ko.utils.unwrapObservable(value);
       valueUnwrapped.call(viewModel, false);
     });
-  },
+  }
 };
-
 ko.bindingHandlers.dropOver = {
-  init: function (element, valueAccessor) {
+  init: function init(element, valueAccessor) {
     element.addEventListener('dragover', function (e) {
       var value = valueAccessor();
       var valueUnwrapped = ko.utils.unwrapObservable(value);
@@ -41106,65 +41109,58 @@ ko.bindingHandlers.dropOver = {
       e.dataTransfer.dropEffect = 'move';
       return false;
     });
-  },
+  }
 };
-
 ko.bindingHandlers.dragEnter = {
-  init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+  init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     element.addEventListener('dragenter', function (e) {
       var value = valueAccessor();
       var valueUnwrapped = ko.utils.unwrapObservable(value);
       valueUnwrapped.call(viewModel, currentlyDraggingViewModel);
     });
-  },
+  }
 };
-
 ko.bindingHandlers.dragLeave = {
-  init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+  init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     element.addEventListener('dragleave', function (e) {
       var value = valueAccessor();
       var valueUnwrapped = ko.utils.unwrapObservable(value);
       valueUnwrapped.call(viewModel, currentlyDraggingViewModel);
     });
-  },
+  }
 };
-
 ko.bindingHandlers.drop = {
-  init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+  init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     var value = valueAccessor();
     element.addEventListener('drop', function (e) {
       if (e.preventDefault) e.preventDefault();
       var valueUnwrapped = ko.utils.unwrapObservable(value);
       valueUnwrapped.call(viewModel, currentlyDraggingViewModel);
     });
-  },
+  }
 };
-
 ko.bindingHandlers.shown = {
-  init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+  init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     var value = valueAccessor();
     var valueUnwrapped = ko.utils.unwrapObservable(value);
     valueUnwrapped.call(viewModel);
-  },
+  }
 };
-
 ko.bindingHandlers.element = {
-  init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+  init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     var observable = valueAccessor();
     observable(element);
-  },
+  }
 };
-
 (function scrollToEndBinding() {
   ko.bindingHandlers.scrolledToEnd = {
-    init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+    init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
       element.valueAccessor = valueAccessor;
       element.viewModel = viewModel;
       element.setAttribute('data-scroll-to-end-listener', true);
-    },
+    }
   };
-
-  var checkAtEnd = function (element) {
+  var checkAtEnd = function checkAtEnd(element) {
     var elementEndY = $(element).offset().top + $(element).height();
     var windowEndY = $(document).scrollTop() + document.documentElement.clientHeight;
     if (windowEndY > elementEndY - document.documentElement.clientHeight / 2) {
@@ -41177,27 +41173,23 @@ ko.bindingHandlers.element = {
     var elems = document.querySelectorAll('[data-scroll-to-end-listener]');
     for (var i = 0; i < elems.length; i++) checkAtEnd(elems[i]);
   }
-
   $(window).scroll(scrollToEndCheck);
   $(window).resize(scrollToEndCheck);
 })();
 
 // handle focus for this element and all children. only when this element or all of its chlidren have lost focus set the value to false.
 ko.bindingHandlers.hasfocus2 = {
-  init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+  init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     var hasFocus = false;
     var timeout;
-
     ko.utils.registerEventHandler(element, 'focusin', handleElementFocusIn);
     ko.utils.registerEventHandler(element, 'focusout', handleElementFocusOut);
-
     function handleElementFocusIn() {
       hasFocus = true;
       valueAccessor()(true);
     }
     function handleElementFocusOut() {
       hasFocus = false;
-
       clearTimeout(timeout);
       timeout = setTimeout(function () {
         if (!hasFocus) {
@@ -41205,110 +41197,98 @@ ko.bindingHandlers.hasfocus2 = {
         }
       }, 50);
     }
-  },
+  }
 };
-
 ko.bindingHandlers.autocomplete = {
-  init: (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) => {
-    const setAutoCompleteOptions = (sources) => {
-      $(element)
-        .autocomplete({
-          classes: {
-            'ui-autocomplete': 'dropdown-menu',
-          },
-          source: sources,
-          minLength: 0,
-          messages: {
-            noResults: '',
-            results: () => {},
-          },
-        })
-        .data('ui-autocomplete')._renderItem = (ul, item) => {
+  init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+    var setAutoCompleteOptions = function setAutoCompleteOptions(sources) {
+      $(element).autocomplete({
+        classes: {
+          'ui-autocomplete': 'dropdown-menu'
+        },
+        source: sources,
+        minLength: 0,
+        messages: {
+          noResults: '',
+          results: function results() {}
+        }
+      }).data('ui-autocomplete')._renderItem = function (ul, item) {
         return $('<li></li>').append($('<a>').text(item.label)).appendTo(ul);
       };
     };
-
-    const handleKeyEvent = (event) => {
-      const value = $(element).val();
-      const lastChar = value.slice(-1);
+    var handleKeyEvent = function handleKeyEvent(event) {
+      var value = $(element).val();
+      var lastChar = value.slice(-1);
       if (lastChar == ungit.config.fileSeparator) {
         // When file separator is entered, list what is in given path, and rest auto complete options
-        ungit.server
-          .getPromise('/fs/listDirectories', { term: value })
-          .then((directoryList) => {
-            const currentDir = directoryList.shift();
-            $(element).val(
-              currentDir.endsWith(ungit.config.fileSeparator)
-                ? currentDir
-                : currentDir + ungit.config.fileSeparator
-            );
-            setAutoCompleteOptions(directoryList);
-            $(element).autocomplete('search', value);
-          })
-          .catch((err) => {
-            if (
-              !err.errorSummary.startsWith('ENOENT: no such file or directory') &&
-              err.errorCode !== 'read-dir-failed'
-            ) {
-              throw err;
-            }
-          });
+        ungit.server.getPromise('/fs/listDirectories', {
+          term: value
+        }).then(function (directoryList) {
+          var currentDir = directoryList.shift();
+          $(element).val(currentDir.endsWith(ungit.config.fileSeparator) ? currentDir : currentDir + ungit.config.fileSeparator);
+          setAutoCompleteOptions(directoryList);
+          $(element).autocomplete('search', value);
+        })["catch"](function (err) {
+          if (!err.errorSummary.startsWith('ENOENT: no such file or directory') && err.errorCode !== 'read-dir-failed') {
+            throw err;
+          }
+        });
       } else if (event.keyCode === 13) {
         // enter key is struck, navigate to the path
         event.preventDefault();
-        navigation.browseTo(`repository?path=${encodePath(value)}`);
+        navigation.browseTo("repository?path=".concat(encodePath(value)));
       } else if (value === '' && storage.getItem('repositories')) {
         // if path is emptied out, show save path options
-        const folderNames = JSON.parse(storage.getItem('repositories')).map((value) => {
+        var folderNames = JSON.parse(storage.getItem('repositories')).map(function (value) {
           return {
             value: value,
-            label: value.substring(value.lastIndexOf(ungit.config.fileSeparator) + 1),
+            label: value.substring(value.lastIndexOf(ungit.config.fileSeparator) + 1)
           };
         });
         setAutoCompleteOptions(folderNames);
         $(element).autocomplete('search', '');
       }
-
       return true;
     };
     ko.utils.registerEventHandler(element, 'keyup', _.debounce(handleKeyEvent, 100));
-  },
+  }
 };
 
 },{"jquery":"jquery","knockout":"knockout","lodash":"lodash","ungit-address-parser":"ungit-address-parser","ungit-navigation":"ungit-navigation","ungit-storage":"ungit-storage"}],258:[function(require,module,exports){
-var programEvents = require('ungit-program-events');
+"use strict";
 
+var programEvents = require('ungit-program-events');
 var nprogress;
 if (ungit.config.isDisableProgressBar) {
   nprogress = {
-    start: () => {},
-    done: () => {},
+    start: function start() {},
+    done: function done() {}
   };
 } else {
   nprogress = require('nprogress');
   nprogress.configure({
     trickleRate: 0.06,
     trickleSpeed: 200,
-    showSpinner: false,
+    showSpinner: false
   });
 }
-
 function Server() {
+  var _this = this;
   this.isInternetConnected = true;
   this.isUnloading = false;
-  window.addEventListener('beforeunload', () => (this.isUnloading = true));
+  window.addEventListener('beforeunload', function () {
+    return _this.isUnloading = true;
+  });
 }
 module.exports = Server;
-
 Server.prototype.initSocket = function () {
   var self = this;
   this.socket = io('', {
-    path: '/socket.io',
+    path: '/socket.io'
   });
   this.socket.on('connect_error', function (err) {
     self._isConnected(function (connected) {
-      if (connected) throw err;
-      else self._onDisconnect(err);
+      if (connected) throw err;else self._onDisconnect(err);
     });
   });
   this.socket.on('disconnect', function () {
@@ -41316,13 +41296,19 @@ Server.prototype.initSocket = function () {
   });
   this.socket.on('connected', function (data) {
     self.socketId = data.socketId;
-    programEvents.dispatch({ event: 'connected' });
+    programEvents.dispatch({
+      event: 'connected'
+    });
   });
   this.socket.on('working-tree-changed', function () {
-    programEvents.dispatch({ event: 'working-tree-changed' });
+    programEvents.dispatch({
+      event: 'working-tree-changed'
+    });
   });
   this.socket.on('git-directory-changed', function () {
-    programEvents.dispatch({ event: 'git-directory-changed' });
+    programEvents.dispatch({
+      event: 'git-directory-changed'
+    });
   });
   this.socket.on('request-credentials', function (args) {
     self._getCredentials(function (credentials) {
@@ -41332,10 +41318,9 @@ Server.prototype.initSocket = function () {
 };
 Server.prototype._queryToString = function (query) {
   var str = [];
-  for (var p in query)
-    if (Object.prototype.hasOwnProperty.call(query, p)) {
-      str.push(encodeURIComponent(p) + '=' + encodeURIComponent(query[p]));
-    }
+  for (var p in query) if (Object.prototype.hasOwnProperty.call(query, p)) {
+    str.push(encodeURIComponent(p) + '=' + encodeURIComponent(query[p]));
+  }
   return str.join('&');
 };
 Server.prototype._httpJsonRequest = function (request, callback) {
@@ -41343,18 +41328,23 @@ Server.prototype._httpJsonRequest = function (request, callback) {
   httpRequest.onreadystatechange = function () {
     // It seems like you can get both readyState == 0, and readyState == 4 && status == 0 when you lose connection to the server
     if (httpRequest.readyState === 0) {
-      callback({ error: 'connection-lost' });
+      callback({
+        error: 'connection-lost'
+      });
     } else if (httpRequest.readyState === 4) {
       var body;
       try {
         body = JSON.parse(httpRequest.responseText);
-      } catch {
+      } catch (_unused) {
         body = null;
       }
-      if (httpRequest.status == 0) callback({ error: 'connection-lost' });
-      else if (httpRequest.status != 200)
-        callback({ status: httpRequest.status, body: body, httpRequest: httpRequest });
-      else callback(null, body);
+      if (httpRequest.status == 0) callback({
+        error: 'connection-lost'
+      });else if (httpRequest.status != 200) callback({
+        status: httpRequest.status,
+        body: body,
+        httpRequest: httpRequest
+      });else callback(null, body);
     }
   };
   var url = request.url;
@@ -41372,39 +41362,52 @@ Server.prototype._httpJsonRequest = function (request, callback) {
 };
 // Check if the server is still alive
 Server.prototype._isConnected = function (callback) {
-  this._httpJsonRequest({ method: 'GET', url: '/api/ping' }, function (err, res) {
+  this._httpJsonRequest({
+    method: 'GET',
+    url: '/api/ping'
+  }, function (err, res) {
     callback(!err && res);
   });
 };
 Server.prototype._onDisconnect = function (err) {
   if (!this.isUnloading) {
-    const stacktrace = Error().stack;
+    var stacktrace = Error().stack;
     console.warn('disconnecting...', err, stacktrace);
-    programEvents.dispatch({ event: 'disconnected', stacktrace: stacktrace, error: err });
+    programEvents.dispatch({
+      event: 'disconnected',
+      stacktrace: stacktrace,
+      error: err
+    });
   }
 };
 Server.prototype._getCredentials = function (callback, args) {
   // Push out a program event, hoping someone will respond! (Which the app component will)
-  programEvents.dispatch({ event: 'request-credentials', remote: args.remote });
+  programEvents.dispatch({
+    event: 'request-credentials',
+    remote: args.remote
+  });
   var credentialsBinding = programEvents.add(function (event) {
     if (event.event != 'request-credentials-response') return;
     credentialsBinding.detach();
-    callback({ username: event.username, password: event.password });
+    callback({
+      username: event.username,
+      password: event.password
+    });
   });
 };
 Server.prototype.watchRepository = function (repositoryPath, callback) {
-  this.socket.emit('watch', { path: repositoryPath }, callback);
+  this.socket.emit('watch', {
+    path: repositoryPath
+  }, callback);
 };
 Server.prototype.queryPromise = function (method, path, body) {
   var self = this;
   if (body) body.socketId = this.socketId;
   var request = {
     method: method,
-    url: '/api' + path,
+    url: '/api' + path
   };
-  if (method == 'GET' || method == 'DELETE') request.query = body;
-  else request.body = body;
-
+  if (method == 'GET' || method == 'DELETE') request.query = body;else request.body = body;
   nprogress.start();
   return new Promise(function (resolve, reject) {
     self._httpJsonRequest(request, function (error, res) {
@@ -41412,7 +41415,10 @@ Server.prototype.queryPromise = function (method, path, body) {
         if (error.error == 'connection-lost') {
           return self._isConnected(function (connected) {
             if (connected) {
-              reject({ errorCode: 'cross-domain-error', error: error });
+              reject({
+                errorCode: 'cross-domain-error',
+                error: error
+              });
             } else {
               self._onDisconnect(error);
               resolve();
@@ -41421,12 +41427,7 @@ Server.prototype.queryPromise = function (method, path, body) {
         }
         var errorSummary = 'unknown';
         if (error.body) {
-          if (error.body.errorCode && error.body.errorCode != 'unknown')
-            errorSummary = error.body.errorCode;
-          else if (typeof error.body.error == 'string')
-            errorSummary = error.body.error.split('\n')[0];
-          else if (typeof error.body.message == 'string') errorSummary = error.body.message;
-          else errorSummary = JSON.stringify(error.body.error);
+          if (error.body.errorCode && error.body.errorCode != 'unknown') errorSummary = error.body.errorCode;else if (typeof error.body.error == 'string') errorSummary = error.body.error.split('\n')[0];else if (typeof error.body.message == 'string') errorSummary = error.body.message;else errorSummary = JSON.stringify(error.body.error);
         } else {
           errorSummary = error.httpRequest.statusText + ' ' + error.status;
         }
@@ -41435,13 +41436,15 @@ Server.prototype.queryPromise = function (method, path, body) {
           error: error,
           path: path,
           res: error,
-          errorCode: error && error.body ? error.body.errorCode : 'unknown',
+          errorCode: error && error.body ? error.body.errorCode : 'unknown'
         });
       } else {
         resolve(res);
       }
     });
-  }).finally(() => nprogress.done(true));
+  })["finally"](function () {
+    return nprogress.done(true);
+  });
 };
 Server.prototype.getPromise = function (url, arg) {
   return this.queryPromise('GET', url, arg);
@@ -41455,7 +41458,6 @@ Server.prototype.delPromise = function (url, arg) {
 Server.prototype.putPromise = function (url, arg) {
   return this.queryPromise('PUT', url, arg);
 };
-
 Server.prototype.unhandledRejection = function (err) {
   // Show a error screen for git errors (so that people have a chance to debug them)
   if (err.res && err.res.body && err.res.body.isGitError) {
@@ -41466,13 +41468,16 @@ Server.prototype.unhandledRejection = function (err) {
         error: err.res.body.error,
         stdout: err.res.body.stdout,
         stderr: err.res.body.stderr,
-        repoPath: err.res.body.workingDirectory,
-      },
+        repoPath: err.res.body.workingDirectory
+      }
     });
   } else {
     // Everything else is handled as a pure error, using the precreated error (to get a better stacktrace)
     console.trace('Unhandled Promise ERROR: ', err, JSON.stringify(err));
-    programEvents.dispatch({ event: 'git-crash-error', error: err });
+    programEvents.dispatch({
+      event: 'git-crash-error',
+      error: err
+    });
     Raven.captureException(err);
   }
 };
@@ -82394,130 +82399,136 @@ function closestNaturalHeight(naturalHeights, height) {
 
 // USED BY FRONT END
 // DO NOT GO ES6
-const addressWindowsLocalRegexp = /[a-zA-Z]:\\([^\\]+\\?)*/;
-const addressSshWithPortRegexp = /ssh:\/\/(.*):(\d*)\/(.*)/;
-const addressSshWithoutPortRegexp = /ssh:\/\/([^/]*)\/(.*)/;
-const addressGitWithoutPortWithUsernamePortRegexp = /([^@]*)@([^:]*):([^.]*)(\.git)?$/;
-const addressGitWithoutPortWithoutUsernameRegexp = /([^:]*):([^.]*)(\.git)?$/;
-const addressHttpsRegexp = /https:\/\/([^/]*)\/([^.]*)(\.git)?$/;
-const addressUnixLocalRegexp = /.*\/([^/]+)/;
+var addressWindowsLocalRegexp = /[a-zA-Z]:\\([^\\]+\\?)*/;
+var addressSshWithPortRegexp = /ssh:\/\/(.*):(\d*)\/(.*)/;
+var addressSshWithoutPortRegexp = /ssh:\/\/([^/]*)\/(.*)/;
+var addressGitWithoutPortWithUsernamePortRegexp = /([^@]*)@([^:]*):([^.]*)(\.git)?$/;
+var addressGitWithoutPortWithoutUsernameRegexp = /([^:]*):([^.]*)(\.git)?$/;
+var addressHttpsRegexp = /https:\/\/([^/]*)\/([^.]*)(\.git)?$/;
+var addressUnixLocalRegexp = /.*\/([^/]+)/;
 
 /**
  * Show slashes in path parameter.
  *
  * @param {string} path
  */
-exports.encodePath = (path) => encodeURIComponent(path).replace(/%2F/g, '/');
-
-exports.parseAddress = (remote) => {
-  let match = addressWindowsLocalRegexp.exec(remote);
+exports.encodePath = function (path) {
+  return encodeURIComponent(path).replace(/%2F/g, '/');
+};
+exports.parseAddress = function (remote) {
+  var match = addressWindowsLocalRegexp.exec(remote);
   if (match) {
-    let project = match[1];
+    var project = match[1];
     if (project[project.length - 1] == '\\') project = project.slice(0, project.length - 1);
-    return { address: remote, host: 'localhost', project: project, shortProject: project };
+    return {
+      address: remote,
+      host: 'localhost',
+      project: project,
+      shortProject: project
+    };
   }
-
   match = addressSshWithPortRegexp.exec(remote);
-  if (match)
-    return {
-      address: remote,
-      host: match[1],
-      port: match[2],
-      project: match[3],
-      shortProject: match[3].split('/').pop(),
-    };
-
+  if (match) return {
+    address: remote,
+    host: match[1],
+    port: match[2],
+    project: match[3],
+    shortProject: match[3].split('/').pop()
+  };
   match = addressSshWithoutPortRegexp.exec(remote);
-  if (match)
-    return {
-      address: remote,
-      host: match[1],
-      project: match[2],
-      shortProject: match[2].split('/').pop(),
-    };
-
+  if (match) return {
+    address: remote,
+    host: match[1],
+    project: match[2],
+    shortProject: match[2].split('/').pop()
+  };
   match = addressGitWithoutPortWithUsernamePortRegexp.exec(remote);
-  if (match)
-    return {
-      address: remote,
-      username: match[1],
-      host: match[2],
-      project: match[3],
-      shortProject: match[3].split('/').pop(),
-    };
-
+  if (match) return {
+    address: remote,
+    username: match[1],
+    host: match[2],
+    project: match[3],
+    shortProject: match[3].split('/').pop()
+  };
   match = addressGitWithoutPortWithoutUsernameRegexp.exec(remote);
-  if (match)
-    return {
-      address: remote,
-      host: match[1],
-      project: match[2],
-      shortProject: match[2].split('/').pop(),
-    };
-
+  if (match) return {
+    address: remote,
+    host: match[1],
+    project: match[2],
+    shortProject: match[2].split('/').pop()
+  };
   match = addressHttpsRegexp.exec(remote);
-  if (match)
-    return {
-      address: remote,
-      host: match[1],
-      project: match[2],
-      shortProject: match[2].split('/').pop(),
-    };
-
+  if (match) return {
+    address: remote,
+    host: match[1],
+    project: match[2],
+    shortProject: match[2].split('/').pop()
+  };
   match = addressUnixLocalRegexp.exec(remote);
-  if (match)
-    return { address: remote, host: 'localhost', project: match[1], shortProject: match[1] };
-
-  return { address: remote };
+  if (match) return {
+    address: remote,
+    host: 'localhost',
+    project: match[1],
+    shortProject: match[1]
+  };
+  return {
+    address: remote
+  };
 };
 
 },{}],"ungit-components":[function(require,module,exports){
-const components = {};
+"use strict";
+
+var components = {};
 module.exports = components;
 ungit.components = components;
-
 components.registered = {};
-
 components.register = function (name, creator) {
   components.registered[name] = creator;
 };
-
 components.create = function (name, args) {
   var componentConstructor = components.registered[name];
   if (!componentConstructor) throw new Error('No component found: ' + name);
   return componentConstructor(args);
 };
-
-components.showModal = (name, args) => {
-  const modal = components.create(name, args);
-  ungit.programEvents.dispatch({ event: 'modal-show-dialog', modal: modal });
+components.showModal = function (name, args) {
+  var modal = components.create(name, args);
+  ungit.programEvents.dispatch({
+    event: 'modal-show-dialog',
+    modal: modal
+  });
   return modal;
 };
 
 },{}],"ungit-main":[function(require,module,exports){
+(function (global){(function (){
+"use strict";
+
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { if (r) i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n;else { var o = function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); }; o("next", 0), o("throw", 1), o("return", 2); } }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 var $ = require('jquery');
-jQuery = $; // this is for old backward compatability of bootrap modules
+global.jQuery = $; // this is for old backward compatability of bootrap modules
 var ko = require('knockout');
 var dndPageScroll = require('dnd-page-scroll');
 require('./bootstrap');
 require('./jquery-ui');
 require('./knockout-bindings');
-const winston = require('winston');
+var winston = require('winston');
 ungit.logger = winston.createLogger({
   level: ungit.config.logLevel || 'error',
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.colorize(),
-    winston.format.printf((info) => {
-      const splat = info[Symbol.for('splat')];
-      if (splat) {
-        const splatStr = splat.map((arg) => JSON.stringify(arg)).join('\n');
-        return `${info.timestamp} - ${info.level}: ${info.message} ${splatStr}`;
-      }
-      return `${info.timestamp} - ${info.level}: ${info.message}`;
-    })
-  ),
-  transports: [new winston.transports.Console()],
+  format: winston.format.combine(winston.format.timestamp(), winston.format.colorize(), winston.format.printf(function (info) {
+    var splat = info[Symbol["for"]('splat')];
+    if (splat) {
+      var splatStr = splat.map(function (arg) {
+        return JSON.stringify(arg);
+      }).join('\n');
+      return "".concat(info.timestamp, " - ").concat(info.level, ": ").concat(info.message, " ").concat(splatStr);
+    }
+    return "".concat(info.timestamp, " - ").concat(info.level, ": ").concat(info.message);
+  })),
+  transports: [new winston.transports.Console()]
 });
 var components = require('ungit-components');
 var Server = require('./server');
@@ -82531,53 +82542,38 @@ var adBlocker = require('just-detect-adblock');
   var vendors = ['ms', 'moz', 'webkit', 'o'];
   for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
     window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
-    window.cancelAnimationFrame =
-      window[vendors[x] + 'CancelAnimationFrame'] ||
-      window[vendors[x] + 'CancelRequestAnimationFrame'];
+    window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
   }
-
-  if (!window.requestAnimationFrame)
-    window.requestAnimationFrame = function (callback) {
-      var currTime = new Date().getTime();
-      var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-      var id = window.setTimeout(function () {
-        callback(currTime + timeToCall);
-      }, timeToCall);
-      lastTime = currTime + timeToCall;
-      return id;
-    };
-
-  if (!window.cancelAnimationFrame)
-    window.cancelAnimationFrame = function (id) {
-      clearTimeout(id);
-    };
-
+  if (!window.requestAnimationFrame) window.requestAnimationFrame = function (callback) {
+    var currTime = new Date().getTime();
+    var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+    var id = window.setTimeout(function () {
+      callback(currTime + timeToCall);
+    }, timeToCall);
+    lastTime = currTime + timeToCall;
+    return id;
+  };
+  if (!window.cancelAnimationFrame) window.cancelAnimationFrame = function (id) {
+    clearTimeout(id);
+  };
   $(document).tooltip({
-    selector: '[data-toggle="tooltip"]',
+    selector: '[data-toggle="tooltip"]'
   });
 })();
-
 function WindowTitle() {
   this.path = 'ungit';
   this.crash = false;
 }
 WindowTitle.prototype.update = function () {
-  var title = this.path
-    .replace(/\\/g, '/')
-    .split('/')
-    .filter(function (x) {
-      return x;
-    })
-    .reverse()
-    .join(' < ');
+  var title = this.path.replace(/\\/g, '/').split('/').filter(function (x) {
+    return x;
+  }).reverse().join(' < ');
   if (this.crash) title = ':( ungit crash ' + title;
   document.title = title;
 };
-
 var windowTitle = new WindowTitle();
 windowTitle.update();
-
-var AppContainerViewModel = function () {
+var AppContainerViewModel = function AppContainerViewModel() {
   this.content = ko.observable();
 };
 exports.AppContainerViewModel = AppContainerViewModel;
@@ -82585,36 +82581,75 @@ AppContainerViewModel.prototype.templateChooser = function (data) {
   if (!data) return '';
   return data.template;
 };
-
 var app, appContainer, server;
-
 exports.start = function () {
   server = new Server();
   appContainer = new AppContainerViewModel();
   ungit.server = server;
-  app = components.create('app', { appContainer: appContainer, server: server });
-  ungit.__app = app;
-  programEvents.add(async (event) => {
-    ungit.logger.info(`received event: ${event.event}`);
-    if (event.event == 'disconnected' || event.event == 'git-crash-error') {
-      console.error(`ungit crash: ${event.event}`, event.error, event.stacktrace);
-      const err =
-        event.event == 'disconnected' && (await adBlocker.detectAnyAdblocker())
-          ? 'adblocker'
-          : event.event;
-      appContainer.content(components.create('crash', err));
-      windowTitle.crash = true;
-      windowTitle.update();
-    } else if (event.event == 'connected') {
-      appContainer.content(app);
-      windowTitle.crash = false;
-      windowTitle.update();
-    }
-
-    app.onProgramEvent(event);
+  app = components.create('app', {
+    appContainer: appContainer,
+    server: server
   });
+  ungit.__app = app;
+  programEvents.add(/*#__PURE__*/function () {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(event) {
+      var err, _t, _t2;
+      return _regenerator().w(function (_context) {
+        while (1) switch (_context.n) {
+          case 0:
+            ungit.logger.info("received event: ".concat(event.event));
+            if (!(event.event == 'disconnected' || event.event == 'git-crash-error')) {
+              _context.n = 5;
+              break;
+            }
+            console.error("ungit crash: ".concat(event.event), event.error, event.stacktrace);
+            _t = event.event == 'disconnected';
+            if (!_t) {
+              _context.n = 2;
+              break;
+            }
+            _context.n = 1;
+            return adBlocker.detectAnyAdblocker();
+          case 1:
+            _t = _context.v;
+          case 2:
+            if (!_t) {
+              _context.n = 3;
+              break;
+            }
+            _t2 = 'adblocker';
+            _context.n = 4;
+            break;
+          case 3:
+            _t2 = event.event;
+          case 4:
+            err = _t2;
+            appContainer.content(components.create('crash', err));
+            windowTitle.crash = true;
+            windowTitle.update();
+            _context.n = 6;
+            break;
+          case 5:
+            if (event.event == 'connected') {
+              appContainer.content(app);
+              windowTitle.crash = false;
+              windowTitle.update();
+            }
+          case 6:
+            app.onProgramEvent(event);
+          case 7:
+            return _context.a(2);
+        }
+      }, _callee);
+    }));
+    return function (_x) {
+      return _ref.apply(this, arguments);
+    };
+  }());
   if (ungit.config.authentication) {
-    var authenticationScreen = components.create('login', { server: server });
+    var authenticationScreen = components.create('login', {
+      server: server
+    });
     appContainer.content(authenticationScreen);
     authenticationScreen.loggedIn.add(function () {
       server.initSocket();
@@ -82622,81 +82657,91 @@ exports.start = function () {
   } else {
     server.initSocket();
   }
-
   Raven.TraceKit.report.subscribe(function (event, err) {
-    programEvents.dispatch({ event: 'raven-crash', error: err || event.event });
+    programEvents.dispatch({
+      event: 'raven-crash',
+      error: err || event.event
+    });
   });
-
   var prevTimestamp = 0;
-  var updateAnimationFrame = function (timestamp) {
+  var _updateAnimationFrame = function updateAnimationFrame(timestamp) {
     var delta = timestamp - prevTimestamp;
     prevTimestamp = timestamp;
     if (app.updateAnimationFrame) app.updateAnimationFrame(delta);
-    window.requestAnimationFrame(updateAnimationFrame);
+    window.requestAnimationFrame(_updateAnimationFrame);
   };
-  window.requestAnimationFrame(updateAnimationFrame);
-
+  window.requestAnimationFrame(_updateAnimationFrame);
   ko.applyBindings(appContainer);
 
   // routing
   navigation.crossroads.addRoute('/', function () {
-    app.content(components.create('home', { app: app }));
+    app.content(components.create('home', {
+      app: app
+    }));
     windowTitle.path = 'ungit';
     windowTitle.update();
   });
-
   navigation.crossroads.addRoute('/repository{?query}', function (query) {
-    programEvents.dispatch({ event: 'navigated-to-path', path: query.path });
-    app.content(components.create('path', { server: server, path: query.path }));
+    programEvents.dispatch({
+      event: 'navigated-to-path',
+      path: query.path
+    });
+    app.content(components.create('path', {
+      server: server,
+      path: query.path
+    }));
     windowTitle.path = query.path;
     windowTitle.update();
   });
-
   navigation.init();
 };
-
 $(document).ready(function () {
-  dndPageScroll.default(); // Automatic page scrolling on drag-n-drop: http://www.planbox.com/blog/news/updates/html5-drag-and-drop-scrolling-the-page.html
+  dndPageScroll["default"](); // Automatic page scrolling on drag-n-drop: http://www.planbox.com/blog/news/updates/html5-drag-and-drop-scrolling-the-page.html
 });
 
-},{"./bootstrap":255,"./jquery-ui":256,"./knockout-bindings":257,"./server":258,"dnd-page-scroll":89,"jquery":"jquery","just-detect-adblock":137,"knockout":"knockout","ungit-components":"ungit-components","ungit-navigation":"ungit-navigation","ungit-program-events":"ungit-program-events","winston":"winston"}],"ungit-navigation":[function(require,module,exports){
-var programEvents = require('ungit-program-events');
+}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
+},{"./bootstrap":255,"./jquery-ui":256,"./knockout-bindings":257,"./server":258,"dnd-page-scroll":89,"jquery":"jquery","just-detect-adblock":137,"knockout":"knockout","ungit-components":"ungit-components","ungit-navigation":"ungit-navigation","ungit-program-events":"ungit-program-events","winston":"winston"}],"ungit-navigation":[function(require,module,exports){
+"use strict";
+
+var programEvents = require('ungit-program-events');
 var navigation = {};
 module.exports = navigation;
-
-var hasher = (navigation.hasher = require('hasher'));
-var crossroads = (navigation.crossroads = require('crossroads'));
-
+var hasher = navigation.hasher = require('hasher');
+var crossroads = navigation.crossroads = require('crossroads');
 navigation.browseTo = function (path) {
   hasher.setHash(path);
 };
-
 navigation.init = function () {
   //setup hasher
   function parseHash(newHash, oldHash) {
     crossroads.parse(newHash);
-    programEvents.dispatch({ event: 'navigation-changed', path: newHash, oldPath: oldHash });
+    programEvents.dispatch({
+      event: 'navigation-changed',
+      path: newHash,
+      oldPath: oldHash
+    });
   }
   hasher.initialized.add(parseHash); //parse initial hash
   hasher.changed.add(parseHash); //parse hash changes
   hasher.raw = true;
-
   hasher.init();
 };
 
 },{"crossroads":76,"hasher":117,"ungit-program-events":"ungit-program-events"}],"ungit-program-events":[function(require,module,exports){
-const signals = require('signals');
+"use strict";
 
-const programEvents = new signals.Signal();
+var signals = require('signals');
+var programEvents = new signals.Signal();
 module.exports = programEvents;
 ungit.programEvents = programEvents;
-
 programEvents.add(function (event) {
   console.log('Event:', event.event);
 });
 
 },{"signals":"signals"}],"ungit-storage":[function(require,module,exports){
+"use strict";
+
 /**
  * A wrapper around LocalStorage to support environments where LocalStorage is not available.
  * Stores and retrieves items from LocalStorage if available and uses a non-persistent cache otherwise.
@@ -82705,24 +82750,22 @@ var storage;
 try {
   storage = {
     getItem: localStorage.getItem.bind(localStorage),
-    setItem: localStorage.setItem.bind(localStorage),
+    setItem: localStorage.setItem.bind(localStorage)
   };
-} catch {
+} catch (_unused) {
   /* Ignore Exception, use fallback implementation. */
 }
-
 if (!storage) {
   var cache = Object.create(null);
   storage = {
-    getItem: function (key) {
+    getItem: function getItem(key) {
       return cache[key] || null;
     },
-    setItem: function (key, value) {
+    setItem: function setItem(key, value) {
       cache[key] = value;
-    },
+    }
   };
 }
-
 module.exports = storage;
 
 },{}],"winston":[function(require,module,exports){

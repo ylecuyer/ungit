@@ -24,6 +24,11 @@ const baseDir = path.join(__dirname, '..');
   const b = browserify(path.join(baseDir, 'notpublic/source/main.js'), {
     noParse: ['dnd-page-scroll', 'jquery', 'knockout'],
     debug: true,
+    transform: [
+      babelify.configure({
+        presets: ['@babel/preset-env'],
+      }),
+    ],
   });
   b.require(path.join(publicSourceDir, 'components.js'), { expose: 'ungit-components' });
   b.require(path.join(publicSourceDir, 'main.js'), { expose: 'ungit-main' });
