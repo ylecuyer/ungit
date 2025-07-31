@@ -40865,13 +40865,13 @@ require('jquery-ui/ui/widgets/autocomplete');
 },{"jquery-ui/ui/keycode":129,"jquery-ui/ui/position":130,"jquery-ui/ui/unique-id":131,"jquery-ui/ui/version":132,"jquery-ui/ui/widget":133,"jquery-ui/ui/widgets/autocomplete":134,"jquery-ui/ui/widgets/menu":135}],256:[function(require,module,exports){
 "use strict";
 
+var _lodash = _interopRequireDefault(require("lodash"));
 var _ungitAddressParserEs = require("ungit-address-parser-es6");
 var _ungitNavigationEs = _interopRequireDefault(require("ungit-navigation-es6"));
 var _ungitStorageEs = _interopRequireDefault(require("ungit-storage-es6"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 /* eslint no-unused-vars: "off" */
 
-var _ = require('lodash');
 var ko = require('knockout');
 var $ = require('jquery');
 ko.bindingHandlers.debug = {
@@ -41087,7 +41087,7 @@ ko.bindingHandlers.autocomplete = {
       }
       return true;
     };
-    ko.utils.registerEventHandler(element, 'keyup', _.debounce(handleKeyEvent, 100));
+    ko.utils.registerEventHandler(element, 'keyup', _lodash["default"].debounce(handleKeyEvent, 100));
   }
 };
 

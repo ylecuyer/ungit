@@ -1,6 +1,6 @@
 /* eslint no-unused-vars: "off" */
 
-var _ = require('lodash');
+import _ from 'lodash';
 var ko = require('knockout');
 var $ = require('jquery');
 import { encodePath } from 'ungit-address-parser-es6';
