@@ -40842,25 +40842,13 @@ require('bootstrap-sass/assets/javascripts/bootstrap/tooltip');
 },{"bootstrap-sass/assets/javascripts/bootstrap/dropdown":48,"bootstrap-sass/assets/javascripts/bootstrap/modal":49,"bootstrap-sass/assets/javascripts/bootstrap/tooltip":50,"jquery":"jquery"}],255:[function(require,module,exports){
 "use strict";
 
-/*
- * Import the autocomplete widget and its dependencies.
- * The current order of the imports is required.
- */
-
-// All files require version, has to go first
-require('jquery-ui/ui/version');
-
-// Shared files, used by menu and autocomplete, in alphabetical order
-require('jquery-ui/ui/keycode');
-require('jquery-ui/ui/position');
-require('jquery-ui/ui/unique-id');
-require('jquery-ui/ui/widget');
-
-// Required by autocomplete, so has to go before
-require('jquery-ui/ui/widgets/menu');
-
-// The autocomplete widget we use
-require('jquery-ui/ui/widgets/autocomplete');
+require("jquery-ui/ui/version");
+require("jquery-ui/ui/keycode");
+require("jquery-ui/ui/position");
+require("jquery-ui/ui/unique-id");
+require("jquery-ui/ui/widget");
+require("jquery-ui/ui/widgets/menu");
+require("jquery-ui/ui/widgets/autocomplete");
 
 },{"jquery-ui/ui/keycode":129,"jquery-ui/ui/position":130,"jquery-ui/ui/unique-id":131,"jquery-ui/ui/version":132,"jquery-ui/ui/widget":133,"jquery-ui/ui/widgets/autocomplete":134,"jquery-ui/ui/widgets/menu":135}],256:[function(require,module,exports){
 "use strict";

@@ -4,16 +4,16 @@
  */
 
 // All files require version, has to go first
-require('jquery-ui/ui/version');
+import 'jquery-ui/ui/version';
 
 // Shared files, used by menu and autocomplete, in alphabetical order
-require('jquery-ui/ui/keycode');
-require('jquery-ui/ui/position');
-require('jquery-ui/ui/unique-id');
-require('jquery-ui/ui/widget');
+import 'jquery-ui/ui/keycode';
+import 'jquery-ui/ui/position';
+import 'jquery-ui/ui/unique-id';
+import 'jquery-ui/ui/widget';
 
 // Required by autocomplete, so has to go before
-require('jquery-ui/ui/widgets/menu');
+import 'jquery-ui/ui/widgets/menu';
 
 // The autocomplete widget we use
-require('jquery-ui/ui/widgets/autocomplete');
+import 'jquery-ui/ui/widgets/autocomplete';
