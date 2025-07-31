@@ -36,7 +36,6 @@ const baseDir = path.join(__dirname, '..');
   b.require(path.join(publicSourceDir, 'program-events.js'), { expose: 'ungit-program-events-es6' });
   b.require(path.join(publicSourceDir, 'storage.js'), { expose: 'ungit-storage-es6' });
   b.require(path.join(baseDir, 'source/address-parser.js'), { expose: 'ungit-address-parser-es6' });
-  b.require('bluebird', { expose: 'bluebird' });
   b.require('blueimp-md5', { expose: 'blueimp-md5' });
   b.require('diff2html', { expose: 'diff2html' });
   b.require('jquery', { expose: 'jquery' });
