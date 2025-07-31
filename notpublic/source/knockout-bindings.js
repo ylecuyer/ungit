@@ -1,7 +1,7 @@
 /* eslint no-unused-vars: "off" */
 
 import _ from 'lodash';
-var ko = require('knockout');
+import ko from 'knockout';
 var $ = require('jquery');
 import { encodePath } from 'ungit-address-parser-es6';
 import navigation from 'ungit-navigation-es6';

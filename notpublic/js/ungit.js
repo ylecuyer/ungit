@@ -40866,43 +40866,43 @@ require('jquery-ui/ui/widgets/autocomplete');
 "use strict";
 
 var _lodash = _interopRequireDefault(require("lodash"));
+var _knockout = _interopRequireDefault(require("knockout"));
 var _ungitAddressParserEs = require("ungit-address-parser-es6");
 var _ungitNavigationEs = _interopRequireDefault(require("ungit-navigation-es6"));
 var _ungitStorageEs = _interopRequireDefault(require("ungit-storage-es6"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 /* eslint no-unused-vars: "off" */
 
-var ko = require('knockout');
 var $ = require('jquery');
-ko.bindingHandlers.debug = {
+_knockout["default"].bindingHandlers.debug = {
   init: function init(element, valueAccessor) {
-    var value = ko.utils.unwrapObservable(valueAccessor());
+    var value = _knockout["default"].utils.unwrapObservable(valueAccessor());
     console.log('DEBUG INIT', value);
   },
   update: function update(element, valueAccessor, allBindingsAccessor, viewModel) {
-    var value = ko.utils.unwrapObservable(valueAccessor());
+    var value = _knockout["default"].utils.unwrapObservable(valueAccessor());
     console.log('DEBUG UPDATE', value);
   }
 };
-ko.bindingHandlers.component = {
+_knockout["default"].bindingHandlers.component = {
   init: function init(element, valueAccessor, allBindingsAccessor, viewModel) {
-    ko.virtualElements.emptyNode(element);
+    _knockout["default"].virtualElements.emptyNode(element);
     return {
       controlsDescendantBindings: true
     };
   },
   update: function update(element, valueAccessor, allBindings, viewModel, bindingContext) {
-    var component = ko.utils.unwrapObservable(valueAccessor());
+    var component = _knockout["default"].utils.unwrapObservable(valueAccessor());
     if (!component || !component.updateNode) {
-      ko.virtualElements.emptyNode(element);
+      _knockout["default"].virtualElements.emptyNode(element);
       return;
     }
     var node = component.updateNode(element);
-    if (node) ko.virtualElements.setDomNodeChildren(element, [node]);
+    if (node) _knockout["default"].virtualElements.setDomNodeChildren(element, [node]);
   }
 };
-ko.virtualElements.allowedBindings.component = true;
-ko.bindingHandlers.editableText = {
+_knockout["default"].virtualElements.allowedBindings.component = true;
+_knockout["default"].bindingHandlers.editableText = {
   init: function init(element, valueAccessor) {
     $(element).on('blur', function () {
       var observable = valueAccessor();
@@ -40910,37 +40910,37 @@ ko.bindingHandlers.editableText = {
     });
   },
   update: function update(element, valueAccessor) {
-    var value = ko.utils.unwrapObservable(valueAccessor());
+    var value = _knockout["default"].utils.unwrapObservable(valueAccessor());
     $(element).text(value);
   }
 };
 var currentlyDraggingViewModel = null;
-ko.bindingHandlers.dragStart = {
+_knockout["default"].bindingHandlers.dragStart = {
   init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     var value = valueAccessor();
     element.addEventListener('dragstart', function (e) {
       e.dataTransfer.setData('Text', 'ungit');
       currentlyDraggingViewModel = viewModel;
-      var valueUnwrapped = ko.utils.unwrapObservable(value);
+      var valueUnwrapped = _knockout["default"].utils.unwrapObservable(value);
       valueUnwrapped.call(viewModel, true);
     });
   }
 };
-ko.bindingHandlers.dragEnd = {
+_knockout["default"].bindingHandlers.dragEnd = {
   init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     var value = valueAccessor();
     element.addEventListener('dragend', function () {
       currentlyDraggingViewModel = null;
-      var valueUnwrapped = ko.utils.unwrapObservable(value);
+      var valueUnwrapped = _knockout["default"].utils.unwrapObservable(value);
       valueUnwrapped.call(viewModel, false);
     });
   }
 };
-ko.bindingHandlers.dropOver = {
+_knockout["default"].bindingHandlers.dropOver = {
   init: function init(element, valueAccessor) {
     element.addEventListener('dragover', function (e) {
       var value = valueAccessor();
-      var valueUnwrapped = ko.utils.unwrapObservable(value);
+      var valueUnwrapped = _knockout["default"].utils.unwrapObservable(value);
       if (!valueUnwrapped) return;
       if (e.preventDefault) e.preventDefault();
       e.dataTransfer.dropEffect = 'move';
@@ -40948,49 +40948,49 @@ ko.bindingHandlers.dropOver = {
     });
   }
 };
-ko.bindingHandlers.dragEnter = {
+_knockout["default"].bindingHandlers.dragEnter = {
   init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     element.addEventListener('dragenter', function (e) {
       var value = valueAccessor();
-      var valueUnwrapped = ko.utils.unwrapObservable(value);
+      var valueUnwrapped = _knockout["default"].utils.unwrapObservable(value);
       valueUnwrapped.call(viewModel, currentlyDraggingViewModel);
     });
   }
 };
-ko.bindingHandlers.dragLeave = {
+_knockout["default"].bindingHandlers.dragLeave = {
   init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     element.addEventListener('dragleave', function (e) {
       var value = valueAccessor();
-      var valueUnwrapped = ko.utils.unwrapObservable(value);
+      var valueUnwrapped = _knockout["default"].utils.unwrapObservable(value);
       valueUnwrapped.call(viewModel, currentlyDraggingViewModel);
     });
   }
 };
-ko.bindingHandlers.drop = {
+_knockout["default"].bindingHandlers.drop = {
   init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     var value = valueAccessor();
     element.addEventListener('drop', function (e) {
       if (e.preventDefault) e.preventDefault();
-      var valueUnwrapped = ko.utils.unwrapObservable(value);
+      var valueUnwrapped = _knockout["default"].utils.unwrapObservable(value);
       valueUnwrapped.call(viewModel, currentlyDraggingViewModel);
     });
   }
 };
-ko.bindingHandlers.shown = {
+_knockout["default"].bindingHandlers.shown = {
   init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     var value = valueAccessor();
-    var valueUnwrapped = ko.utils.unwrapObservable(value);
+    var valueUnwrapped = _knockout["default"].utils.unwrapObservable(value);
     valueUnwrapped.call(viewModel);
   }
 };
-ko.bindingHandlers.element = {
+_knockout["default"].bindingHandlers.element = {
   init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     var observable = valueAccessor();
     observable(element);
   }
 };
 (function scrollToEndBinding() {
-  ko.bindingHandlers.scrolledToEnd = {
+  _knockout["default"].bindingHandlers.scrolledToEnd = {
     init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
       element.valueAccessor = valueAccessor;
       element.viewModel = viewModel;
@@ -41002,7 +41002,7 @@ ko.bindingHandlers.element = {
     var windowEndY = $(document).scrollTop() + document.documentElement.clientHeight;
     if (windowEndY > elementEndY - document.documentElement.clientHeight / 2) {
       var value = element.valueAccessor();
-      var valueUnwrapped = ko.utils.unwrapObservable(value);
+      var valueUnwrapped = _knockout["default"].utils.unwrapObservable(value);
       valueUnwrapped.call(element.viewModel);
     }
   };
@@ -41015,12 +41015,12 @@ ko.bindingHandlers.element = {
 })();
 
 // handle focus for this element and all children. only when this element or all of its chlidren have lost focus set the value to false.
-ko.bindingHandlers.hasfocus2 = {
+_knockout["default"].bindingHandlers.hasfocus2 = {
   init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     var hasFocus = false;
     var timeout;
-    ko.utils.registerEventHandler(element, 'focusin', handleElementFocusIn);
-    ko.utils.registerEventHandler(element, 'focusout', handleElementFocusOut);
+    _knockout["default"].utils.registerEventHandler(element, 'focusin', handleElementFocusIn);
+    _knockout["default"].utils.registerEventHandler(element, 'focusout', handleElementFocusOut);
     function handleElementFocusIn() {
       hasFocus = true;
       valueAccessor()(true);
@@ -41036,7 +41036,7 @@ ko.bindingHandlers.hasfocus2 = {
     }
   }
 };
-ko.bindingHandlers.autocomplete = {
+_knockout["default"].bindingHandlers.autocomplete = {
   init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     var setAutoCompleteOptions = function setAutoCompleteOptions(sources) {
       $(element).autocomplete({
@@ -41087,7 +41087,7 @@ ko.bindingHandlers.autocomplete = {
       }
       return true;
     };
-    ko.utils.registerEventHandler(element, 'keyup', _lodash["default"].debounce(handleKeyEvent, 100));
+    _knockout["default"].utils.registerEventHandler(element, 'keyup', _lodash["default"].debounce(handleKeyEvent, 100));
   }
 };
 
