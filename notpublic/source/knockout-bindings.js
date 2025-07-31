@@ -2,7 +2,7 @@
 
 import _ from 'lodash';
 import ko from 'knockout';
-var $ = require('jquery');
+import $ from 'jquery';
 import { encodePath } from 'ungit-address-parser-es6';
 import navigation from 'ungit-navigation-es6';
 import storage from 'ungit-storage-es6';

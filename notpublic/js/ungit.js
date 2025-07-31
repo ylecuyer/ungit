@@ -40867,13 +40867,13 @@ require('jquery-ui/ui/widgets/autocomplete');
 
 var _lodash = _interopRequireDefault(require("lodash"));
 var _knockout = _interopRequireDefault(require("knockout"));
+var _jquery = _interopRequireDefault(require("jquery"));
 var _ungitAddressParserEs = require("ungit-address-parser-es6");
 var _ungitNavigationEs = _interopRequireDefault(require("ungit-navigation-es6"));
 var _ungitStorageEs = _interopRequireDefault(require("ungit-storage-es6"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 /* eslint no-unused-vars: "off" */
 
-var $ = require('jquery');
 _knockout["default"].bindingHandlers.debug = {
   init: function init(element, valueAccessor) {
     var value = _knockout["default"].utils.unwrapObservable(valueAccessor());
@@ -40904,14 +40904,14 @@ _knockout["default"].bindingHandlers.component = {
 _knockout["default"].virtualElements.allowedBindings.component = true;
 _knockout["default"].bindingHandlers.editableText = {
   init: function init(element, valueAccessor) {
-    $(element).on('blur', function () {
+    (0, _jquery["default"])(element).on('blur', function () {
       var observable = valueAccessor();
-      observable($(this).text());
+      observable((0, _jquery["default"])(this).text());
     });
   },
   update: function update(element, valueAccessor) {
     var value = _knockout["default"].utils.unwrapObservable(valueAccessor());
-    $(element).text(value);
+    (0, _jquery["default"])(element).text(value);
   }
 };
 var currentlyDraggingViewModel = null;
@@ -40998,8 +40998,8 @@ _knockout["default"].bindingHandlers.element = {
     }
   };
   var checkAtEnd = function checkAtEnd(element) {
-    var elementEndY = $(element).offset().top + $(element).height();
-    var windowEndY = $(document).scrollTop() + document.documentElement.clientHeight;
+    var elementEndY = (0, _jquery["default"])(element).offset().top + (0, _jquery["default"])(element).height();
+    var windowEndY = (0, _jquery["default"])(document).scrollTop() + document.documentElement.clientHeight;
     if (windowEndY > elementEndY - document.documentElement.clientHeight / 2) {
       var value = element.valueAccessor();
       var valueUnwrapped = _knockout["default"].utils.unwrapObservable(value);
@@ -41010,8 +41010,8 @@ _knockout["default"].bindingHandlers.element = {
     var elems = document.querySelectorAll('[data-scroll-to-end-listener]');
     for (var i = 0; i < elems.length; i++) checkAtEnd(elems[i]);
   }
-  $(window).scroll(scrollToEndCheck);
-  $(window).resize(scrollToEndCheck);
+  (0, _jquery["default"])(window).scroll(scrollToEndCheck);
+  (0, _jquery["default"])(window).resize(scrollToEndCheck);
 })();
 
 // handle focus for this element and all children. only when this element or all of its chlidren have lost focus set the value to false.
@@ -41039,7 +41039,7 @@ _knockout["default"].bindingHandlers.hasfocus2 = {
 _knockout["default"].bindingHandlers.autocomplete = {
   init: function init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
     var setAutoCompleteOptions = function setAutoCompleteOptions(sources) {
-      $(element).autocomplete({
+      (0, _jquery["default"])(element).autocomplete({
         classes: {
           'ui-autocomplete': 'dropdown-menu'
         },
@@ -41050,11 +41050,11 @@ _knockout["default"].bindingHandlers.autocomplete = {
           results: function results() {}
         }
       }).data('ui-autocomplete')._renderItem = function (ul, item) {
-        return $('<li></li>').append($('<a>').text(item.label)).appendTo(ul);
+        return (0, _jquery["default"])('<li></li>').append((0, _jquery["default"])('<a>').text(item.label)).appendTo(ul);
       };
     };
     var handleKeyEvent = function handleKeyEvent(event) {
-      var value = $(element).val();
+      var value = (0, _jquery["default"])(element).val();
       var lastChar = value.slice(-1);
       if (lastChar == ungit.config.fileSeparator) {
         // When file separator is entered, list what is in given path, and rest auto complete options
@@ -41062,9 +41062,9 @@ _knockout["default"].bindingHandlers.autocomplete = {
           term: value
         }).then(function (directoryList) {
           var currentDir = directoryList.shift();
-          $(element).val(currentDir.endsWith(ungit.config.fileSeparator) ? currentDir : currentDir + ungit.config.fileSeparator);
+          (0, _jquery["default"])(element).val(currentDir.endsWith(ungit.config.fileSeparator) ? currentDir : currentDir + ungit.config.fileSeparator);
           setAutoCompleteOptions(directoryList);
-          $(element).autocomplete('search', value);
+          (0, _jquery["default"])(element).autocomplete('search', value);
         })["catch"](function (err) {
           if (!err.errorSummary.startsWith('ENOENT: no such file or directory') && err.errorCode !== 'read-dir-failed') {
             throw err;
@@ -41083,7 +41083,7 @@ _knockout["default"].bindingHandlers.autocomplete = {
           };
         });
         setAutoCompleteOptions(folderNames);
-        $(element).autocomplete('search', '');
+        (0, _jquery["default"])(element).autocomplete('search', '');
       }
       return true;
     };
