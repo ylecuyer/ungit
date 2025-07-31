@@ -1,8 +1,8 @@
 import ko from 'knockout';
 import _ from 'lodash';
-import octicons from 'octicons';
-import components from 'ungit-components-es6';
-import storage from 'ungit-storage-es6';
+import octicons from '@primer/octicons';
+import components from '/notpublic/source/components.js';
+import storage from '/notpublic/source/storage.js';
 import { ComponentRoot } from '../ComponentRoot';
 
 const showRemote = 'showRemote';

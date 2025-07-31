@@ -1,5 +1,5 @@
 import ko from 'knockout';
-import components from 'ungit-components-es6';
+import components from '/notpublic/source/components.js';
 import { parse as d2h_parse, html as d2h_html } from 'diff2html';
 
 const sideBySideDiff = 'sidebysidediff';

@@ -1,6 +1,6 @@
 import ko from 'knockout';
-import octicons from 'octicons';
-import components from 'ungit-components-es6';
+import octicons from '@primer/octicons';
+import components from '/notpublic/source/components.js';
 
 components.register('gitErrors', (args) => new GitErrorsViewModel(args.server, args.repoPath));
 

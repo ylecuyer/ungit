@@ -1,4 +1,4 @@
-import programEvents from 'ungit-program-events-es6';
+import programEvents from './program-events.js';
 import hasher from 'hasher';
 import crossroads from 'crossroads';
 

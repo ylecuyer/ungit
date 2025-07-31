@@ -21,27 +21,6 @@
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="/js/ungit.js"></script>
 
-    <script type="text/javascript" src="/plugins/app/app.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/branches/branches.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/commit/commit.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/commitdiff/commitdiff.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/crash/crash.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/gitErrors/gitErrors.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/graph/graph.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/header/header.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/home/home.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/imagediff/imagediff.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/login/login.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/modals/modals.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/path/path.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/refreshbutton/refreshbutton.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/remotes/remotes.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/repository/repository.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/staging/staging.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/stash/stash.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/submodules/submodules.bundle.js"></script>
-    <script type="text/javascript" src="/plugins/textdiff/textdiff.bundle.js"></script>
-
     <!-- Knockout Templates: app -->
     <script type="text/html" id="app">
     <!-- ko component: header -->
@@ -1441,8 +1420,9 @@
     <!-- End Knockout Templates: textdiff -->
 
 
-    <script type="text/javascript">
-      require('ungit-main-es6').start();
+    <script type="module">
+      import { start } from './notpublic/source/main.js';
+      start();
     </script>
   </body>
 </html>

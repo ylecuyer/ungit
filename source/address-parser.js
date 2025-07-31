@@ -78,3 +78,5 @@ export const parseAddress = (remote) => {
 
   return { address: remote };
 };
+
+export default parseAddress;

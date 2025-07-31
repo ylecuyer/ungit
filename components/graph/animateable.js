@@ -1,6 +1,6 @@
 import ko from 'knockout';
 import Selectable from './selectable.js';
-import 'mina';
+import 'snapsvg/src/mina';
 
 class Animateable extends Selectable {
   constructor(graph) {

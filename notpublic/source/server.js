@@ -1,4 +1,4 @@
-import programEvents from 'ungit-program-events-es6';
+import programEvents from './program-events.js';
 import libnprogress from 'nprogress';
 
 var nprogress;
@@ -21,7 +21,6 @@ function Server() {
   this.isUnloading = false;
   window.addEventListener('beforeunload', () => (this.isUnloading = true));
 }
-module.exports = Server;
 
 Server.prototype.initSocket = function () {
   var self = this;
@@ -198,3 +197,5 @@ Server.prototype.unhandledRejection = function (err) {
     programEvents.dispatch({ event: 'git-crash-error', error: err });
   }
 };
+
+export default Server;

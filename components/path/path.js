@@ -1,11 +1,11 @@
 import ko from 'knockout';
-import octicons from 'octicons';
-import components from 'ungit-components-es6';
-import addressParser from 'ungit-address-parser-es6';
-import navigation from 'ungit-navigation-es6';
-import programEvents from 'ungit-program-events-es6';
-import { encodePath } from 'ungit-address-parser-es6';
-import storage from 'ungit-storage-es6'
+import octicons from '@primer/octicons';
+import components from '/notpublic/source/components.js';
+import addressParser from '/source/address-parser.js';
+import navigation from '/notpublic/source/navigation.js';
+import programEvents from '/notpublic/source/program-events.js';
+import { encodePath } from '/source/address-parser.js';
+import storage from '/notpublic/source/storage.js';
 import { ComponentRoot } from '../ComponentRoot';
 const showCreateRepoKey = 'isShowCreateRepo';
 

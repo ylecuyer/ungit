@@ -1,15 +1,36 @@
+import '/components/app/app.js';
+import '/components/branches/branches.js';
+import '/components/commit/commit.js';
+import '/components/commitdiff/commitdiff.js';
+import '/components/crash/crash.js';
+import '/components/gitErrors/gitErrors.js';
+import '/components/graph/graph.js';
+import '/components/header/header.js';
+import '/components/home/home.js';
+import '/components/imagediff/imagediff.js';
+import '/components/login/login.js';
+import '/components/modals/modals.js';
+import '/components/path/path.js';
+import '/components/refreshbutton/refreshbutton.js';
+import '/components/remotes/remotes.js';
+import '/components/repository/repository.js';
+import '/components/staging/staging.js';
+import '/components/stash/stash.js';
+import '/components/submodules/submodules.js';
+import '/components/textdiff/textdiff.js';
+
 import $ from 'jquery';
 import ko from 'knockout';
 import './bootstrap.js';
 import './jquery-ui.js';
 import './knockout-bindings.js';
-import components from 'ungit-components-es6';
+import components from './components.js';
 import Server from './server.js';
-import programEvents from 'ungit-program-events-es6';
-import navigation from 'ungit-navigation-es6';
+import programEvents from './program-events.js';
+import navigation from './navigation.js';
 import adBlocker from 'just-detect-adblock';
 
-ungit.logger = global.console;
+ungit.logger = console;
 
 // Request animation frame polyfill and init tooltips
 (function () {

@@ -1,6 +1,6 @@
 import ko from 'knockout';
-import components from 'ungit-components-es6';
-import storage from 'ungit-storage-es6';
+import components from '/notpublic/source/components.js';
+import storage from '/notpublic/source/storage.js';
 import $ from 'jquery';
 
 components.register('app', (args) => {

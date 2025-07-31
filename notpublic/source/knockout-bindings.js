@@ -3,9 +3,9 @@
 import _ from 'lodash';
 import ko from 'knockout';
 import $ from 'jquery';
-import { encodePath } from 'ungit-address-parser-es6';
-import navigation from 'ungit-navigation-es6';
-import storage from 'ungit-storage-es6';
+import { encodePath } from '../../source/address-parser.js';
+import navigation from './navigation.js';
+import storage from './storage.js';
 
 ko.bindingHandlers.debug = {
   init: function (element, valueAccessor) {

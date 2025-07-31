@@ -1,5 +1,5 @@
 import ko from 'knockout';
-import components from 'ungit-components-es6';
+import components from '/notpublic/source/components.js';
 import signals from 'signals';
 
 components.register('login', (args) => new LoginViewModel(args.server));

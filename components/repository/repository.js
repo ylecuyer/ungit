@@ -1,8 +1,8 @@
 import ko from 'knockout';
-import octicons from 'octicons';
-import components from 'ungit-components-es6';
-import programEvents from 'ungit-program-events-es6';
-import { encodePath } from 'ungit-address-parser-es6';
+import octicons from '@primer/octicons';
+import components from '/notpublic/source/components.js';
+import programEvents from '/notpublic/source/program-events.js';
+import { encodePath } from '/source/address-parser.js';
 
 components.register('repository', (args) => new RepositoryViewModel(args.server, args.path));
 

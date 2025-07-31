@@ -1,9 +1,9 @@
 import ko from 'knockout';
 import _ from 'lodash';
-import octicons from 'octicons';
+import octicons from '@primer/octicons';
 import moment from 'moment';
-import components from 'ungit-components-es6';
-import storage from 'ungit-storage-es6';
+import components from '/notpublic/source/components.js';
+import storage from '/notpublic/source/storage.js';
 import { ComponentRoot } from '../ComponentRoot';
 
 components.register('stash', (args) => new StashViewModel(args.server, args.repoPath));
