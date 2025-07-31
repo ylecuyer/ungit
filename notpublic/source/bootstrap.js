@@ -2,7 +2,7 @@
  * Import the Bootstrap components individually.
  */
 
-var $ = require('jquery');
+import $ from 'jquery';
 global.jQuery = $; // this is for old backward compatability of bootrap modules
 
 require('bootstrap-sass/assets/javascripts/bootstrap/dropdown');

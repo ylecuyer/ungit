@@ -40826,12 +40826,13 @@ function extend() {
 (function (global){(function (){
 "use strict";
 
+var _jquery = _interopRequireDefault(require("jquery"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 /*
  * Import the Bootstrap components individually.
  */
 
-var $ = require('jquery');
-global.jQuery = $; // this is for old backward compatability of bootrap modules
+global.jQuery = _jquery["default"]; // this is for old backward compatability of bootrap modules
 
 require('bootstrap-sass/assets/javascripts/bootstrap/dropdown');
 require('bootstrap-sass/assets/javascripts/bootstrap/modal');
