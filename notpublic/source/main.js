@@ -3,29 +3,13 @@ import ko from 'knockout';
 import './bootstrap.js';
 import './jquery-ui.js';
 import './knockout-bindings.js';
-import winston from 'winston';
 import components from 'ungit-components-es6';
 import Server from './server.js';
 import programEvents from 'ungit-program-events-es6';
 import navigation from 'ungit-navigation-es6';
 import adBlocker from 'just-detect-adblock';
 
-ungit.logger = winston.createLogger({
-  level: ungit.config.logLevel || 'error',
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.colorize(),
-    winston.format.printf((info) => {
-      const splat = info[Symbol.for('splat')];
-      if (splat) {
-        const splatStr = splat.map((arg) => JSON.stringify(arg)).join('\n');
-        return `${info.timestamp} - ${info.level}: ${info.message} ${splatStr}`;
-      }
-      return `${info.timestamp} - ${info.level}: ${info.message}`;
-    })
-  ),
-  transports: [new winston.transports.Console()],
-});
+ungit.logger = global.console;
 
 // Request animation frame polyfill and init tooltips
 (function () {
