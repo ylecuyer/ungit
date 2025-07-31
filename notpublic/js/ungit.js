@@ -41095,6 +41095,7 @@ ko.bindingHandlers.autocomplete = {
 "use strict";
 
 var _ungitProgramEventsEs = _interopRequireDefault(require("ungit-program-events-es6"));
+var _nprogress = _interopRequireDefault(require("nprogress"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 var nprogress;
 if (ungit.config.isDisableProgressBar) {
@@ -41103,7 +41104,7 @@ if (ungit.config.isDisableProgressBar) {
     done: function done() {}
   };
 } else {
-  nprogress = require('nprogress');
+  nprogress = _nprogress["default"];
   nprogress.configure({
     trickleRate: 0.06,
     trickleSpeed: 200,

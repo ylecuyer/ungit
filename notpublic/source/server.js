@@ -1,4 +1,5 @@
 import programEvents from 'ungit-program-events-es6';
+import libnprogress from 'nprogress';
 
 var nprogress;
 if (ungit.config.isDisableProgressBar) {
@@ -7,7 +8,7 @@ if (ungit.config.isDisableProgressBar) {
     done: () => {},
   };
 } else {
-  nprogress = require('nprogress');
+  nprogress = libnprogress;
   nprogress.configure({
     trickleRate: 0.06,
     trickleSpeed: 200,
