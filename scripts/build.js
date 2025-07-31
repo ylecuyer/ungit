@@ -10,69 +10,6 @@ const mkdirp = require('mkdirp').mkdirp;
 const baseDir = path.join(__dirname, '..');
 
 (async () => {
-  await mkdirp(path.join(baseDir, 'notpublic', 'css'));
-  await mkdirp(path.join(baseDir, 'notpublic', 'js'));
-
-  const dir = await fs.readdir('components', { withFileTypes: true });
-  const components = dir
-    .filter((component) => component.isDirectory())
-    .map((component) => component.name);
-
-  // browserify
-  console.log('browserify:common');
-  const publicSourceDir = path.join(baseDir, 'notpublic/source');
-  const b = browserify(path.join(baseDir, 'notpublic/source/main.js'), {
-    noParse: ['dnd-page-scroll', 'jquery', 'knockout'],
-    debug: true,
-    transform: [
-      babelify.configure({
-        presets: ['@babel/preset-env'],
-      }),
-    ],
-  });
-  b.require(path.join(publicSourceDir, 'components.js'), { expose: 'ungit-components-es6' });
-  b.require(path.join(publicSourceDir, 'main.js'), { expose: 'ungit-main-es6' });
-  b.require(path.join(publicSourceDir, 'navigation.js'), { expose: 'ungit-navigation-es6' });
-  b.require(path.join(publicSourceDir, 'program-events.js'), { expose: 'ungit-program-events-es6' });
-  b.require(path.join(publicSourceDir, 'storage.js'), { expose: 'ungit-storage-es6' });
-  b.require(path.join(baseDir, 'source/address-parser.js'), { expose: 'ungit-address-parser-es6' });
-  b.require('blueimp-md5', { expose: 'blueimp-md5' });
-  b.require('diff2html', { expose: 'diff2html' });
-  b.require('jquery', { expose: 'jquery' });
-  b.require('knockout', { expose: 'knockout' });
-  b.require('lodash', { expose: 'lodash' });
-  b.require(path.join(baseDir, 'node_modules/snapsvg/src/mina.js'), { expose: 'mina' });
-  b.require('moment', { expose: 'moment' });
-  b.require('@primer/octicons', { expose: 'octicons' });
-  b.require('signals', { expose: 'signals' });
-  const ungitjsFile = path.join(baseDir, 'notpublic/js/ungit.js');
-  const mapFile = path.join(baseDir, 'notpublic/js/ungit.js.map');
-  await new Promise((resolve) => {
-    const outFile = fsSync.createWriteStream(ungitjsFile);
-    outFile.on('close', () => resolve());
-    b.bundle().pipe(exorcist(mapFile)).pipe(outFile);
-  });
-  console.log(`browserify ${path.relative(baseDir, ungitjsFile)}`);
-
-  console.log('browserify:components');
-  for (const component of components) {
-    console.log(`browserify:components:${component}`);
-    const sourcePrefix = path.join(baseDir, `components/${component}/${component}`);
-    const destination = path.join(baseDir, `components/${component}/${component}.bundle.js`);
-
-    const jsSource = `${sourcePrefix}.js`;
-
-    try {
-      await fs.access(jsSource);
-      await browserifyFile(jsSource, destination);
-    } catch(e) {
-      console.error(`Error processing ${jsSource}: ${e.message}`);
-      console.warn(
-        `${sourcePrefix} does not exist. If this component is obsolete, please remove that directory or perform a clean build.`
-      );
-    }
-  }
-
   // copy
   console.log('copy bootstrap fonts');
   await Promise.all(
@@ -88,22 +25,6 @@ const baseDir = path.join(__dirname, '..');
   );
 })();
 
-async function browserifyFile(source, destination) {
-  const mapDestination = `${destination}.map`;
-  await new Promise((resolve) => {
-    const b = browserify(source, {
-      bundleExternal: false,
-      debug: true,
-    }).transform(babelify, {
-      presets: ['@babel/preset-env'],
-    });
-    
-    const outFile = fsSync.createWriteStream(destination);
-    outFile.on('close', () => resolve());
-    b.bundle().pipe(exorcist(mapDestination)).pipe(outFile);
-  });
-  console.log(`browserify ${path.relative(baseDir, destination)}`);
-}
 async function copyToFolder(source, destination) {
   source = path.join(baseDir, source);
   destination = path.join(baseDir, destination, path.basename(source));
