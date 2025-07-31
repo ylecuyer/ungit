@@ -1,7 +1,7 @@
 'use strict';
 
 // USED BY FRONT END
-// DO NOT GO ES6
+// CONVERTED TO ES6
 const addressWindowsLocalRegexp = /[a-zA-Z]:\\([^\\]+\\?)*/;
 const addressSshWithPortRegexp = /ssh:\/\/(.*):(\d*)\/(.*)/;
 const addressSshWithoutPortRegexp = /ssh:\/\/([^/]*)\/(.*)/;
@@ -15,9 +15,9 @@ const addressUnixLocalRegexp = /.*\/([^/]+)/;
  *
  * @param {string} path
  */
-exports.encodePath = (path) => encodeURIComponent(path).replace(/%2F/g, '/');
+export const encodePath = (path) => encodeURIComponent(path).replace(/%2F/g, '/');
 
-exports.parseAddress = (remote) => {
+export const parseAddress = (remote) => {
   let match = addressWindowsLocalRegexp.exec(remote);
   if (match) {
     let project = match[1];

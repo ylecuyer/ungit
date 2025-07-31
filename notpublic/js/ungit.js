@@ -40865,6 +40865,7 @@ require('jquery-ui/ui/widgets/autocomplete');
 },{"jquery-ui/ui/keycode":129,"jquery-ui/ui/position":130,"jquery-ui/ui/unique-id":131,"jquery-ui/ui/version":132,"jquery-ui/ui/widget":133,"jquery-ui/ui/widgets/autocomplete":134,"jquery-ui/ui/widgets/menu":135}],256:[function(require,module,exports){
 "use strict";
 
+var _ungitAddressParserEs = require("ungit-address-parser-es6");
 var _ungitNavigationEs = _interopRequireDefault(require("ungit-navigation-es6"));
 var _ungitStorageEs = _interopRequireDefault(require("ungit-storage-es6"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
@@ -40873,8 +40874,6 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default":
 var _ = require('lodash');
 var ko = require('knockout');
 var $ = require('jquery');
-var _require = require('ungit-address-parser'),
-  encodePath = _require.encodePath;
 ko.bindingHandlers.debug = {
   init: function init(element, valueAccessor) {
     var value = ko.utils.unwrapObservable(valueAccessor());
@@ -41074,7 +41073,7 @@ ko.bindingHandlers.autocomplete = {
       } else if (event.keyCode === 13) {
         // enter key is struck, navigate to the path
         event.preventDefault();
-        _ungitNavigationEs["default"].browseTo("repository?path=".concat(encodePath(value)));
+        _ungitNavigationEs["default"].browseTo("repository?path=".concat((0, _ungitAddressParserEs.encodePath)(value)));
       } else if (value === '' && _ungitStorageEs["default"].getItem('repositories')) {
         // if path is emptied out, show save path options
         var folderNames = JSON.parse(_ungitStorageEs["default"].getItem('repositories')).map(function (value) {
@@ -41092,7 +41091,7 @@ ko.bindingHandlers.autocomplete = {
   }
 };
 
-},{"jquery":"jquery","knockout":"knockout","lodash":"lodash","ungit-address-parser":"ungit-address-parser","ungit-navigation-es6":"ungit-navigation-es6","ungit-storage-es6":"ungit-storage-es6"}],257:[function(require,module,exports){
+},{"jquery":"jquery","knockout":"knockout","lodash":"lodash","ungit-address-parser-es6":"ungit-address-parser-es6","ungit-navigation-es6":"ungit-navigation-es6","ungit-storage-es6":"ungit-storage-es6"}],257:[function(require,module,exports){
 "use strict";
 
 var _ungitProgramEventsEs = _interopRequireDefault(require("ungit-program-events-es6"));
@@ -82233,11 +82232,15 @@ function closestNaturalHeight(naturalHeights, height) {
 
 }(this));
 
-},{}],"ungit-address-parser":[function(require,module,exports){
+},{}],"ungit-address-parser-es6":[function(require,module,exports){
 'use strict';
 
 // USED BY FRONT END
-// DO NOT GO ES6
+// CONVERTED TO ES6
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.parseAddress = exports.encodePath = void 0;
 var addressWindowsLocalRegexp = /[a-zA-Z]:\\([^\\]+\\?)*/;
 var addressSshWithPortRegexp = /ssh:\/\/(.*):(\d*)\/(.*)/;
 var addressSshWithoutPortRegexp = /ssh:\/\/([^/]*)\/(.*)/;
@@ -82251,10 +82254,10 @@ var addressUnixLocalRegexp = /.*\/([^/]+)/;
  *
  * @param {string} path
  */
-exports.encodePath = function (path) {
+var encodePath = exports.encodePath = function encodePath(path) {
   return encodeURIComponent(path).replace(/%2F/g, '/');
 };
-exports.parseAddress = function (remote) {
+var parseAddress = exports.parseAddress = function parseAddress(remote) {
   var match = addressWindowsLocalRegexp.exec(remote);
   if (match) {
     var project = match[1];
