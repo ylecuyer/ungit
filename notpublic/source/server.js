@@ -196,6 +196,5 @@ Server.prototype.unhandledRejection = function (err) {
     // Everything else is handled as a pure error, using the precreated error (to get a better stacktrace)
     console.trace('Unhandled Promise ERROR: ', err, JSON.stringify(err));
     programEvents.dispatch({ event: 'git-crash-error', error: err });
-    Raven.captureException(err);
   }
 };

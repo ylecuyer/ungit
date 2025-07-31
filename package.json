@@ -55,7 +55,6 @@
     "p-limit": "~6.2.0",
     "passport": "~0.7.0",
     "passport-local": "~1.0.0",
-    "raven-js": "~3.27.2",
     "rc": "~1.2.8",
     "rimraf": "~6.0.1",
     "semver": "~7.7.2",

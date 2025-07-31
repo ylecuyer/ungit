@@ -124,10 +124,6 @@ function start() {
     server.initSocket();
   }
 
-  Raven.TraceKit.report.subscribe(function (event, err) {
-    programEvents.dispatch({ event: 'raven-crash', error: err || event.event });
-  });
-
   var prevTimestamp = 0;
   var updateAnimationFrame = function (timestamp) {
     var delta = timestamp - prevTimestamp;

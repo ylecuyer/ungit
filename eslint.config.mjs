@@ -40,7 +40,6 @@ export default [
         ...globals.browser,
         io: 'readonly',
         jQuery: 'writable',
-        Raven: 'readonly',
         ungit: 'readonly',
       },
     },

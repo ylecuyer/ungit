@@ -41052,7 +41052,6 @@ Server.prototype.unhandledRejection = function (err) {
       event: 'git-crash-error',
       error: err
     });
-    Raven.captureException(err);
   }
 };
 
@@ -76459,12 +76458,6 @@ function start() {
   } else {
     server.initSocket();
   }
-  Raven.TraceKit.report.subscribe(function (event, err) {
-    _ungitProgramEventsEs["default"].dispatch({
-      event: 'raven-crash',
-      error: err || event.event
-    });
-  });
   var prevTimestamp = 0;
   var _updateAnimationFrame = function updateAnimationFrame(timestamp) {
     var delta = timestamp - prevTimestamp;

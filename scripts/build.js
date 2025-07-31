@@ -87,15 +87,6 @@ const baseDir = path.join(__dirname, '..');
       await copyToFolder(file, 'public/fonts');
     })
   );
-
-  console.log('copy raven');
-  await Promise.all(
-    ['node_modules/raven-js/dist/raven.min.js', 'node_modules/raven-js/dist/raven.min.js.map'].map(
-      async (file) => {
-        await copyToFolder(file, 'public/js');
-      }
-    )
-  );
 })();
 
 async function browserifyFile(source, destination) {
