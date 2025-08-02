@@ -2,7 +2,7 @@ import ko from 'knockout';
 import octicons from '@primer/octicons';
 import components from '/notpublic/source/components.js';
 import programEvents from '/notpublic/source/program-events.js';
-import { encodePath } from '/source/address-parser.js';
+import { encodePath } from '../../../source/address-parser.js';
 
 components.register('repository', (args) => new RepositoryViewModel(args.server, args.path));
 

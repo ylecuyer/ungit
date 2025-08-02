@@ -1,4 +1,5 @@
 export default {
+    root: 'frontend',
     server: {
         proxy: {
             '/plugins': {
