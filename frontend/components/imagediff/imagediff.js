@@ -1,7 +1,7 @@
 import ko from 'knockout';
 import octicons from '@primer/octicons';
 import components from '/notpublic/source/components.js';
-import { encodePath } from '../../../source/address-parser.js';
+import { encodePath } from '../../../backend/source/address-parser.js';
 
 components.register('imagediff', (args) => new ImageDiffViewModel(args));
 

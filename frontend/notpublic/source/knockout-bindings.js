@@ -3,7 +3,7 @@
 import _ from 'lodash';
 import ko from 'knockout';
 import $ from 'jquery';
-import { encodePath } from '../../../source/address-parser.js';
+import { encodePath } from '../../../backend/source/address-parser.js';
 import navigation from './navigation.js';
 import storage from './storage.js';
 
