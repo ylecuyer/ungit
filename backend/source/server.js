@@ -162,6 +162,7 @@ if (config.authentication) {
   };
 }
 
+app.use('/images', serveStatic(path.join(__dirname, '../../assets/images')));
 app.use(serveStatic(__dirname + '/../../frontend/dist'));
 
 // Socket-IO

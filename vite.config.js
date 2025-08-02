@@ -2,6 +2,10 @@ export default {
     root: 'frontend',
     server: {
         proxy: {
+            '/images': {
+                target: 'http://localhost:8448',
+                changeOrigin: true,
+            },
             '/plugins': {
                 target: 'http://localhost:8448',
                 changeOrigin: true,
