@@ -1,5 +1,5 @@
 const expect = require('expect.js');
-const cache = require('../source/utils/cache');
+const cache = require('../backend/source/utils/cache');
 
 describe('cache', () => {
   it('should be invokable several times', () => {

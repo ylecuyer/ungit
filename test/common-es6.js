@@ -1,6 +1,6 @@
 const expect = require('expect.js');
 const path = require('path');
-const restGit = require('../source/git-api');
+const restGit = require('../backend/source/git-api');
 
 exports.makeRequest = (method, req, path, payload) => {
   let r;

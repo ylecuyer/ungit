@@ -375,7 +375,7 @@ try {
   throw e;
 }
 
-module.exports.ungitPackageVersion = require('../package.json').version;
+module.exports.ungitPackageVersion = require('../../package.json').version;
 
 let devVersion = module.exports.ungitPackageVersion;
 if (fs.existsSync(path.join(__dirname, '..', '.git'))) {

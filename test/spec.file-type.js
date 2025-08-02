@@ -1,4 +1,4 @@
-const fileType = require('../source/utils/file-type.js');
+const fileType = require('../backend/source/utils/file-type.js');
 const expect = require('expect.js');
 
 describe('file type', () => {

@@ -2,13 +2,13 @@
 
 const startLaunchTime = Date.now();
 
-const config = require('../source/config');
+const config = require('../backend/source/config');
 const openPromise = import('open');
 const path = require('path');
 const child_process = require('child_process');
-const { encodePath } = require('../source/address-parser');
+const { encodePath } = require('../backend/source/address-parser');
 
-const BugTracker = require('../source/bugtracker');
+const BugTracker = require('../backend/source/bugtracker');
 const bugtracker = new BugTracker('launcher');
 // Fastest way to find out if a port is used or not/i.e. if ungit is running
 const net = require('net');
@@ -66,7 +66,7 @@ const navigate = () => {
 
 const launch = () => {
   child = child_process.fork(
-    path.join(__dirname, '..', 'source', 'server.js'),
+    path.join(__dirname, '..', 'backend', 'source', 'server.js'),
     process.argv.slice(2),
     { cwd: path.join(process.cwd(), '..'), silent: true }
   );

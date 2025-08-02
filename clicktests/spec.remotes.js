@@ -2,7 +2,7 @@
 const environment = require('./environment')();
 const mkdirp = require('mkdirp').mkdirp;
 const rimraf = require('rimraf').rimraf;
-const { encodePath } = require('../source/address-parser');
+const { encodePath } = require('../backend/source/address-parser');
 const testRepoPaths = [];
 
 describe('[REMOTES]', () => {

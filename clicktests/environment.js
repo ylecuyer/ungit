@@ -1,11 +1,11 @@
 'use strict';
-const logger = require('../source/utils/logger');
+const logger = require('../backend/source/utils/logger');
 const child_process = require('child_process');
 const puppeteer = require('puppeteer');
 const request = require('superagent');
 const mkdirp = require('mkdirp').mkdirp;
 const rimraf = require('rimraf').rimraf;
-const { encodePath } = require('../source/address-parser');
+const { encodePath } = require('../backend/source/address-parser');
 const portfinder = require('portfinder');
 const portrange = 45032;
 
