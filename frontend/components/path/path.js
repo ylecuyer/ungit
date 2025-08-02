@@ -1,10 +1,9 @@
 import ko from 'knockout';
 import octicons from '@primer/octicons';
 import components from '/notpublic/source/components.js';
-import addressParser from '../../../backend/source/address-parser.js';
+import { encodePath, parseAddress } from '../../../backend/source/address-parser.js';
 import navigation from '/notpublic/source/navigation.js';
 import programEvents from '/notpublic/source/program-events.js';
-import { encodePath } from '../../../backend/source/address-parser.js';
 import storage from '/notpublic/source/storage.js';
 import { ComponentRoot } from '../ComponentRoot';
 const showCreateRepoKey = 'isShowCreateRepo';
@@ -51,7 +50,7 @@ class PathViewModel extends ComponentRoot {
       const defaultText = 'destination folder';
       if (!this.cloneUrl()) return defaultText;
 
-      const parsedAddress = addressParser.parseAddress(this.cloneUrl());
+      const parsedAddress = parseAddress(this.cloneUrl());
       return parsedAddress.shortProject || defaultText;
     });
     this.cloneDestination = ko.observable();
@@ -149,7 +148,7 @@ class PathViewModel extends ComponentRoot {
         destinationDir: dest,
         isRecursiveSubmodule: this.isRecursiveSubmodule(),
       })
-      .then((res) => navigation.browseTo('repository?path=' + addressParser.encodePath(res.path)))
+      .then((res) => navigation.browseTo('repository?path=' + encodePath(res.path)))
       .catch((e) => this.server.unhandledRejection(e))
       .finally(() => {
         programEvents.dispatch({ event: 'working-tree-changed' });
@@ -163,3 +162,5 @@ class PathViewModel extends ComponentRoot {
       .then(() => this.updateStatus());
   }
 }
+
+window.ugPathViewModel = PathViewModel; // For testing purposes

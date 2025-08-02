@@ -18,6 +18,8 @@ const gitConfigArguments = [
   'core.pager=cat',
   '-c',
   'core.editor=:',
+  '-c',
+  'protocol.file.allow=always', // for submodule tests using file:// protocol
 ];
 const gitOptionalLocks = config.isGitOptionalLocks ? '--no-optional-locks' : '';
 const gitBin = (() => {
