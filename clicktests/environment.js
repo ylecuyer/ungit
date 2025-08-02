@@ -24,7 +24,7 @@ class Environment {
   constructor(config) {
     this.config = config || {};
     this.config.serverTimeout = this.config.serverTimeout || 35000;
-    this.config.headless = this.config.headless === undefined ? true : this.config.headless;
+    this.config.headless = false; //this.config.headless === undefined ? true : this.config.headless;
     this.config.viewWidth = 1920;
     this.config.viewHeight = 1080;
     this.config.serverStartupOptions = this.config.serverStartupOptions || [];

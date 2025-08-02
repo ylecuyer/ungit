@@ -162,8 +162,7 @@ if (config.authentication) {
   };
 }
 
-app.use(`/plugins`, express.static(path.join(__dirname, '..', 'components')));
-app.use(serveStatic(__dirname + '/../notpublic'));
+app.use(serveStatic(__dirname + '/../../frontend/dist'));
 
 // Socket-IO
 const socketIO = require('socket.io');
