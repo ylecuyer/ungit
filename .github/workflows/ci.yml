@@ -57,6 +57,10 @@ jobs:
       - run: npm ci
       - run: npm run lint
         if: matrix.os == 'ubuntu-latest' && matrix.node-version == '20'
+      - run: ls -la node_modules/bootstrap-sass/
+      - run: ls -la node_modules/bootstrap-sass/assets/
+      - run: ls -la node_modules/bootstrap-sass/assets/fonts/
+      - run: ls -la node_modules/bootstrap-sass/assets/fonts/bootstrap/
       - run: npm run build
       - run: npm test
 
