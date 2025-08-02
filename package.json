@@ -6,9 +6,9 @@
   "scripts": {
     "start": "node ./bin/ungit --launchBrowser=0",
     "inspect": "node --inspect ./source/server.js",
-    "test": "npm run unittest && npm run clicktest",
-    "unittest": "mocha --config .mochatest.json",
-    "clicktest": "mocha --config .mochaclicktest.json",
+    "test": "npm run unittests && npm run clicktests",
+    "unittests": "mocha --config .mochatest.json",
+    "clicktests": "mocha --config .mochaclicktest.json",
     "coverage": "nyc npm run unittest",
     "lint": "eslint .",
     "format": "npm run lint -- --fix",
