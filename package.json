@@ -12,7 +12,7 @@
     "coverage": "nyc npm run unittest",
     "lint": "eslint .",
     "format": "npm run lint -- --fix",
-    "build": "node --trace-deprecation ./scripts/build.js && vite build",
+    "build": "vite build",
     "watch": "nodemon -C --exec \"npm run build\" -e js,less -w public/source -w public/less -w components/ -i \"*.bundle.js\"",
     "bumpdependencies": "ncu --upgrade --reject bootstrap",
     "electronpackage": "node ./scripts/electronpackage.js",
