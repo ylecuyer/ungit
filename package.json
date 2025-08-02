@@ -12,7 +12,7 @@
     "coverage": "nyc npm run unittest",
     "lint": "eslint .",
     "format": "npm run lint -- --fix",
-    "build": "node --trace-deprecation ./scripts/build.js",
+    "build": "node --trace-deprecation ./scripts/build.js && vite build",
     "watch": "nodemon -C --exec \"npm run build\" -e js,less -w public/source -w public/less -w components/ -i \"*.bundle.js\"",
     "bumpdependencies": "ncu --upgrade --reject bootstrap",
     "electronpackage": "node ./scripts/electronpackage.js",
@@ -93,7 +93,8 @@
     "puppeteer": "~24.14.0",
     "sass": "^1.89.2",
     "superagent": "~10.2.2",
-    "supertest": "~7.1.3"
+    "supertest": "~7.1.3",
+    "vite": "^7.0.6"
   },
   "engines": {
     "node": "^20.19.0 || ^22.12.0 || >=23"
