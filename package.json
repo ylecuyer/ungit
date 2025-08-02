@@ -14,9 +14,7 @@
     "format": "npm run lint -- --fix",
     "build": "vite build",
     "watch": "nodemon -C --exec \"npm run build\" -e js,less -w public/source -w public/less -w components/ -i \"*.bundle.js\"",
-    "bumpdependencies": "ncu --upgrade --reject bootstrap",
-    "electronpackage": "node ./scripts/electronpackage.js",
-    "electronzip": "node ./scripts/electronzip.js"
+    "bumpdependencies": "ncu --upgrade --reject bootstrap"
   },
   "repository": {
     "type": "git",
@@ -75,8 +73,6 @@
     "babelify": "^10.0.0",
     "browserify": "~17.0.1",
     "dedent": "~1.6.0",
-    "electron": "~37.2.3",
-    "electron-packager": "~17.1.2",
     "eslint": "~9.31.0",
     "eslint-plugin-mocha": "~11.1.0",
     "eslint-plugin-n": "~17.21.0",

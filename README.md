@@ -33,8 +33,6 @@ NOTE: If your system requires root access to install global npm packages, make s
 
 	sudo -H npm install -g ungit
 
-Prebuilt [electron](https://electronjs.org/) packages are available [here](https://github.com/FredrikNoren/ungit/releases) (git is still required).
-
 Using
 -----
 Anywhere you want to start, just type:

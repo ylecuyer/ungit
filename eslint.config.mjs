@@ -50,20 +50,6 @@ export default [
     },
   },
 
-  // public/main.js
-  {
-    files: ['frontend/notpublic/main.js'],
-
-    rules: {
-      'n/no-unpublished-require': [
-        'error',
-        {
-          allowModules: ['electron'],
-        },
-      ],
-    },
-  },
-
   // source
   {
     files: ['backend/source/**'],

@@ -39,24 +39,6 @@ To get started developing on Ungit:
  7. Run `npm run lint` to verify your changes conform to the formatting.
  8. (Optional). Run `npm run format` to automatically fix formatting and (some) linting issues.
 
-### Run ungit as a standalone application
-
-To provide easier access to launch ungit a standalone application container using [electron](https://electronjs.org/) is available.
-
-#### To get started
-
- 1. Follow steps in 'Getting started' to get a development environment ready.
- 2. Run `npm run electronpackage`. This will create a standalone application package under `build/`
-
-#### Known limitations
-
- 1. The current standalone application does not allow you to execute more than one instance.
- 2. There is no installer package neither automatic update mechanism for standalone application in place yet.
-
-#### Additional notes
-
- 1. To create windows package with proper application description on a non-windows platform, [wine](https://www.winehq.org/) is required to be installed. If not, the windows package will be created with default resources.
-
 ### Architecture overview
 
 Ungit has two major parts; the server and the UI. The server exposes a REST interfaces, which enables it to be run on a remote server. The UI is a single-page web-app, built using Knockout.js.
