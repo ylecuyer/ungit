@@ -1,7 +1,7 @@
 const expect = require('expect.js');
 const child_process = require('child_process');
 const http = require('http');
-const config = require('../backend/source/config');
+const config = require('../../backend/source/config');
 
 describe('credentials-helper', () => {
   it('should be invokable', (done) => {

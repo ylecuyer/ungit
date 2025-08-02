@@ -2,7 +2,7 @@ const expect = require('expect.js');
 const request = require('supertest');
 const express = require('express');
 const path = require('path');
-const restGit = require('../backend/source/git-api');
+const restGit = require('../../backend/source/git-api.js');
 const common = require('./common-es6.js');
 
 const app = express();
