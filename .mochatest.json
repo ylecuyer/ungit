@@ -1,5 +1,5 @@
 {
-  "spec": "test/spec.*.js",
+  "spec": "unittests/spec.*.js",
   "file": "./backend/source/utils/logger.js",
   "timeout": 12000,
   "exit": true
