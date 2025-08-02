@@ -4,8 +4,13 @@ import octicons from '@primer/octicons';
 import components from '/notpublic/source/components.js';
 import programEvents from '/notpublic/source/program-events.js';
 import { ComponentRoot } from '../ComponentRoot';
+import submodulesTemplate from './submodules.html?raw';
 
 components.register('submodules', (args) => new SubmodulesViewModel(args.server, args.repoPath));
+const submodulesElement = document.createElement('template');
+submodulesElement.id = 'submodules';
+submodulesElement.innerHTML = submodulesTemplate;
+document.body.appendChild(submodulesElement);
 
 class SubmodulesViewModel extends ComponentRoot {
   constructor(server, repoPath) {

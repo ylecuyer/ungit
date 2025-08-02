@@ -2,8 +2,13 @@ import ko from 'knockout';
 import octicons from '@primer/octicons';
 import components from '/notpublic/source/components.js';
 import { encodePath } from '../../../backend/source/address-parser.js';
+import imageDiffTemplate from './imagediff.html?raw';
 
 components.register('imagediff', (args) => new ImageDiffViewModel(args));
+const imageDiffElement = document.createElement('template');
+imageDiffElement.id = 'imagediff';
+imageDiffElement.innerHTML = imageDiffTemplate;
+document.body.appendChild(imageDiffElement);
 
 class ImageDiffViewModel {
   constructor(args) {

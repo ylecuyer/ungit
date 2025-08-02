@@ -3,8 +3,13 @@ import octicons from '@primer/octicons';
 import components from '/notpublic/source/components.js';
 import programEvents from '/notpublic/source/program-events.js';
 import { encodePath } from '../../../backend/source/address-parser.js';
+import repositoryTemplate from './repository.html?raw';
 
 components.register('repository', (args) => new RepositoryViewModel(args.server, args.path));
+const repositoryElement = document.createElement('template');
+repositoryElement.id = 'repository';
+repositoryElement.innerHTML = repositoryTemplate;
+document.body.appendChild(repositoryElement);
 
 class RepositoryViewModel {
   constructor(server, path) {

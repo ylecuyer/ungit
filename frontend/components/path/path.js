@@ -7,10 +7,15 @@ import programEvents from '/notpublic/source/program-events.js';
 import storage from '/notpublic/source/storage.js';
 import { ComponentRoot } from '../ComponentRoot';
 const showCreateRepoKey = 'isShowCreateRepo';
+import pathTemplate from './path.html?raw';
 
 components.register('path', (args) => {
   return new PathViewModel(args.server, args.path);
 });
+const pathElement = document.createElement('template');
+pathElement.id = 'path';
+pathElement.innerHTML = pathTemplate;
+document.body.appendChild(pathElement);
 
 class SubRepositoryViewModel {
   constructor(server, path) {

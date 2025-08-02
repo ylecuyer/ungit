@@ -1,8 +1,13 @@
 import ko from 'knockout';
 import octicons from '@primer/octicons';
 import components from '/notpublic/source/components.js';
+import gitErrorTemplate from './gitErrors.html?raw';
 
 components.register('gitErrors', (args) => new GitErrorsViewModel(args.server, args.repoPath));
+const gitErrorsElement = document.createElement('template');
+gitErrorsElement.id = 'gitErrors';
+gitErrorsElement.innerHTML = gitErrorTemplate;
+document.body.appendChild(gitErrorsElement);
 
 class GitErrorsViewModel {
   constructor(server, repoPath) {

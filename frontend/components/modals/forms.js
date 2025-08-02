@@ -1,10 +1,16 @@
 import ko from 'knockout';
 import { ModalViewModel, FormItems } from './modalBase';
+import formModalTemplate from './formModal.html?raw';
 
 ungit.components.register(
   'credentialsmodal',
   (args) => new CredentialsModalViewModel(args.remote)
 );
+const formModalElement = document.createElement('template');
+formModalElement.id = 'formModal';
+formModalElement.innerHTML = formModalTemplate;
+document.body.appendChild(formModalElement);
+
 ungit.components.register('addremotemodal', (arg) => new AddRemoteModalViewModel(arg.path));
 ungit.components.register('addsubmodulemodal', (arg) => new AddSubmoduleModalViewModel(arg.path));
 

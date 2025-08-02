@@ -7,10 +7,20 @@ import GitNodeViewModel from './git-node.js';
 import GitRefViewModel from './git-ref.js';
 import EdgeViewModel from './edge.js';
 import { ComponentRoot } from '../ComponentRoot.js';
+import graphTemplate from './graph.html?raw';
+import graphGraphicsTemplate from './graph-graphics.html?raw';
 
 const numberOfNodesPerLoad = ungit.config.numberOfNodesPerLoad;
 
 components.register('graph', (args) => new GraphViewModel(args.server, args.repoPath));
+const graphElement = document.createElement('template');
+graphElement.id = 'graph';
+graphElement.innerHTML = graphTemplate;
+document.body.appendChild(graphElement);
+const graphGraphicsElement = document.createElement('template');
+graphGraphicsElement.id = 'graphGraphics';
+graphGraphicsElement.innerHTML = graphGraphicsTemplate;
+document.body.appendChild(graphGraphicsElement);
 
 class GraphViewModel extends ComponentRoot {
   constructor(server, repoPath) {

@@ -4,6 +4,7 @@ import octicons from '@primer/octicons';
 import components from '/notpublic/source/components.js';
 import programEvents from '/notpublic/source/program-events.js';
 import { ComponentRoot } from '../ComponentRoot';
+import stagingTemplate from './staging.html?raw';
 
 const filesToDisplayIncrmentBy = 50;
 const filesToDisplayLimit = filesToDisplayIncrmentBy;
@@ -13,6 +14,10 @@ components.register(
   'staging',
   (args) => new StagingViewModel(args.server, args.repoPath, args.graph)
 );
+const stagingElement = document.createElement('template');
+stagingElement.id = 'staging';
+stagingElement.innerHTML = stagingTemplate;
+document.body.appendChild(stagingElement);
 
 class StagingViewModel extends ComponentRoot {
   constructor(server, repoPath, graph) {

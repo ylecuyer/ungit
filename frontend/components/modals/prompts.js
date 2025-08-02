@@ -1,7 +1,13 @@
 import ko from 'knockout';
 import { ModalViewModel, PromptOptions } from './modalBase';
+import promptModalTemplate from './promptModal.html?raw';
 
 ungit.components.register('yesnomodal', (args) => new YesNoModalViewModel(args.title, args.details, args.closeFunc));
+const promptModalElement = document.createElement('template');
+promptModalElement.id = 'promptModal';
+promptModalElement.innerHTML = promptModalTemplate;
+document.body.appendChild(promptModalElement);
+
 ungit.components.register(
   'yesnomutemodal',
   (args) => new YesNoMuteModalViewModel(args.title, args.details, args.closeFunc)

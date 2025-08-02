@@ -1,8 +1,13 @@
 import ko from 'knockout';
 import components from '/notpublic/source/components.js';
 import signals from 'signals';
+import loginTemplate from './login.html?raw';
 
 components.register('login', (args) => new LoginViewModel(args.server));
+const loginElement = document.createElement('template');
+loginElement.id = 'login';
+loginElement.innerHTML = loginTemplate;
+document.body.appendChild(loginElement);
 
 class LoginViewModel {
   constructor(server) {

@@ -5,8 +5,13 @@ import moment from 'moment';
 import components from '/notpublic/source/components.js';
 import storage from '/notpublic/source/storage.js';
 import { ComponentRoot } from '../ComponentRoot';
+import stashTemplate from './stash.html?raw';
 
 components.register('stash', (args) => new StashViewModel(args.server, args.repoPath));
+const stashElement = document.createElement('template');
+stashElement.id = 'stash';
+stashElement.innerHTML = stashTemplate;
+document.body.appendChild(stashElement);
 
 class StashItemViewModel {
   constructor(stash, data) {

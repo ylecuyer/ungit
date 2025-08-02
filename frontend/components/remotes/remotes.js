@@ -3,8 +3,13 @@ import _ from 'lodash';
 import octicons from '@primer/octicons';
 import components from '/notpublic/source/components.js';
 import programEvents from '/notpublic/source/program-events.js';
+import remoteTemplate from './remotes.html?raw';
 
 components.register('remotes', (args) => new RemotesViewModel(args.server, args.repoPath));
+const remoteElement = document.createElement('template');
+remoteElement.id = 'remotes';
+remoteElement.innerHTML = remoteTemplate;
+document.body.appendChild(remoteElement);
 
 class RemotesViewModel {
   constructor(server, repoPath) {

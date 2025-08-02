@@ -3,8 +3,13 @@ import md5 from 'blueimp-md5';
 import moment from 'moment';
 import octicons from '@primer/octicons';
 import components from '/notpublic/source/components.js';
+import commitTemplate from './commit.html?raw';
 
 components.register('commit', (args) => new CommitViewModel(args));
+const commitElement = document.createElement('template');
+commitElement.id = 'commit';
+commitElement.innerHTML = commitTemplate;
+document.body.appendChild(commitElement);
 
 class CommitViewModel {
   constructor(gitNode) {

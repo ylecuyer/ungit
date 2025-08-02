@@ -2,8 +2,13 @@ import ko from 'knockout';
 import octicons from '@primer/octicons';
 import components from '/notpublic/source/components.js';
 import { encodePath } from '../../../backend/source/address-parser.js';
+import homeTemplate from './home.html?raw';
 
 components.register('home', (args) => new HomeViewModel(args.app));
+const homeElement = document.createElement('template');
+homeElement.id = 'home';
+homeElement.innerHTML = homeTemplate;
+document.body.appendChild(homeElement);
 
 class HomeRepositoryViewModel {
   constructor(home, path) {
@@ -73,9 +78,6 @@ class HomeViewModel {
           return reposByPath[path];
         })
     );
-  }
-  get template() {
-    return 'home';
   }
 }
 

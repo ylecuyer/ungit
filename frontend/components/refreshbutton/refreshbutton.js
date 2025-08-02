@@ -2,8 +2,13 @@ import ko from 'knockout';
 import octicons from '@primer/octicons';
 import components from '/notpublic/source/components.js';
 import programEvents from '/notpublic/source/program-events.js';
+import refreshButtonTemplate from './refreshbutton.html?raw';
 
 components.register('refreshbutton', (args) => new RefreshButton(args.isLarge));
+const refreshButtonElement = document.createElement('template');
+refreshButtonElement.id = 'refreshbutton';
+refreshButtonElement.innerHTML = refreshButtonTemplate;
+document.body.appendChild(refreshButtonElement);
 
 class RefreshButton {
   constructor(isLarge) {

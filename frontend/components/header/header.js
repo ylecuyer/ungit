@@ -4,8 +4,13 @@ import components from '/notpublic/source/components.js';
 import navigation from '/notpublic/source/navigation.js';
 import programEvents from '/notpublic/source/program-events.js';
 import { encodePath } from '../../../backend/source/address-parser.js';
+import headerTemplate from './header.html?raw';
 
 components.register('header', (args) => new HeaderViewModel(args.app));
+const headerElement = document.createElement('template');
+headerElement.id = 'header';
+headerElement.innerHTML = headerTemplate;
+document.body.appendChild(headerElement);
 
 class HeaderViewModel {
   constructor(app) {

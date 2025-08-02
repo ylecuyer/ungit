@@ -1,8 +1,13 @@
 import ko from 'knockout';
 import { CommitLineDiff } from './commitlinediff.js';
 import components from '/notpublic/source/components.js';
+import commitDiffTemplate from './commitdiff.html?raw';
 
 components.register('commitDiff', (args) => new CommitDiff(args));
+const commitDiffElement = document.createElement('template');
+commitDiffElement.id = 'commitdiff';
+commitDiffElement.innerHTML = commitDiffTemplate;
+document.body.appendChild(commitDiffElement);
 
 class CommitDiff {
   constructor(args) {

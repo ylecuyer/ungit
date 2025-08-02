@@ -2,10 +2,15 @@ import ko from 'knockout';
 import components from '/notpublic/source/components.js';
 import storage from '/notpublic/source/storage.js';
 import $ from 'jquery';
+import appTemplate from './app.html?raw';
 
 components.register('app', (args) => {
   return new AppViewModel(args.appContainer, args.server);
 });
+const appElement = document.createElement('template');
+appElement.id = 'app';
+appElement.innerHTML = appTemplate;
+document.body.appendChild(appElement);
 
 class AppViewModel {
   constructor(appContainer, server) {

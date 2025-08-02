@@ -4,6 +4,7 @@ import octicons from '@primer/octicons';
 import components from '/notpublic/source/components.js';
 import storage from '/notpublic/source/storage.js';
 import { ComponentRoot } from '../ComponentRoot';
+import branchesTemplate from './branches.html?raw';
 
 const showRemote = 'showRemote';
 const showBranch = 'showBranch';
@@ -12,6 +13,10 @@ const showTag = 'showTag';
 components.register('branches', (args) => {
   return new BranchesViewModel(args.server, args.graph, args.repoPath);
 });
+const branchesElement = document.createElement('template');
+branchesElement.id = 'branches';
+branchesElement.innerHTML = branchesTemplate;
+document.body.appendChild(branchesElement);
 
 class BranchesViewModel extends ComponentRoot {
   constructor(server, graph, repoPath) {

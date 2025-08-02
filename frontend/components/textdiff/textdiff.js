@@ -1,11 +1,17 @@
 import ko from 'knockout';
 import components from '/notpublic/source/components.js';
 import { parse as d2h_parse, html as d2h_html } from 'diff2html';
+import textDiffTemplate from './textdiff.html?raw';
 
 const sideBySideDiff = 'sidebysidediff';
 const textDiff = 'textdiff';
 
 components.register('textdiff', (args) => new TextDiffViewModel(args));
+const textDiffElement = document.createElement('template');
+textDiffElement.id = 'textdiff';
+textDiffElement.innerHTML = textDiffTemplate;
+document.body.appendChild(textDiffElement);
+
 components.register('textdiff.type', () => new Type());
 components.register('textdiff.wordwrap', () => new WordWrap());
 components.register('textdiff.whitespace', () => new WhiteSpace());
