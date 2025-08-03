@@ -63,7 +63,7 @@ describe('[GENERIC]', () => {
 
   it('Should be possible to cancel amend a file', async () => {
     await environment.click('.amend-link');
-    await environment.click('.btn-stg-cancel');
+    await environment.click('[data-aid="stg-cancel"]');
     await environment.waitForElementVisible('.empty-commit-link');
   });
 
@@ -210,7 +210,7 @@ describe('[GENERIC]', () => {
 
   it('Should be possible to cancel creation of an empty commit', async () => {
     await environment.click('.empty-commit-link');
-    await environment.click('.btn-stg-cancel');
+    await environment.click('[data-aid="stg-cancel"]');
     await environment.waitForElementVisible('.empty-commit-link');
   });
 
@@ -230,7 +230,7 @@ describe('[GENERIC]', () => {
 
   it('Should be possible to cancel amend of an empty commit', async () => {
     await environment.click('.amend-link');
-    await environment.click('.btn-stg-cancel');
+    await environment.click('[data-aid="stg-cancel"]');
     await environment.waitForElementVisible('.empty-commit-link');
   });
 
