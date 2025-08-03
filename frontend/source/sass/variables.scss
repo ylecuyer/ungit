@@ -1,5 +1,7 @@
 @import '../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables';
 
+$font-size-base: 16px;
+
 // Application variables
 // --------------------------------------------------
 $log-width-small: 400px;
@@ -10,7 +12,6 @@ $log-width-large: 550px;
 
 // Scaffolding
 $body-bg: #252833;
-$text-color: #d8d8d8;
 
 // Links
 $link-hover-color: lighten($link-color, 15%);
