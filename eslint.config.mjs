@@ -33,7 +33,7 @@ export default [
 
   // public/source
   {
-    files: ['frontend/notpublic/source/**'],
+    files: ['frontend/source/source/**'],
 
     languageOptions: {
       globals: {

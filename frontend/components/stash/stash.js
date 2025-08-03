@@ -2,8 +2,8 @@ import ko from 'knockout';
 import _ from 'lodash';
 import octicons from '@primer/octicons';
 import moment from 'moment';
-import components from '/notpublic/source/components.js';
-import storage from '/notpublic/source/storage.js';
+import components from '/source/source/components.js';
+import storage from '/source/source/storage.js';
 import { ComponentRoot } from '../ComponentRoot';
 import stashTemplate from './stash.html?raw';
 

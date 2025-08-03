@@ -1,6 +1,6 @@
 import ko from 'knockout';
-import components from '/notpublic/source/components.js';
-import storage from '/notpublic/source/storage.js';
+import components from '/source/source/components.js';
+import storage from '/source/source/storage.js';
 import $ from 'jquery';
 import appTemplate from './app.html?raw';
 

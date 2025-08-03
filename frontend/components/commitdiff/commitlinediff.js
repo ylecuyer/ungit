@@ -1,6 +1,6 @@
 import ko from 'knockout';
-import components from '/notpublic/source/components.js';
-import programEvents from '/notpublic/source/program-events.js';
+import components from '/source/source/components.js';
+import programEvents from '/source/source/program-events.js';
 
 class CommitLineDiff {
   constructor(args, fileLineDiff) {

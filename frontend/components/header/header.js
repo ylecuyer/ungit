@@ -1,8 +1,8 @@
 import ko from 'knockout';
 import octicons from '@primer/octicons';
-import components from '/notpublic/source/components.js';
-import navigation from '/notpublic/source/navigation.js';
-import programEvents from '/notpublic/source/program-events.js';
+import components from '/source/source/components.js';
+import navigation from '/source/source/navigation.js';
+import programEvents from '/source/source/program-events.js';
 import { encodePath } from '../../../backend/source/address-parser.js';
 import headerTemplate from './header.html?raw';
 

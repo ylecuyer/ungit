@@ -1,4 +1,4 @@
-import '/notpublic/sass/styles.scss';
+import '/source/sass/styles.scss';
 
 import '/components/app/app.scss';
 import '/components/commitdiff/commitdiff.scss';

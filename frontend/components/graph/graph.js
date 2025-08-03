@@ -2,7 +2,7 @@ import ko from 'knockout';
 import _ from 'lodash';
 import moment from 'moment';
 import octicons from '@primer/octicons';
-import components from '/notpublic/source/components.js';
+import components from '/source/source/components.js';
 import GitNodeViewModel from './git-node.js';
 import GitRefViewModel from './git-ref.js';
 import EdgeViewModel from './edge.js';
