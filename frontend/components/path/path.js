@@ -1,10 +1,10 @@
 import ko from 'knockout';
 import octicons from '@primer/octicons';
-import components from '/source/source/components.js';
+import components from '/source/js/components.js';
 import { encodePath, parseAddress } from '../../../backend/source/address-parser.js';
-import navigation from '/source/source/navigation.js';
-import programEvents from '/source/source/program-events.js';
-import storage from '/source/source/storage.js';
+import navigation from '/source/js/navigation.js';
+import programEvents from '/source/js/program-events.js';
+import storage from '/source/js/storage.js';
 import { ComponentRoot } from '../ComponentRoot';
 const showCreateRepoKey = 'isShowCreateRepo';
 import pathTemplate from './path.html?raw';

@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import ko from 'knockout';
-import components from '/source/source/components.js';
-import programEvents from '/source/source/program-events.js';
+import components from '/source/js/components.js';
+import programEvents from '/source/js/program-events.js';
 import Animateable from './animateable.js';
 import GraphActions from './git-graph-actions.js';
 

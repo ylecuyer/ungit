@@ -1,8 +1,8 @@
 import ko from 'knockout';
 import _ from 'lodash';
 import octicons from '@primer/octicons';
-import components from '/source/source/components.js';
-import programEvents from '/source/source/program-events.js';
+import components from '/source/js/components.js';
+import programEvents from '/source/js/program-events.js';
 import remoteTemplate from './remotes.html?raw';
 
 components.register('remotes', (args) => new RemotesViewModel(args.server, args.repoPath));

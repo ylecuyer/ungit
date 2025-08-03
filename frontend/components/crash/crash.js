@@ -1,5 +1,5 @@
 import ko from 'knockout';
-import components from '/source/source/components.js';
+import components from '/source/js/components.js';
 import crashTemplate from './crash.html?raw';
 
 components.register('crash', (err) => new CrashViewModel(err));

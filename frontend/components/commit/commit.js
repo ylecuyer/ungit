@@ -2,7 +2,7 @@ import ko from 'knockout';
 import md5 from 'blueimp-md5';
 import moment from 'moment';
 import octicons from '@primer/octicons';
-import components from '/source/source/components.js';
+import components from '/source/js/components.js';
 import commitTemplate from './commit.html?raw';
 
 components.register('commit', (args) => new CommitViewModel(args));

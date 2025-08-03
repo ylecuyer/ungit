@@ -1,8 +1,8 @@
 import ko from 'knockout';
 import md5 from 'blueimp-md5';
 import octicons from '@primer/octicons';
-import programEvents from '/source/source/program-events.js';
-import components from '/source/source/components.js';
+import programEvents from '/source/js/program-events.js';
+import components from '/source/js/components.js';
 import Selectable from './selectable.js';
 
 class RefViewModel extends Selectable {

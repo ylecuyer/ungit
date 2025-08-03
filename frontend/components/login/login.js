@@ -1,5 +1,5 @@
 import ko from 'knockout';
-import components from '/source/source/components.js';
+import components from '/source/js/components.js';
 import signals from 'signals';
 import loginTemplate from './login.html?raw';
 

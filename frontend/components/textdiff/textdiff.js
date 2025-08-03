@@ -1,5 +1,5 @@
 import ko from 'knockout';
-import components from '/source/source/components.js';
+import components from '/source/js/components.js';
 import { parse as d2h_parse, html as d2h_html } from 'diff2html';
 import textDiffTemplate from './textdiff.html?raw';
 
