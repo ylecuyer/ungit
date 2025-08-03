@@ -22,6 +22,7 @@ class HomeRepositoryViewModel {
     this.remote = ko.observable('...');
     this.updateState();
     this.removeIcon = octicons.x.toSVG({ height: 18 });
+    this.alertIcon = octicons.alert.toSVG({ height: 18 });
     this.arrowIcon = octicons['arrow-right'].toSVG({ height: 24 });
   }
 
