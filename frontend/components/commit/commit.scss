@@ -8,11 +8,11 @@
 
     .commit-box {
       box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.2);
-      background: #4b5766;
+      background: white;
       left: -5px;
 
       .arrow {
-        border-left-color: #4b5766;
+        border-left-color: white;
 
         &.shadow {
           display: block;
@@ -88,7 +88,7 @@
 
       .diff-wrapper {
         margin-top: 10px;
-        background: #4b5766;
+        background: white;
         border-radius: 3px;
       }
     }
