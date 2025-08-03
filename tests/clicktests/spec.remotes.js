@@ -40,7 +40,7 @@ describe('[REMOTES]', () => {
 
     await environment.insert('.modal #Name', 'myremote');
     await environment.insert('.modal #Url', testRepoPaths[0]);
-    await environment.awaitAndClick('.modal .modal-footer .btn-primary');
+    await environment.awaitAndClick('[data-aid="form-modal-submit"]');
     await environment.ensureRedraw();
     await environment.click('.fetchButton .dropdown-toggle');
     await environment.waitForElementVisible(
