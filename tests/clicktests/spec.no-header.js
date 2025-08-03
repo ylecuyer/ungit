@@ -17,7 +17,7 @@ describe('[NO-HEADER]', () => {
   });
 
   it('Check for refresh button', async () => {
-    await environment.click('.refresh-button');
+    await environment.click('[data-aid="refresh-button"]');
     await environment.waitForElementHidden('[data-ta-container="remote-error-popup"]');
   });
 });

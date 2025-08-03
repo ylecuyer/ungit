@@ -45,7 +45,7 @@ describe('[GENERIC]', () => {
   });
 
   it('Check for refresh button', () => {
-    return environment.click('.refresh-button');
+    return environment.click('[data-aid="refresh-button"]');
   });
 
   it('Should be possible to create and commit a file', async () => {
@@ -235,7 +235,7 @@ describe('[GENERIC]', () => {
   });
 
   it('Should be possible to click refresh button', () => {
-    return environment.click('button.refresh-button');
+    return environment.click('[data-aid="refresh-button"]');
   });
 
   it('Go to home screen', async () => {
