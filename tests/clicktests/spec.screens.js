@@ -25,7 +25,7 @@ describe('[SCREENS]', () => {
   });
 
   it('Init repository should bring you to repo page', async () => {
-    await environment.click('.uninited button.btn-primary');
+    await environment.click('.uninited [data-aid="init-repository"]');
     await environment.waitForElementVisible('.repository-view');
   });
 
