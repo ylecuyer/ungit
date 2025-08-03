@@ -47,6 +47,8 @@ class PathViewModel extends ComponentRoot {
         .split('/')
         .filter((s) => s)
         .slice(-1)[0] || '/';
+    this.infoIcon = octicons.info.toSVG({ height: 18 });
+    this.alertText = `"${this.dirName}" is not a git repository`;
     this.status = ko.observable('loading');
     this.cloneUrl = ko.observable();
     this.showDirectoryCreatedAlert = ko.observable(false);
