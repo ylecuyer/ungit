@@ -18,6 +18,7 @@ import '/components/staging/staging.js';
 import '/components/stash/stash.js';
 import '/components/submodules/submodules.js';
 import '/components/textdiff/textdiff.js';
+import '/components/sidebar/sidebar.js';
 
 import $ from 'jquery';
 import ko from 'knockout';
