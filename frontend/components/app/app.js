@@ -32,13 +32,6 @@ class AppViewModel {
     this.showNewVersionAvailable = ko.observable();
     this.newVersionInstallCommand =
       (ungit.platform == 'win32' ? '' : 'sudo -H ') + 'npm update -g ungit';
-    this.bugtrackingEnabled = ko.observable(ungit.config.bugtracking);
-    this.bugtrackingNagscreenDismissed = ko.observable(
-      storage.getItem('bugtrackingNagscreenDismissed')
-    );
-    this.showBugtrackingNagscreen = ko.computed(() => {
-      return !this.bugtrackingEnabled() && !this.bugtrackingNagscreenDismissed();
-    });
     this.gitVersionErrorDismissed = ko.observable(storage.getItem('gitVersionErrorDismissed'));
     this.gitVersionError = ko.observable();
     this.gitVersionErrorVisible = ko.computed(() => {
@@ -64,19 +57,6 @@ class AppViewModel {
     ko.renderTemplate('app', this, {}, parentElement);
   }
   shown() {
-    // The ungit.config constiable collections configuration from all different paths and only updates when
-    // ungit is restarted
-    if (!ungit.config.bugtracking) {
-      // Whereas the userconfig only reflects what's in the ~/.ungitrc and updates directly,
-      // but is only used for changing around the configuration. We need to check this here
-      // since ungit may have crashed without the server crashing since we enabled bugtracking,
-      // and we don't want to show the nagscreen twice in that case.
-      this.server
-        .getPromise('/userconfig')
-        .then((userConfig) => this.bugtrackingEnabled(userConfig.bugtracking))
-        .catch((e) => this.server.unhandledRejection(e));
-    }
-
     this.server
       .getPromise('/latestversion')
       .then((version) => {
@@ -145,21 +125,6 @@ class AppViewModel {
         });
       }
     }, 200);
-  }
-  gitSetUserConfig(bugTracking) {
-    this.server.getPromise('/userconfig').then((userConfig) => {
-      userConfig.bugtracking = bugTracking;
-      return this.server.postPromise('/userconfig', userConfig).then(() => {
-        this.bugtrackingEnabled(bugTracking);
-      });
-    });
-  }
-  enableBugtracking() {
-    this.gitSetUserConfig(true);
-  }
-  dismissBugtrackingNagscreen() {
-    storage.setItem('bugtrackingNagscreenDismissed', true);
-    this.bugtrackingNagscreenDismissed(true);
   }
   dismissGitVersionError() {
     storage.setItem('gitVersionErrorDismissed', true);
