@@ -23,7 +23,6 @@ class HeaderViewModel {
       () => this.path() && !this.app.repoList().includes(this.path())
     );
     this.addIcon = octicons.plus.toSVG({ height: 18 });
-    this.backIcon = octicons['arrow-left'].toSVG({ height: 24 });
   }
 
   updateNode(parentElement) {

@@ -1,43 +1,4 @@
-@import '/source/sass/variables';
-
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 100px;
-}
-
-.navbarPadder {
-  height: 81px;
-}
-
 .navbar {
-  padding-top: 13px;
-  z-index: 5;
-  box-shadow: 0 15px 15px #252833;
-  height: 81px;
-
-  .backlink {
-    margin-left: 10px;
-    margin-top: 7px;
-    position: absolute;
-    color: #686868;
-
-    &:hover {
-      text-decoration: none;
-      color: #a5a5a5;
-    }
-
-    .back-icon {
-      -webkit-transition: opacity 0.5s ease-in-out;
-      -moz-transition: opacity 0.5s ease-in-out;
-      transition: opacity 0.5s ease-in-out;
-      opacity: 0;
-
-      &.back-icon-shown {
-        opacity: 1;
-      }
-    }
-  }
-
   .form-container {
     margin-left: 180px;
     margin-right: 72px;
@@ -58,31 +19,10 @@ html {
     }
   }
 
-  .arrow {
-    bottom: 0;
-    left: 300px;
-    border-bottom-color: $body-bg;
-  }
-
   .version-and-license {
     position: absolute;
     right: 10px;
     bottom: 2px;
     font-size: 12px;
   }
-}
-
-.toolbar {
-  position: absolute;
-  right: 10px;
-  top: 13px;
-}
-
-.headerLogo {
-  width: 100px;
-  height: auto;
-}
-
-.version {
-  padding-left: 140px;
 }

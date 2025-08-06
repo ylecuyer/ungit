@@ -1,43 +1,25 @@
-<div class="navbar navbar-default navbar-fixed-top">
-  <a
-    class="backlink"
-    href="#/"
-    data-toggle="tooltip"
-    data-placement="bottom"
-    title="Navigate to ungit home page"
-  >
-    <span
-      class="back-icon octicon-circled"
-      data-bind="html: backIcon, css: { 'back-icon-shown': showBackButton }"
-    ></span>
-    <img class="headerLogo" src="images/logo.svg" alt="Ungit Logo" />
-  </a>
-
-  <div>
-    <form class="path-input-form flex" data-bind="submit: submitPath">
+<header class="bg-background sticky inset-x-0 top-0 isolate flex shrink-0 items-center gap-2 border-b z-10">
+  <div class="flex h-14 w-full items-center gap-2 px-4">
+    <button type="button" onclick="document.dispatchEvent(new CustomEvent('basecoat:sidebar'))" aria-label="Toggle sidebar"
+      data-tooltip="Toggle sidebar" data-side="bottom" data-align="start" class="btn-sm-icon-ghost mr-2 size-7 -ml-1.5">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+        <path d="M9 3v18"></path>
+      </svg>
+    </button>
+    <form class="path-input-form flex w-full" data-bind="submit: submitPath">
       <input
-        class="form-control input-lg"
+        class="w-full"
         type="text"
         data-bind="value: path, autocomplete: path"
         placeholder="Enter path to repository"
         aria-label="Path to repository"
       />
-      <button
-        class="btn btn-default add-to-repolist"
-        type="button"
-        data-bind="html: addIcon, visible: showAddToRepoListButton, click: addCurrentPathToRepoList"
-        data-toggle="tooltip"
-        data-placement="bottom"
-        title="Add current git directory to Ungit home page"
-      ></button>
     </form>
+    <button class="btn-secondary add-to-repolist" type="button"
+      data-bind="html: addIcon, visible: showAddToRepoListButton, click: addCurrentPathToRepoList" data-side="bottom"
+      data-tooltip="Add current git directory to Ungit home page"></button>
+    <!-- ko component: refreshButton --><!-- /ko -->
   </div>
-  <div class="toolbar"><!-- ko component: refreshButton --><!-- /ko --></div>
-
-  <div class="arrow"></div>
-  <div class="version">
-    <span data-bind="text: currentVersion" />
-  </div>
-</div>
-
-<div class="navbarPadder"></div>
+</header>
