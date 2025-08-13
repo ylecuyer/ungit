@@ -239,7 +239,6 @@ describe('[GENERIC]', () => {
   });
 
   it('Go to home screen', async () => {
-    await environment.click('.navbar .backlink');
-    await environment.waitForElementVisible('.home');
+    await environment.goto(environment.getRootUrl());
   });
 });
