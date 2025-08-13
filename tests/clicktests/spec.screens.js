@@ -10,11 +10,6 @@ describe('[SCREENS]', () => {
 
   after('Environment stop', () => environment.shutdown());
 
-  it('Open home screen', async () => {
-    await environment.goto(environment.getRootUrl());
-    await environment.waitForElementVisible('.home');
-  });
-
   it('Open path screen', async () => {
     testRepoPaths.push(await environment.createTempFolder());
 
@@ -29,15 +24,9 @@ describe('[SCREENS]', () => {
     await environment.waitForElementVisible('.repository-view');
   });
 
-  it('Clicking logo should bring you to home screen', async () => {
-    await environment.click('.navbar .backlink');
-    await environment.waitForElementVisible('.home');
-    await environment.wait(1000);
-  });
-
   it('Entering an invalid path and create directory in that location', async () => {
     await environment.insert(
-      '.navbar .path-input-form input',
+      'header .path-input-form input',
       `${testRepoPaths[0]}-test0/not/existing`
     );
     await environment.press('Enter');
@@ -48,14 +37,14 @@ describe('[SCREENS]', () => {
   });
 
   it('Entering an invalid path should bring you to an error screen', async () => {
-    await environment.insert('.navbar .path-input-form input', '/a/path/that/doesnt/exist');
+    await environment.insert('header .path-input-form input', '/a/path/that/doesnt/exist');
     await environment.press('Enter');
     await environment.waitForElementVisible('.invalid-path');
     await environment.wait(1000);
   });
 
   it('Entering a path to a repo should bring you to that repo', async () => {
-    await environment.insert('.navbar .path-input-form input', testRepoPaths[0]);
+    await environment.insert('header .path-input-form input', testRepoPaths[0]);
     await environment.press('Enter');
     await environment.waitForElementVisible('.repository-view');
     await environment.wait(1000);
