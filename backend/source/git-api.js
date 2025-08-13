@@ -11,6 +11,7 @@ const fs = require('fs').promises;
 const chokidar = require('chokidar');
 const ignore = require('ignore');
 const { EventEmitter } = require('events');
+const md5 = require('blueimp-md5');
 
 const tenMinTimeoutMs = 10 * 60 * 1000;
 
@@ -1045,6 +1046,15 @@ exports.registerApi = (env) => {
       .then(() => res.status(200).json({}))
       .finally(emitGitDirectoryChanged.bind(null, req.body.path))
       .catch((e) => res.status(500).json(e));
+  });
+
+  app.get(`${exports.pathPrefix}/avatar`, ensureAuthenticated, (req, res) => {
+    const email = req.query.email;
+    if (!email) {
+      return res.status(400).json({ error: 'Email is required to get avatar' });
+    }
+    const gravatarUrl = `https://www.gravatar.com/avatar/${md5(email.trim().toLowerCase())}?d=identicon`;
+    res.redirect(gravatarUrl);
   });
 
   if (config.dev) {
