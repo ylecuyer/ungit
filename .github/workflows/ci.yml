@@ -20,6 +20,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      - run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
       - run: git --version
       - run: git config --global user.email "test@testy.com"
       - run: git config --global user.name "Test testy"
