@@ -29,5 +29,5 @@ jobs:
 
       - run: npm ci
       - run: npm run build
-      - run: npm unittests
-      - run: npm clicktests
+      - run: npm run unittests
+      - run: npm run clicktests
