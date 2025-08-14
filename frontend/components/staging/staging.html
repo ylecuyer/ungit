@@ -48,16 +48,16 @@
             </button>
             <span class="commit-message-title-counter" data-bind="text: commitMessageTitleCount" />
           </div>
-          <div class="btn-group commit-grp" data-bind="visible: isStageValid">
+          <div class="btn-group flex commit-grp" data-bind="visible: isStageValid">
             <button
-              class="btn btn-primary btn-lg commit-btn"
+              class="btn btn-main commit-btn"
               data-bind="click: commit, enable: !commitValidationError()"
             >
               Commit
             </button>
             <button
               type="button"
-              class="btn btn-primary btn-lg dropdown-toggle"
+              class="btn dropdown-toggle"
               data-toggle="dropdown"
               data-bind="enable: !commitValidationError()"
               aria-haspopup="true"
