@@ -113,18 +113,8 @@ class AppViewModel {
   }
   showModal(modal) {
     this.modal(modal);
-
-    // when dom is ready, open the modal
-    const checkExists = setInterval(() => {
-      const modalDom = $('.modal.fade');
-      if (modalDom.length) {
-        clearInterval(checkExists);
-        modalDom.modal();
-        modalDom.on('hidden.bs.modal', function () {
-          modal.close();
-        });
-      }
-    }, 200);
+    console.log("modal", modal);
+    $('dialog')[0].showModal();
   }
   dismissGitVersionError() {
     storage.setItem('gitVersionErrorDismissed', true);
