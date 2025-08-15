@@ -29,6 +29,7 @@ describe('[SUMBODULES]', () => {
 
   it('Submodule update', async () => {
     await environment.click('.submodule .dropdown-toggle');
+    await environment.click('.submodule .dropdown-toggle');
     await environment.waitForElementVisible(
       '.fetchButton .dropdown-menu [data-ta-clickable="subrepo"]'
     );
