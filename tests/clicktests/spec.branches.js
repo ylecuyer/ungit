@@ -151,7 +151,7 @@ describe('[BRANCHES]', () => {
     const branchDeleteResponse = environment.setApiListener('/branches?', 'DELETE');
     await environment.click('.branch .dropdown-toggle');
     await environment.click('[data-ta-clickable="refs/heads/branch-3-remove"]');
-    await environment.awaitAndClick('.modal-dialog .btn-primary');
+    await environment.awaitAndClick('dialog .btn');
     await branchDeleteResponse;
   });
 
@@ -177,7 +177,7 @@ describe('[BRANCHES]', () => {
       '[data-ta-action="cherry-pick"]:not([style*="display: none"]) .dropmask'
     );
     await environment.click('.staging .btn-stg-abort');
-    await environment.awaitAndClick('.modal-dialog .btn-primary', 2000);
+    await environment.awaitAndClick('dialog .btn', 2000);
     const gitlogResponse = environment.setApiListener('/gitlog', 'GET', (body) => {
       return _.isEqual(
         body.nodes.map((node) => node.message),
@@ -213,7 +213,7 @@ describe('[BRANCHES]', () => {
     await environment.click('[data-ta-node-title="commit-1"] .squash .dropmask');
     await environment.waitForElementVisible('.staging .files .file');
     await environment.click('.files button.discard');
-    await environment.awaitAndClick('.modal-dialog .btn-primary', 2000);
+    await environment.awaitAndClick('dialog .btn', 2000);
     await environment.ensureRedraw();
     await environment.waitForElementHidden('.staging .files .file');
   });

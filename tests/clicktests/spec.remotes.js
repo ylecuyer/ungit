@@ -38,8 +38,8 @@ describe('[REMOTES]', () => {
     await environment.click('.fetchButton .dropdown-toggle');
     await environment.click('.add-new-remote');
 
-    await environment.insert('.modal #Name', 'myremote');
-    await environment.insert('.modal #Url', testRepoPaths[0]);
+    await environment.insert('dialog #Name', 'myremote');
+    await environment.insert('dialog #Url', testRepoPaths[0]);
     await environment.awaitAndClick('[data-aid="form-modal-submit"]');
     await environment.ensureRedraw();
     await environment.click('.fetchButton .dropdown-toggle');
@@ -57,7 +57,7 @@ describe('[REMOTES]', () => {
   it('Remote delete check', async () => {
     await environment.click('.fetchButton .dropdown-toggle');
     await environment.click('[data-ta-clickable="myremote-remove"]');
-    await environment.awaitAndClick('.modal-dialog .btn-primary');
+    await environment.awaitAndClick('dialog .btn');
     await environment.ensureRedraw();
     await environment.click('.fetchButton .dropdown-toggle');
     await environment.waitForElementHidden('[data-ta-clickable="myremote"]');
@@ -132,7 +132,7 @@ describe('[REMOTES]', () => {
     await environment.insert('.staging input.form-control', 'Commit & Push with ff');
     await environment.click('.commit-grp .dropdown-toggle');
     await environment.click('.commitnpush');
-    await environment.awaitAndClick('.modal-dialog .btn-primary');
+    await environment.awaitAndClick('dialog .btn');
     await environment.waitForElementVisible(
       '[data-ta-node-title="Commit & Push with ff"] .commit-container'
     );

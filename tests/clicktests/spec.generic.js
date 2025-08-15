@@ -111,7 +111,7 @@ describe('[GENERIC]', () => {
     await environment.click('.files button');
     await environment.waitForElementHidden('[data-ta-container="patch-file"]');
     await environment.click('.files button.discard');
-    await environment.awaitAndClick('.modal-dialog .btn-primary');
+    await environment.awaitAndClick('dialog .btn');
     await environment.waitForElementHidden('.files .file .btn-default');
   });
 
@@ -123,7 +123,7 @@ describe('[GENERIC]', () => {
     await environment.createBranch('willbedeleted');
     await environment.clickOnNode('.branch[data-ta-name="willbedeleted"]');
     await environment.click('[data-ta-action="delete"]:not([style*="display: none"]) .dropmask');
-    await environment.awaitAndClick('.modal-dialog .btn-primary');
+    await environment.awaitAndClick('dialog .btn');
     await environment.ensureRedraw();
     await environment.waitForElementHidden('.branch[data-ta-name="willbedeleted"]');
   });
@@ -132,7 +132,7 @@ describe('[GENERIC]', () => {
     await environment.createTag('tagwillbedeleted');
     await environment.clickOnNode('.graph .ref.tag[data-ta-name="tagwillbedeleted"]');
     await environment.click('[data-ta-action="delete"]:not([style*="display: none"]) .dropmask');
-    await environment.awaitAndClick('.modal-dialog .btn-primary');
+    await environment.awaitAndClick('dialog .btn');
     await environment.ensureRedraw();
     await environment.waitForElementHidden('.graph .ref.tag[data-ta-name="tagwillbedeleted"]');
   });
@@ -151,7 +151,7 @@ describe('[GENERIC]', () => {
     await environment.waitForElementVisible('.files .file .additions');
     await environment.waitForElementVisible('.files .file .deletions');
     await environment.click('.files button.discard');
-    await environment.awaitAndClick('.modal-dialog .btn-primary');
+    await environment.awaitAndClick('dialog .btn');
     await environment.ensureRedraw();
     await environment.waitForElementHidden('.files .file .btn-default');
   });

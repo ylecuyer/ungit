@@ -306,11 +306,11 @@ class Environment {
 
   async _verifyRefAction(action) {
     try {
-      await this.page.waitForSelector('.modal-dialog .btn-primary', {
+      await this.page.waitForSelector('dialog .btn', {
         visible: true,
         timeout: 2000,
       }); // not all ref actions opens dialog, this line may throw exception.
-      await this.awaitAndClick('.modal-dialog .btn-primary');
+      await this.awaitAndClick('dialog .btn');
     } catch {
       /* ignore */
     }
