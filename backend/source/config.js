@@ -396,6 +396,6 @@ module.exports.isGitOptionalLocks = semver.satisfies(module.exports.gitVersion, 
 
 if (argvConfig.$0.endsWith('mocha')) {
   console.warn('Running mocha test run, overriding few test variables...');
-  module.exports.logLevel = 'debug';
+  module.exports.logLevel = 'error';
   module.exports.dev = true;
 }
