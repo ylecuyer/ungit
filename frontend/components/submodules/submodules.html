@@ -3,45 +3,39 @@
     <span data-bind="html: submodulesIcon"></span>
     <span data-bind="text: 'Submodules'"></span>
   </button>
-  <button
-    type="button"
-    class="btn-outline dropdown-toggle"
-    data-toggle="dropdown"
-    aria-haspopup="true"
-    aria-expanded="false"
-  >
-    <span class="caret"></span>
-    <span class="sr-only">Toggle Submodule List</span>
-  </button>
-  <ul class="dropdown-menu dropdown-menu-right" role="menu">
-    <!-- ko foreach: submodules -->
-    <li>
-      <a
-        class="linked-url"
-        href="#"
-        data-bind="text: name, click: $parent.submodulePathClick, attr: { 'data-ta-clickable': name }"
-      ></a>
-      <a
-        class="list-link list-url"
-        href="#"
-        data-bind="html: $parent.linkIcon, click: $parent.submoduleLinkClick, attr: { 'data-ta-clickable': name + '-weblink' }"
-      ></a>
-      <a
-        class="list-link list-remove"
-        href="#"
-        data-bind="html: $parent.closeIcon, click: $parent.submoduleRemove.bind($parent), attr: { 'data-ta-clickable': name + '-remove' }"
-      ></a>
-    </li>
-    <!-- /ko -->
-    <!-- ko if: submodules().length-->
-    <li class="divider" role="separator"></li>
-    <li>
-      <a href="#" class="update-submodule" data-bind="click: updateSubmodules">Update Submodules</a>
-    </li>
-    <li class="divider" role="separator"></li>
-    <!-- /ko -->
-    <li>
-      <a href="#" class="add-submodule" data-bind="click: showAddSubmoduleDialog">Add Submodules</a>
-    </li>
-  </ul>
+
+
+  <div id="demo-dropdown-menu" class="dropdown-menu">
+    <button type="button" id="demo-dropdown-menu-trigger" aria-haspopup="menu" aria-controls="demo-dropdown-menu-menu" aria-expanded="false" class="btn-outline dropdown-toggle">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down text-muted-foreground opacity-50 shrink-0"><path d="m6 9 6 6 6-6"></path></svg>
+    </button>
+    <div id="demo-dropdown-menu-popover" data-popover aria-hidden="true" class="min-w-56">
+      <div role="menu">
+        <div role="group">
+          <!-- ko foreach: submodules -->
+          <div class="flex gap-2">
+            <a role="menuitem"
+              href="#"
+              data-bind="text: name, click: $parent.submodulePathClick, attr: { 'data-ta-clickable': name }"
+            ></a>
+            <a
+              href="#"
+              data-bind="html: $parent.linkIcon, click: $parent.submoduleLinkClick, attr: { 'data-ta-clickable': name + '-weblink' }"
+            ></a>
+            <a
+              href="#"
+              data-bind="html: $parent.closeIcon, click: $parent.submoduleRemove.bind($parent), attr: { 'data-ta-clickable': name + '-remove' }"
+            ></a>
+          </div>
+          <!-- /ko -->
+          <!-- ko if: submodules().length-->
+          <hr role="separator" />
+          <a role="menuitem" href="#" class="update-submodule" data-bind="click: updateSubmodules">Update Submodules</a>
+          <hr role="separator" />
+          <!-- /ko -->
+          <a role="menuitem" href="#" class="add-submodule" data-bind="click: showAddSubmoduleDialog">Add Submodules</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
