@@ -104,7 +104,7 @@ describe('[REMOTES]', () => {
     await environment.ensureRedraw();
 
     await environment.click('.options input');
-    await environment.waitForElementVisible('li .octicon-globe');
+    await environment.waitForElementVisible('[role="menuitem"] .octicon-globe');
   });
 
   it('checkout remote branches with matching local branch at wrong place', async () => {
