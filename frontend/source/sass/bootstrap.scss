@@ -5,7 +5,6 @@
 @import '../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/grid';
 
 // Components
-@import '../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/dropdowns';
 
 // Bootstrap styling
 .form-control {
@@ -14,7 +13,6 @@
 
 .dropdown-menu {
   max-height: 500px;
-  overflow-y: auto;
 }
 
 .list-group-item {
