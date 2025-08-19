@@ -35,6 +35,7 @@ class CommitViewModel {
     this.numberOfRemovedLines = ko.observable();
     this.parents = ko.observable();
     this.authorGravatar = ko.computed(() => md5((this.authorEmail() || '').trim().toLowerCase()));
+    this.gitCommitIcon = octicons['git-commit'].toSVG({ height: 18 });
 
     this.showCommitDiff = ko.computed(
       () => this.fileLineDiffs() && this.fileLineDiffs().length > 0

@@ -1,7 +1,7 @@
 <div class="btn-toolbar" data-bind="visible: showDiffButtons">
   <div class="btn-group btn-group-xs">
     <button
-      class="btn-secondary commit-whitespace"
+      class="btn-outline commit-whitespace"
       data-bind="click: whiteSpace.toggle, css: {active: whiteSpace.isActive}"
       data-tooltip="Hide whitespace changes in diff"
       data-side="bottom"
@@ -11,7 +11,7 @@
   </div>
   <div class="btn-group btn-group-xs">
     <button
-      class="btn-secondary commit-sideBySideDiff"
+      class="btn-outline commit-sideBySideDiff"
       data-bind="click: textDiffType.toggle, css: {active: textDiffType.isActive}"
       data-tooltip="Show side by side diff view"
       data-side="bottom"
@@ -21,7 +21,7 @@
   </div>
   <div class="btn-group btn-group-xs">
     <button
-      class="btn-secondary commit-wordwrap"
+      class="btn-outline commit-wordwrap"
       data-bind="click: wordWrap.toggle, css: {active: wordWrap.isActive}"
       data-tooltip="Wrap words per line"
       data-side="bottom"
