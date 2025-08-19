@@ -1,48 +1,11 @@
 // diff2html style overrides
 
-.d2h-file-wrapper {
-  border: none;
-  margin-bottom: 0;
-}
-
+// do not show d2h header
 .d2h-file-header {
   display: none;
 }
 
-.d2h-diff-table {
-  font-family: 'Source Code Pro', monospace;
-  font-size: 12px;
-
-  tbody > tr > td {
-    padding: 0;
-
-    &.d2h-code-side-linenumber {
-      padding: 0 0.5em;
-    }
-  }
-}
-
-.d2h-cntx {
-  color: rgba(0, 0, 0, 0.3);
-}
-
-.d2h-info {
-  background-color: transparent;
-  color: rgba(0, 0, 0, 0.3);
-}
-
-.d2h-code-side-emptyplaceholder,
-.d2h-emptyplaceholder {
-  background-color: transparent;
-}
-
-.d2h-code-linenumber,
-.d2h-code-side-linenumber {
-  background-color: #727a83;
-  border-left: 1px solid rgba(0, 0, 0, 0.34);
-  border-right: 1px solid rgba(0, 0, 0, 0.34);
-}
-
+// Custom colors for diff changes
 .d2h-file-diff .d2h-del.d2h-change,
 .d2h-del {
   background-color: #e86756;
@@ -64,11 +27,4 @@
 .d2h-code-side-line ins {
   background-color: rgba(255, 255, 255, 0.6);
 }
-
-.d2h-code-line-ctn {
-  vertical-align: initial;
-}
-
-.word-wrap .d2h-code-line-ctn {
-  white-space: pre-wrap;
-}
+// end custom colors for diff changes

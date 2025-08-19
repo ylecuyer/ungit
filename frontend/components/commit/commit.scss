@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import '/source/sass/variables';
 
 .commit {
@@ -46,7 +47,7 @@
   }
 
   .commit-box {
-    background-color: var(--color-sidebar) !important;
+    background-color: var(--color-sidebar-accent) !important;
     .arrow {
       right: -30px;
       top: 27px;
