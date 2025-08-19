@@ -68,6 +68,7 @@ class StagingViewModel extends ComponentRoot {
     this.allStageFlag = ko.computed(() => this.nFiles() !== this.nStagedFiles());
     this.stats = ko.computed(() => `${this.nFiles()} files, ${this.nStagedFiles()} to be commited`);
     this.amend = ko.observable(false);
+    this.amend.subscribe(this.toggleAmend.bind(this));
     this.canAmend = ko.computed(
       () => this.HEAD() && !this.inRebase() && !this.inMerge() && !this.emptyCommit()
     );
@@ -237,11 +238,11 @@ class StagingViewModel extends ComponentRoot {
     this.files(newFiles);
   }
 
-  toggleAmend() {
-    if (!this.amend() && !this.commitMessageTitle()) {
+  toggleAmend(amend) {
+    if (amend && !this.commitMessageTitle()) {
       this.commitMessageTitle(this.HEAD().title);
       this.commitMessageBody(this.HEAD().body);
-    } else if (this.amend()) {
+    } else if (!amend) {
       const isPrevDefaultMsg =
         this.commitMessageTitle() == this.HEAD().title &&
         this.commitMessageBody() == this.HEAD().body;
@@ -250,7 +251,6 @@ class StagingViewModel extends ComponentRoot {
         this.commitMessageBody('');
       }
     }
-    this.amend(!this.amend());
   }
 
   toggleEmptyCommit() {

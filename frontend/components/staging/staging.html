@@ -1,9 +1,9 @@
 <div
-  class="card staging panel panel-default"
+  class="card px-6"
   data-bind="css: { commitValidationError: commitValidationError }"
 >
   <div class="panel-body">
-    <div class="arrow"></div>
+
     <div data-bind="visible: showNux" class="nux">
       Nothing to commit.
       <a class="amend-link" href="#" data-bind="click: toggleAmend, visible: canAmend"
@@ -16,38 +16,32 @@
         >Create an empty commit?</a
       >
     </div>
-    <div class="row" data-bind="visible: !showNux()">
-      <div class="col-lg-3">
+
+    <div class="flex gap-4" data-bind="visible: !showNux()">
+      <div class="basis-1/4">
         <div class="form">
           <input
-            class="form-control"
+            class="form-control rounded-b-none"
             type="text"
             placeholder="Title (required)"
             aria-label="Commit message title"
             data-bind="value: commitMessageTitle, valueUpdate: 'afterkeydown', enable: !inRebase(), event: {keypress: onEnter}"
           />
           <textarea
-            class="form-control commit-body"
+            class="form-control commit-body rounded-t-none"
             rows="2"
             placeholder="Body"
             aria-label="Commit message body"
             data-bind="value: commitMessageBody, valueUpdate: 'afterkeydown', enable: !inRebase(), event: {keypress: onAltEnter}"
           ></textarea>
-          <div>
-            <button
-              class="amend-button"
-              data-bind="visible: canAmend, click: toggleAmend"
-            >
-              <div class="checkmark" data-bind="css: { checked: amend }">
-                <span
-                  class="glyphicon"
-                  data-bind="css: { 'glyphicon-check': amend, 'glyphicon-unchecked': !amend() }"
-                ></span>
-              </div>
-              <span>Amend last commit</span>
-            </button>
-            <span class="commit-message-title-counter" data-bind="text: commitMessageTitleCount" />
-          </div>
+          <label class="label gap-3 my-2" data-bind="visible: canAmend">
+            <input
+              type="checkbox"
+              class="input"
+              data-bind="checked: amend"
+            />
+            Amend last commit
+          </label>
           <div class="btn-group flex commit-grp" data-bind="visible: isStageValid">
             <button
               class="btn btn-main commit-btn"
@@ -101,7 +95,7 @@
           ></span>
         </div>
       </div>
-      <div class="col-lg-9 file-area">
+      <div class="basis-3/4">
         <div class="flex gap-2">
           <div class="commands btn-group btn-group-sm">
             <span class="badge-secondary" data-bind="text: stats"></span>
