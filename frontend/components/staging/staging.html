@@ -42,53 +42,55 @@
             />
             Amend last commit
           </label>
-          <div class="btn-group flex commit-grp" data-bind="visible: isStageValid">
-            <button
-              class="btn btn-main commit-btn"
-              data-bind="click: commit, enable: !commitValidationError()"
-            >
-              Commit
-            </button>
-            
-            <div id="demo-dropdown-menu" class="dropdown-menu">
+          <div class="flex gap-2">
+            <div class="btn-group flex commit-grp" data-bind="visible: isStageValid">
               <button
-                        data-bind="enable: !commitValidationError()"
-              type="button" id="demo-dropdown-menu-trigger" aria-haspopup="menu" aria-controls="demo-dropdown-menu-menu" aria-expanded="false" class="btn dropdown-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down text-muted-foreground opacity-50 shrink-0"><path d="m6 9 6 6 6-6"></path></svg>
+                class="btn btn-main commit-btn"
+                data-bind="click: commit, enable: !commitValidationError()"
+              >
+                Commit
               </button>
-              <div id="demo-dropdown-menu-popover" data-popover aria-hidden="true" class="min-w-56">
-                <div role="menu">
-                  <div role="group">
-                          <a role="menuitem"
-                            href="#"
-                            data-bind="click: commitnpush, css: { disabled: !canPush() }"
-                            class="commitnpush"
-                            >Commit & Push</a
-                          >
+              
+              <div id="demo-dropdown-menu" class="dropdown-menu">
+                <button
+                          data-bind="enable: !commitValidationError()"
+                type="button" id="demo-dropdown-menu-trigger" aria-haspopup="menu" aria-controls="demo-dropdown-menu-menu" aria-expanded="false" class="btn dropdown-toggle">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down text-muted-foreground opacity-50 shrink-0"><path d="m6 9 6 6 6-6"></path></svg>
+                </button>
+                <div id="demo-dropdown-menu-popover" data-popover aria-hidden="true" class="min-w-56">
+                  <div role="menu">
+                    <div role="group">
+                            <a role="menuitem"
+                              href="#"
+                              data-bind="click: commitnpush, css: { disabled: !canPush() }"
+                              class="commitnpush"
+                              >Commit & Push</a
+                            >
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+            <button
+              class="btn-secondary"
+              data-aid="stg-cancel"
+              data-bind="click: cancelAmendEmpty, visible: showCancelButton"
+            >
+              Cancel
+            </button>
+            <button
+              class="btn btn-primary"
+              data-bind="click: conflictContinue, visible: conflictText, enable: !commitValidationError()"
+            >
+              Continue <span data-bind="text: conflictText" />
+            </button>
+            <button
+              class="btn btn-warning btn-stg-abort"
+              data-bind="click: conflictAbort, visible: conflictText"
+            >
+              Abort <span data-bind="text: conflictText" />
+            </button>
           </div>
-          <button
-            class="btn-secondary"
-            data-aid="stg-cancel"
-            data-bind="click: cancelAmendEmpty, visible: showCancelButton"
-          >
-            Cancel
-          </button>
-          <button
-            class="btn btn-primary"
-            data-bind="click: conflictContinue, visible: conflictText, enable: !commitValidationError()"
-          >
-            Continue <span data-bind="text: conflictText" />
-          </button>
-          <button
-            class="btn btn-warning btn-stg-abort"
-            data-bind="click: conflictAbort, visible: conflictText"
-          >
-            Abort <span data-bind="text: conflictText" />
-          </button>
           <span
             class="validationError"
             data-bind="text: commitValidationError, visible: commitValidationError"
