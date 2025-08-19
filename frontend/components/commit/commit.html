@@ -9,9 +9,9 @@
     <div class="panel-body">
       <div class="arrow shadow"></div>
       <div class="arrow"></div>
-      <div class="flex">
+      <div class="flex gap-2 items-center">
         <img
-          class="pull-left img-circle gravatar"
+          class="size-15 shrink-0 object-cover rounded-full"
           data-bind="attr: { src: `/api/avatar?email=${authorEmail()}`, alt: `Profile Picture of ${authorName()}` }"
           onerror="this.style.display='none';"
         />
