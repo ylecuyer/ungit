@@ -14,7 +14,7 @@ class GitErrorsViewModel {
     this.server = server;
     this.repoPath = repoPath;
     this.gitErrors = ko.observableArray();
-    this.closeIcon = octicons.x.toSVG({ height: 18 });
+    this.closeIcon = octicons.x.toSVG({ height: 18, class: 'cursor-pointer m-3' });
     this.alertIcon = octicons.alert.toSVG({ height: 24 });
   }
 
@@ -39,7 +39,7 @@ class GitErrorViewModel {
     this.server = server;
     this.tip = data.tip;
     this.isWarning = data.isWarning || false;
-    this.command = data.command;
+    this.command = "git " + data.command;
     this.error = data.error;
     this.stdout = data.stdout;
     this.stderr = data.stderr;
