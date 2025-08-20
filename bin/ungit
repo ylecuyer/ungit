@@ -3,7 +3,6 @@
 const startLaunchTime = Date.now();
 
 const config = require('../backend/source/config');
-const openPromise = import('open');
 const path = require('path');
 const child_process = require('child_process');
 const { encodePath } = require('../backend/source/address-parser');

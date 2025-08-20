@@ -49,9 +49,6 @@ const defaultConfig = {
   // Launch a browser window with ungit when ungit is started
   launchBrowser: true,
 
-  // Instead of launching ungit with the current folder force a different path to be used. Can be set to null to force the home screen.
-  forcedLaunchPath: undefined,
-
   // Closes the server after x ms of inactivity. Mainly used by the clicktesting.
   autoShutdownTimeout: undefined,
 
@@ -67,17 +64,6 @@ const defaultConfig = {
   // Assigns the log level. Possible values, in order from quietest to loudest, are
   // "none", "error", "warn", "info", "verbose", "debug", and "silly"
   logLevel: 'warn',
-
-  // Specify a custom command to launch. `%U` will be replaced with the URL
-  //  that corresponds with the working git directory.
-  //
-  // NOTE: This will execute *before* opening the browser window if the
-  //        `launchBrowser` option is `true`.
-  // Example:
-  //     # Override the browser launch command; use chrome's "app"
-  //     #   argument to get a new, chromeless window for that "native feel"
-  //     $ ungit --launchBrowser=0 --launchCommand "chrome --app=%U"
-  launchCommand: undefined,
 
   // Allow checking out nodes (which results in a detached head)
   allowCheckoutNodes: false,
@@ -221,10 +207,6 @@ const argv = yargs
   .boolean('showRebaseAndMergeOnlyOnRefs')
   .describe('maxConcurrentGitOperations', 'Maximum number of concurrent git operations')
   .describe(
-    'forcedLaunchPath',
-    'Define path to be used on open. Can be set to null to force the home screen'
-  )
-  .describe(
     'autoShutdownTimeout',
     'Closes the server after x ms of inactivity. Mainly used by the clicktesting'
   )
@@ -240,10 +222,6 @@ const argv = yargs
   .describe(
     'logLevel',
     'The logging level, possible values are none, error, warn, info, verbose, debug, and silly.'
-  )
-  .describe(
-    'launchCommand',
-    'Specify a custom command to launch. `%U` will be replaced with the URL that corresponds with the working git directory.'
   )
   .describe('allowCheckoutNodes', 'Allow checking out nodes (which results in a detached head)')
   .boolean('allowCheckoutNodes')
