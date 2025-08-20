@@ -8,8 +8,6 @@ const path = require('path');
 const child_process = require('child_process');
 const { encodePath } = require('../backend/source/address-parser');
 
-const BugTracker = require('../backend/source/bugtracker');
-const bugtracker = new BugTracker('launcher');
 // Fastest way to find out if a port is used or not/i.e. if ungit is running
 const net = require('net');
 const server = net.createServer();
@@ -26,7 +24,6 @@ process.on('SIGTERM', cleanExit); // catch kill
 process.on('uncaughtException', (err) => {
   console.error(err.stack.toString());
 
-  bugtracker.notify(err, 'ungit-launcher');
   cleanExit();
 });
 

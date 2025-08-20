@@ -1,7 +1,5 @@
 const logger = require('./utils/logger');
 const config = require('./config');
-const BugTracker = require('./bugtracker');
-const bugtracker = new BugTracker('server');
 const express = require('express');
 const gitApi = require('./git-api');
 const sysinfo = require('./sysinfo');
@@ -16,7 +14,6 @@ const serveStatic = require('serve-static');
 
 process.on('uncaughtException', (err) => {
   logger.error(err.stack ? err.stack.toString() : err.toString());
-  bugtracker.notify(err, 'ungit-launcher');
   process.exit();
 });
 
@@ -321,7 +318,6 @@ app.get('/api/fs/listDirectories', ensureAuthenticated, (req, res) => {
 // Error handling
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  bugtracker.notify(err, 'ungit-node');
   logger.error(err.stack);
   res.status(500).send({ error: err.message, errorType: err.name, stack: err.stack });
 });
