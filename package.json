@@ -8,7 +8,7 @@
     "inspect": "node --inspect ./source/server.js",
     "test": "npm run unittests && npm run clicktests",
     "unittests": "mocha --config .mochatest.json",
-    "clicktests": "mocha --config .mochaclicktest.json",
+    "clicktests": "bundle exec rspec",
     "coverage": "nyc npm run unittest",
     "lint": "eslint .",
     "format": "npm run lint -- --fix",

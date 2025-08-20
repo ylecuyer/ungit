@@ -4,8 +4,7 @@ RSpec.describe '[BARE]' do
       g = Git.init dir, bare: true
 
       visit "/#/repository?path=#{dir}"
-      sleep 10
-      expect(page.title).to eq("#{dir} < tmp")
+      expect(page.title).to eq("#{File.basename(dir)} < tmp")
     end
   end
 end

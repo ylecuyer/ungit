@@ -30,4 +30,12 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm run unittests
-      - run: npm run clicktests
+
+      - name: Setup Ruby
+        uses: actions/setup-ruby@v4
+        with:
+          ruby-version: '3.2.8'
+          bundler-cache: true
+
+      - run: bundle install
+      - run: bundle exec rspec
