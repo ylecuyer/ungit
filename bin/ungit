@@ -27,37 +27,12 @@ process.on('uncaughtException', (err) => {
   cleanExit();
 });
 
-const openUngitBrowser = (pathToNavigateTo) => {
-  console.log(`Navigate to ${pathToNavigateTo}`);
-  return openPromise
-    .then((open) => {
-      return open.default(pathToNavigateTo);
-    })
-    .catch((err) => console.log(`failed to navigate to ${pathToNavigateTo}`, err));
-};
-
 const navigate = () => {
   let url = config.urlBase + ':' + config.port;
   if (config.forcedLaunchPath === undefined) {
     url += '/#/repository?path=' + encodePath(process.cwd());
   } else if (config.forcedLaunchPath !== null && config.forcedLaunchPath !== '') {
     url += '/#/repository?path=' + encodePath(config.forcedLaunchPath);
-  }
-
-  if (config.launchCommand) {
-    const command = config.launchCommand.replace(/%U/g, url);
-    console.log(`Running custom launch command: ${command}`);
-    child_process.exec(command, (err, stdout, stderr) => {
-      if (err) {
-        console.log('Failed to exec custom launchCommand', err, stderr);
-        return;
-      }
-      if (config.launchBrowser) {
-        openUngitBrowser(url);
-      }
-    });
-  } else if (config.launchBrowser) {
-    openUngitBrowser(url);
   }
 };
 
