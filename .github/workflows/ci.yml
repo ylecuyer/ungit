@@ -32,7 +32,7 @@ jobs:
       - run: npm run unittests
 
       - name: Setup Ruby
-        uses: actions/setup-ruby@v4
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2.8'
           bundler-cache: true
