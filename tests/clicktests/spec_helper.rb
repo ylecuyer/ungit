@@ -140,4 +140,14 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
+
+  # run in tmp dir
+  config.around do |example|
+    Dir.mktmpdir do |dir|
+      example.metadata[:tmp_dir] = dir
+      Dir.chdir(dir) do
+        example.run
+      end
+    end
+  end
 end
