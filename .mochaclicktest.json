@@ -1,8 +1,8 @@
 {
-  "spec": "tests/clicktests/spec.*.js",
-  "file": "./backend/source/utils/logger.js",
+  "spec": "tests/clicktests/spec.*.mjs",
   "timeout": 20000,
   "bail": true,
   "exit": true,
-  "slow": 1000
+  "slow": 1000,
+  "require": "tests/clicktests/setup.mjs"
 }
