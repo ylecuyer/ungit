@@ -37,4 +37,4 @@ jobs:
           ruby-version: '3.2.8'
           bundler-cache: true
 
-      - run: bundle exec parallel_rspec
+      - run: bundle exec parallel_rspec tests/clicktests
