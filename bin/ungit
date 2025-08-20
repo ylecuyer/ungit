@@ -1,64 +1,9 @@
 #!/usr/bin/env node
 
-const startLaunchTime = Date.now();
-
 const config = require('../backend/source/config');
-const path = require('path');
-const child_process = require('child_process');
-const { encodePath } = require('../backend/source/address-parser');
+const { server } = require('../backend/source/server');
 
-// Fastest way to find out if a port is used or not/i.e. if ungit is running
-const net = require('net');
-const server = net.createServer();
-let child;
-const cleanExit = () => {
-  if (child) {
-    child.kill('SIGINT');
-  }
-  process.exit();
-};
-
-process.on('SIGINT', cleanExit); // catch ctrl-c
-process.on('SIGTERM', cleanExit); // catch kill
-process.on('uncaughtException', (err) => {
-  console.error(err.stack.toString());
-
-  cleanExit();
-});
-
-const launch = () => {
-  child = child_process.fork(
-    path.join(__dirname, '..', 'backend', 'source', 'server.js'),
-    process.argv.slice(2),
-    { cwd: path.join(process.cwd(), '..'), silent: true }
-  );
-
-  child.on('exit', (res) => {
-    console.log('Stopped keeping ungit alive');
-  });
-
-  const startupListener = (data) => {
-    if (data.toString().indexOf('## Ungit started ##') >= 0) {
-      child.removeListener('stdout', startupListener);
-      child.stdout.on('data', (data) => console.log(data.toString().trim()));
-      const launchTime = Date.now() - startLaunchTime;
-      console.log(data.toString());
-      console.log(`Took ${launchTime}ms to start server.`);
-    }
-  };
-
-  child.stdout.on('data', startupListener);
-  child.stderr.on('data', (data) => console.log(`stderr: ${data.toString().trim()}`));
-};
-
-server.listen({ port: config.port, host: config.ungitBindIp }, (err) => {
-  server.close(launch);
-});
-server.on('error', (e) => {
-  if (e.code == 'EADDRINUSE') {
-    console.log('Ungit server already running');
-  } else {
-    console.error('Failed to run server: ', e);
-    process.exit(1);
-  }
+server.listen({ port: config.port, host: config.ungitBindIp }, () => {
+  console.info('Listening on port ' + config.port);
+  console.log('## Ungit started ##'); // Consumed by bin/ungit to figure out when the app is started
 });

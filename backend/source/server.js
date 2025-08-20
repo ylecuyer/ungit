@@ -322,10 +322,4 @@ app.use((err, req, res, next) => {
   res.status(500).send({ error: err.message, errorType: err.name, stack: err.stack });
 });
 
-exports.started = new signals.Signal();
-
-server.listen({ port: config.port, host: config.ungitBindIp }, () => {
-  logger.info('Listening on port ' + config.port);
-  console.log('## Ungit started ##'); // Consumed by bin/ungit to figure out when the app is started
-  exports.started.dispatch();
-});
+exports.server = server;
