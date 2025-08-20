@@ -1,4 +1,4 @@
-PORT=8998
+PORT = 8998 + ENV['TEST_ENV_NUMBER'].to_i
 
 ungit_pid = fork do
   exec("./bin/ungit --port #{PORT}")

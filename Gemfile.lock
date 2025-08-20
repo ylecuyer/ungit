@@ -59,6 +59,9 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.9-x86_64-linux-musl)
       racc (~> 1.4)
+    parallel (1.27.0)
+    parallel_tests (5.4.0)
+      parallel
     process_executer (4.0.0)
       track_open_instances (~> 0.1)
     public_suffix (6.0.2)
@@ -111,6 +114,7 @@ PLATFORMS
 DEPENDENCIES
   capybara
   git
+  parallel_tests
   rspec
   selenium-webdriver
 
