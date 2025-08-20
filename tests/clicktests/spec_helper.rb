@@ -19,6 +19,7 @@ require 'capybara/rspec'
 require 'selenium-webdriver'
 require 'git'
 require 'tmpdir'
+require 'fileutils'
 
 # Configure Capybara
 Capybara.configure do |config|
