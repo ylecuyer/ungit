@@ -68,6 +68,7 @@
             data-toggle="tooltip"
             data-placement="bottom"
             title="Create a branch or tag"
+            data-aid="create-branch-or-tag-btn"
           ></button>
           <!-- ko if: branchingFormVisible -->
           <form
@@ -77,12 +78,14 @@
             <input
               class="name form-control"
               type="text"
+              data-aid="new-branch-or-tag-name"
               aria-label="New branch name"
               data-bind="value: newBranchName, hasfocus: newBranchNameHasFocus, valueUpdate: 'afterkeydown'"
             />
             <button
               class="btn btn-primary"
               type="submit"
+              data-aid="create-branch-btn"
               data-bind="click: createBranch, enable: canCreateRef"
             >
               Branch
