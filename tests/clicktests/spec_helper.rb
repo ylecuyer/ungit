@@ -15,6 +15,7 @@
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 require_relative "support/ungit"
+require_relative "support/git"
 require 'capybara/rspec'
 require 'selenium-webdriver'
 require 'git'
@@ -150,4 +151,6 @@ RSpec.configure do |config|
       end
     end
   end
+
+  include GitHelpers
 end

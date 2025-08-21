@@ -6,7 +6,7 @@
 
     <div data-bind="visible: showNux" class="nux">
       Nothing to commit.
-      <a class="amend-link" href="#" data-bind="click: () => amend(true), visible: canAmend"
+      <a data-aid="amend-commit" class="amend-link" href="#" data-bind="click: () => amend(true), visible: canAmend"
         >Amend previous commit?</a
       >
       <a
