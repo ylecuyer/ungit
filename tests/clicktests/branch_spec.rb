@@ -31,4 +31,23 @@ RSpec.describe '[BRANCH]' do
 
     expect(g.branches.map(&:name)).to eq(['master'])
   end
+
+  it 'shows all branches in dropdown' do
+    g = init_repo_with_one_file
+    visit_git_repo
+
+    5.times do |i|
+      g.branch("new-branch-#{i}").create
+    end
+
+    find('[data-aid="branch-dropdown-menu-trigger"]').click
+    within('#branch-dropdown-menu-popover') do
+      expect(page).to have_content('master')
+      expect(page).to have_content('new-branch-0')
+      expect(page).to have_content('new-branch-1')
+      expect(page).to have_content('new-branch-2')
+      expect(page).to have_content('new-branch-3')
+      expect(page).to have_content('new-branch-4')
+    end
+  end
 end
