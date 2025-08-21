@@ -36,4 +36,30 @@ RSpec.describe '[COMMIT]' do
     last_commit = g.log.execute.first
     expect(last_commit.message).to eq('Amended')
   end
+
+  it 'can amend last commit with file changes' do
+    g = init_repo_with_one_file
+    visit_git_repo
+
+    FileUtils.touch('new_file.txt')
+
+    within('.files .file') do
+      expect(page).to have_content('new_file.txt')
+    end
+
+    find('[data-aid="stg-amend-checkbox"]').click
+    expect(find('[data-aid="stg-commit-title"]').value).to eq('Add file.txt')
+    expect(find('[data-aid="stg-commit-body"]').value).to eq('')
+
+    find('[data-aid="stg-commit-title"]').set('Add new_file.txt')
+
+    expect {
+      find('[data-aid="stg-commit-btn"]').click
+      expect(page).to have_content("Nothing to commit.")
+    }.to change { commits = g.log.execute; commits.count }.by(0)
+    
+    last_commit = g.log.execute.first
+    expect(last_commit.message).to eq('Add new_file.txt')
+    expect(last_commit.gtree.blobs.keys).to eq(['file.txt', 'new_file.txt'])
+  end
 end

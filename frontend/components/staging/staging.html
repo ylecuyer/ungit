@@ -37,7 +37,7 @@
             aria-label="Commit message body"
             data-bind="value: commitMessageBody, valueUpdate: 'afterkeydown', enable: !inRebase(), event: {keypress: onAltEnter}"
           ></textarea>
-          <label class="label gap-3 my-2" data-bind="visible: canAmend">
+          <label class="label gap-3 my-2" data-bind="visible: canAmend" data-aid="stg-amend-checkbox">
             <input
               type="checkbox"
               class="input"
