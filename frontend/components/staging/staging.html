@@ -84,6 +84,7 @@
             </button>
             <button
               class="btn btn-primary"
+              data-aid="stg-btn-continue"
               data-bind="click: conflictContinue, visible: conflictText, enable: !commitValidationError()"
             >
               Continue <span data-bind="text: conflictText" />
@@ -183,12 +184,13 @@
             <span class="deletions" data-bind="text: deletions"></span>
             <span class="modified" data-bind="visible: modified">Modified</span>
             <span class="conflict" data-bind="visible: conflict"
-              ><span class="temporary">Conflicts</span
+              ><span class="badge-destructive">Conflicts</span
               ><span
-                class="launchmergetool explanation"
+                class="btn-outline launchmergetool explanation"
                 data-bind="visible: mergeTool, click: launchMergeTool"
                 >Launch Merge Tool</span
-              ><span class="markresolved explanation" data-bind="click: resolveConflict"
+              >
+              <span data-aid="mark-as-resolved" class="btn-sm-secondary markresolved explanation" data-bind="click: resolveConflict"
                 >Mark as Resolved</span
               ></span
             >
