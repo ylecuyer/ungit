@@ -12,7 +12,7 @@
     <section class="scrollbar">
       <div role="group">
         <h3>Bookmarked repositories</h3>
-        <ul data-bind="foreach: repos">
+        <ul data-bind="foreach: repos" data-aid="bookmarked-repos">
           <li>
             <a data-bind="text: name, attr: { href: link }"></a>
           </li>
