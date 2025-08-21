@@ -62,4 +62,28 @@ RSpec.describe '[COMMIT]' do
     expect(last_commit.message).to eq('Add new_file.txt')
     expect(last_commit.gtree.blobs.keys).to eq(['file.txt', 'new_file.txt'])
   end
+
+  it 'can commit' do
+    g = init_repo_with_one_file
+    visit_git_repo
+
+    FileUtils.touch('new_file.txt')
+
+    within('.files .file') do
+      expect(page).to have_content('new_file.txt')
+    end
+
+    find('[data-aid="stg-commit-title"]').set('New commit')
+    find('[data-aid="stg-commit-body"]').set('This is a new commit')
+
+    expect {
+      find('[data-aid="stg-commit-btn"]').click
+      expect(page).to have_content("Nothing to commit.")
+    }.to change { commits = g.log.execute; commits.count }.by(1)
+
+    last_commit = g.log.execute.first
+    expect(last_commit.message).to eq("New commit\n\nThis is a new commit")
+    expect(last_commit.diff_parent.size).to eq(1)
+    expect(last_commit.diff_parent.first.path).to eq('new_file.txt')
+  end
 end
