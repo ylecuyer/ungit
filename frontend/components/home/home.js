@@ -19,7 +19,6 @@ class HomeRepositoryViewModel {
     this.title = path;
     this.link = `/#/repository?path=${encodePath(path)}`;
     this.pathRemoved = ko.observable(false);
-    this.remote = ko.observable('...');
     this.updateState();
     this.removeIcon = octicons.x.toSVG({ height: 18 });
     this.alertIcon = octicons.alert.toSVG({ height: 18 });
@@ -33,14 +32,6 @@ class HomeRepositoryViewModel {
         this.pathRemoved(!exists);
       })
       .catch((e) => this.server.unhandledRejection(e));
-    this.server
-      .getPromise(`/remotes/origin?path=${encodePath(this.path)}`)
-      .then((remote) => {
-        this.remote(remote.address.replace(/\/\/.*?@/, '//***@'));
-      })
-      .catch(() => {
-        this.remote('');
-      });
   }
 
   remove() {

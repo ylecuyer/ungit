@@ -153,5 +153,14 @@ RSpec.configure do |config|
     end
   end
 
+  # add remote git
+  config.around do |example|
+    Dir.mktmpdir do |dir|
+      g = Git.init(dir, bare: true)
+      example.metadata[:remote_dir] = dir
+      example.run
+    end
+  end
+
   include GitHelpers
 end

@@ -1,5 +1,5 @@
 RSpec.describe '[BARE]' do
-  it 'can add a remote' do
+  it 'can add a remote' do |example|
     g = init_repo_with_one_file
     visit_git_repo
 
@@ -9,7 +9,7 @@ RSpec.describe '[BARE]' do
     find('[data-aid="add-remote"]').click
 
     fill_in 'Name', with: 'origin'
-    fill_in 'Url', with: 'file:///tmp/somewhere.git'
+    fill_in 'Url', with: "file://#{example.metadata[:remote_dir]}"
 
     expect {
       find('[data-aid="form-modal-submit"]').click
@@ -17,12 +17,12 @@ RSpec.describe '[BARE]' do
     }.to change { g.remotes.count }.by(1)
 
     expect(g.remotes.first.name).to eq('origin')
-    expect(g.remotes.first.url).to eq('file:///tmp/somewhere.git')
+    expect(g.remotes.first.url).to eq("file://#{example.metadata[:remote_dir]}")
   end
 
-  it 'can remove a remote' do
+  it 'can remove a remote' do |example|
     g = init_repo_with_one_file
-    g.add_remote('origin', 'file:///tmp/somewhere.git')
+    g.add_remote('origin', "file://#{example.metadata[:remote_dir]}")
     visit_git_repo
 
     expect(page).to have_content('Fetch from origin')

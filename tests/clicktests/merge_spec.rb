@@ -7,7 +7,7 @@ RSpec.describe '[MERGE]' do
     find('[data-ta-action="merge"]').click
     expect(page).to have_content("Merge branch 'bugfix'")
 
-    last_commit = g.log.first
+    last_commit = g.log.execute.first
     expect(last_commit.message).to eq("Merge branch 'bugfix'")
   end
 
@@ -39,7 +39,7 @@ RSpec.describe '[MERGE]' do
       find('[data-aid="stg-btn-continue"]').click
       expect(page).to have_content("Merge branch 'bugfix'")
 
-      last_commit = g.log.first
+      last_commit = g.log.execute.first
       expect(last_commit.message).to eq("Merge branch 'bugfix'\n\n# Conflicts:\n#\tfile.txt")
     end
 
@@ -72,7 +72,7 @@ RSpec.describe '[MERGE]' do
       expect(page).to have_content('Nothing to commit.')
       expect(page).to have_no_content("Merge branch 'bugfix'")
 
-      last_commit = g.log.first
+      last_commit = g.log.execute.first
       expect(last_commit.message).not_to eq("Merge branch 'bugfix'\n\n# Conflicts:\n#\tfile.txt")
     end
   end
