@@ -3,6 +3,8 @@ const child_process = require('child_process');
 const http = require('http');
 const config = require('../../backend/source/config');
 
+const port = 9999;
+
 describe('credentials-helper', () => {
   it('should be invokable', (done) => {
     const socketId = Math.floor(Math.random() * 1000);
@@ -25,8 +27,8 @@ describe('credentials-helper', () => {
       }
     });
 
-    server.listen({ port: config.port }, () => {
-      const command = `node bin/credentials-helper ${socketId} ${config.port} ${remote} get`;
+    server.listen({ port: port }, () => {
+      const command = `node bin/credentials-helper ${socketId} ${port} ${remote} get`;
       child_process.exec(command, (err, stdout) => {
         server.close();
         expect(err).to.not.be.ok();
