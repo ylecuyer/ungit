@@ -59,11 +59,42 @@ RSpec.describe '[DISCARD]' do
   end
 
   it 'can discard a removed file' do
-    skip 'Not implemented yet'
+    g = init_repo_with_one_file
+    visit_git_repo
+
+    FileUtils.rm('file.txt')
+
+    within('.files .file') do
+      expect(page).to have_content('file.txt')
+      expect(page).to have_content('Removed')
+      find('[data-aid="discard"]').click
+    end
+
+    expect(page).to have_content("Are you sure you want to discard these changes?")
+    find('[data-ta-action="yes"]').click
+    expect(page).to have_content("Nothing to commit.")
+
+    expect(File.exist?('file.txt')).to be true
   end
 
   it 'can discard a modified file' do
-    skip 'Not implemented yet'
+    g = init_repo_with_one_file
+    visit_git_repo
+
+    File.write('file.txt', 'Some changes')
+
+    within('.files .file') do
+      expect(page).to have_content('file.txt')
+      expect(page).to have_content('+1')
+      expect(page).to have_content('-0')
+      find('[data-aid="discard"]').click
+    end
+
+    expect(page).to have_content("Are you sure you want to discard these changes?")
+    find('[data-ta-action="yes"]').click
+    expect(page).to have_content("Nothing to commit.")
+
+    expect(File.read('file.txt')).to eq ''
   end
 
   it 'can discard a submodule change' do
