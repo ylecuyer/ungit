@@ -58,9 +58,6 @@ const defaultConfig = {
   // Automatically fetch from remote when entering a repository using ungit, periodically on activity detection, or on directory change
   autoFetch: true,
 
-  // Used for development purposes.
-  dev: false,
-
   // Assigns the log level. Possible values, in order from quietest to loudest, are
   // "none", "error", "warn", "info", "verbose", "debug", and "silly"
   logLevel: 'warn',
@@ -217,8 +214,6 @@ const argv = yargs
     'Automatically fetch from remote when entering a repository using ungit, periodically on activity detection, or on directory change'
   )
   .boolean('autoFetch')
-  .describe('dev', 'Used for development purposes')
-  .boolean('dev')
   .describe(
     'logLevel',
     'The logging level, possible values are none, error, warn, info, verbose, debug, and silly.'
@@ -375,5 +370,4 @@ module.exports.isGitOptionalLocks = semver.satisfies(module.exports.gitVersion, 
 if (argvConfig.$0.endsWith('mocha')) {
   console.warn('Running mocha test run, overriding few test variables...');
   module.exports.logLevel = 'error';
-  module.exports.dev = true;
 }

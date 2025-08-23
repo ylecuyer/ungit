@@ -1056,48 +1056,4 @@ exports.registerApi = (env) => {
     const gravatarUrl = `https://www.gravatar.com/avatar/${md5(email.trim().toLowerCase())}?d=identicon`;
     res.redirect(gravatarUrl);
   });
-
-  if (config.dev) {
-    app.post(`${exports.pathPrefix}/testing/createtempdir`, ensureAuthenticated, (req, res) => {
-      temp.mkdir('test-temp-dir', (err, tempPath) => res.json({ path: path.normalize(tempPath) }));
-    });
-    app.post(`${exports.pathPrefix}/testing/createfile`, ensureAuthenticated, (req, res) => {
-      const content = req.body.content ? req.body.content : `test content\n${Math.random()}\n`;
-      fs.writeFile(req.body.file, content)
-        .then(() => res.json({}))
-        .then(emitWorkingTreeChanged.bind(null, req.body.path));
-    });
-    app.post(`${exports.pathPrefix}/testing/changefile`, ensureAuthenticated, (req, res) => {
-      const content = req.body.content ? req.body.content : `test content\n${Math.random()}\n`;
-      fs.writeFile(req.body.file, content)
-        .then(() => res.json({}))
-        .then(emitWorkingTreeChanged.bind(null, req.body.path));
-    });
-    app.post(`${exports.pathPrefix}/testing/createimagefile`, ensureAuthenticated, (req, res) => {
-      fs.writeFile(req.body.file, 'png', { encoding: 'binary' })
-        .then(() => res.json({}))
-        .then(emitWorkingTreeChanged.bind(null, req.body.path));
-    });
-    app.post(`${exports.pathPrefix}/testing/changeimagefile`, ensureAuthenticated, (req, res) => {
-      fs.writeFile(req.body.file, 'png ~~', { encoding: 'binary' })
-        .then(() => res.json({}))
-        .then(emitWorkingTreeChanged.bind(null, req.body.path));
-    });
-    app.post(`${exports.pathPrefix}/testing/removefile`, ensureAuthenticated, (req, res) => {
-      fs.unlink(req.body.file)
-        .then(() => res.json({}))
-        .then(emitWorkingTreeChanged.bind(null, req.body.path));
-    });
-    app.post(`${exports.pathPrefix}/testing/git`, ensureAuthenticated, (req, res) => {
-      jsonResultOrFailProm(res, gitPromise(req.body.command, req.body.path)).then(
-        emitWorkingTreeChanged.bind(null, req.body.path)
-      );
-    });
-    app.post(`${exports.pathPrefix}/testing/cleanup`, (req, res) => {
-      temp.cleanup((err, cleaned) => {
-        logger.info('Cleaned up: ' + JSON.stringify(cleaned));
-        res.json({ result: cleaned });
-      });
-    });
-  }
 };
