@@ -57,4 +57,16 @@ RSpec.describe '[DISCARD]' do
     expect(File.exist?('file1.txt')).to be false
     expect(File.exist?('file2.txt')).to be false
   end
+
+  it 'can discard a removed file' do
+    skip 'Not implemented yet'
+  end
+
+  it 'can discard a modified file' do
+    skip 'Not implemented yet'
+  end
+
+  it 'can discard a submodule change' do
+    skip 'Not implemented yet'
+  end
 end
