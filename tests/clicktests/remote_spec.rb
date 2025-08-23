@@ -1,4 +1,4 @@
-RSpec.describe '[BARE]' do
+RSpec.describe '[REMOTE]' do
   it 'can add a remote' do |example|
     g = init_repo_with_one_file
     visit_git_repo
