@@ -1,4 +1,7 @@
 export default {
+    build: {
+        sourcemap: true
+    },
     root: 'frontend',
     server: {
         proxy: {
