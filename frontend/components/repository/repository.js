@@ -106,7 +106,7 @@ class RepositoryViewModel {
             if (isYes) {
               this.server.putPromise('/gitignore', {
                 path: this.repoPath(),
-                data: document.querySelector('.modal-body .text-area-content').value,
+                data: document.querySelector('dialog .text-area-content').value,
               });
             }
           },
