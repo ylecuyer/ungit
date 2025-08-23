@@ -6,10 +6,10 @@
   "scripts": {
     "start": "node ./bin/ungit --launchBrowser=0",
     "inspect": "node --inspect ./source/server.js",
-    "test": "npm run unittests && npm run clicktests",
-    "unittests": "mocha --config .mochatest.json",
+    "test": "scripts/test.sh",
+    "unittests": "scripts/unittests.sh",
     "clicktests": "bundle exec parallel_rspec tests/clicktests",
-    "coverage": "nyc npm run unittest",
+    "coverage": "./scripts/coverage.sh",
     "lint": "eslint .",
     "format": "npm run lint -- --fix",
     "build": "vite build",
