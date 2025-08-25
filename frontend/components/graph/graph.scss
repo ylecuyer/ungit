@@ -45,8 +45,9 @@
     }
 
     .ref {
-      display: inline-block;
-      opacity: 0.6;
+      display: inline-flex;
+      opacity: 1;
+      line-height: 21px;
       cursor: move;
       margin: 7px 0 4px 0;
       outline: none;
@@ -55,13 +56,14 @@
       border-radius: 10px;
       transition: border-color 0.5s;
       -webkit-transition: border-color 0.5s;
+      background-color: white;
 
       &.dragging.focused {
         border-color: transparent;
       }
 
       &.focused {
-        border-color: #ffffff;
+        border-color: #000;
       }
 
       &.current {
@@ -73,11 +75,11 @@
       }
 
       &.remote {
-        color: #5db4ff;
+        color: #000;
       }
 
       &.tag {
-        color: #eef266;
+        color: #000;
       }
     }
 
@@ -90,6 +92,7 @@
       padding: 5px 10px;
       position: relative;
       border-radius: 3px;
+      line-height: 21px;
 
       .dropmask {
         position: absolute;
@@ -100,7 +103,7 @@
       }
 
       &.dimmed {
-        opacity: 0.5;
+        opacity: 1;
       }
 
       &.push {

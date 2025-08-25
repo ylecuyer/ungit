@@ -4,12 +4,18 @@ RSpec.describe '[SUBMODULE]' do
     Dir.mktmpdir do |dir|
       Dir.chdir(dir) do
         g = Git.init
-        FileUtils.touch('file.txt')
+        File.write('file.txt', 'Hi')
         g.add('file.txt')
         g.commit('Add file.txt')
+
+        File.write('file2.txt', 'Hello')
+        g.add('file2.txt')
+        g.commit('Add file2.txt')
+
+        example.metadata[:submodule_dir] = dir
+        example.metadata[:submodule_git] = g
       end
 
-      example.metadata[:submodule_dir] = dir
       example.run
     end
   end
@@ -32,8 +38,25 @@ RSpec.describe '[SUBMODULE]' do
     end
   end
 
-  it 'can update a submodule' do
-    skip 'Not implemented yet'
+  it 'can update a submodule' do |example|
+    g = init_repo_with_one_file
+    g.lib.send(:command, '-c', 'protocol.file.allow=always', 'submodule', 'add', example.metadata[:submodule_dir], 'submodule')
+    g.commit('Add submodule')
+
+    local_submodule = Git.open('submodule')
+    local_submodule.checkout(local_submodule.log.execute.last.sha)
+
+    binding.pry
+
+    visit_git_repo
+    binding.pry
+    find('[data-aid="submodule-dropdown-menu"]').click
+    find('a.update-submodule').click
+
+    within('.files') do
+      expect(page).to have_content('submodule')
+      expect(page).to have_content('.gitmodules')
+    end
   end
 
   it 'can move into a submodule' do
