@@ -46,10 +46,8 @@ RSpec.describe '[SUBMODULE]' do
     local_submodule = Git.open('submodule')
     local_submodule.checkout(local_submodule.log.execute.last.sha)
 
-    binding.pry
-
     visit_git_repo
-    binding.pry
+
     find('[data-aid="submodule-dropdown-menu"]').click
     find('a.update-submodule').click
 
