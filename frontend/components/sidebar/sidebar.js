@@ -30,7 +30,6 @@ class SidebarViewModel {
         link: `/#/repository?path=${encodePath(path)}`,
       };
     });
-    console.log("Fetched repositories from storage:", repos);
     this.repos(repos);
   }
 

@@ -31,7 +31,14 @@ import programEvents from './program-events.js';
 import navigation from './navigation.js';
 import adBlocker from 'just-detect-adblock';
 
-ungit.logger = console;
+//ungit.logger = console;
+ungit.logger = {
+  info: function () {},
+  error: function () {},
+  log: function () {},
+  warn: function () {},
+  debug: function () {},
+};
 
 // Request animation frame polyfill and init tooltips
 (function () {

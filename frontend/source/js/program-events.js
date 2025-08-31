@@ -5,5 +5,5 @@ export default programEvents;
 ungit.programEvents = programEvents;
 
 programEvents.add(function (event) {
-  console.log('Event:', event.event);
+  ungit.logger.log('Event:', event.event);
 });
