@@ -1,0 +1,58 @@
+<div class="btn-group flex branch">
+  <button type="button" class="btn-outline btn-main" data-bind="click: updateRefs">
+    <span data-bind="html: branchIcon"></span>
+    <span data-bind="text: refsLabel"></span>
+  </button>
+
+  <div id="branch-dropdown-menu" class="dropdown-menu">
+    <button type="button" id="branch-dropdown-menu-trigger" aria-haspopup="menu" aria-controls="demo-dropdown-menu-menu" aria-expanded="false" class="btn-outline dropdown-toggle" data-aid="branch-dropdown-menu-trigger">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down text-muted-foreground opacity-50 shrink-0"><path d="m6 9 6 6 6-6"></path></svg>
+    </button>
+    <div id="branch-dropdown-menu-popover" data-popover data-side="bottom" data-side="left" aria-hidden="true" class="min-w-56">
+      <div role="menu" class="max-h-200">
+        <div role="group">
+          <header class="dropdown-header options" onclick="event.stopPropagation()">
+            <label>
+              <input
+                class="glyphicon"
+                type="checkbox"
+                data-bind="checked: isShowRemote, css: { 'glyphicon-check': isShowRemote, 'glyphicon-unchecked': !isShowRemote() }"
+              />
+              Remote
+            </label>
+            <label>
+              <input
+                class="glyphicon"
+                type="checkbox"
+                data-bind="checked: isShowBranch, css: { 'glyphicon-check': isShowBranch, 'glyphicon-unchecked': !isShowBranch() }"
+              />
+              Branch
+            </label>
+            <label>
+              <input
+                class="glyphicon"
+                type="checkbox"
+                data-bind="checked: isShowTag, css: { 'glyphicon-check': isShowTag, 'glyphicon-unchecked': !isShowTag() }"
+              />
+              Tag
+            </label>
+          </header>
+          <hr role="separator" />
+          <!-- ko foreach: branchesAndLocalTags -->
+          <div class="flex gap-2">
+            <a
+              role="menuitem"
+              href="#"
+              data-bind="html: displayHtml(), click: $parent.checkoutBranch.bind($parent), attr: { 'data-ta-clickable': 'checkout' + name }"
+            ></a>
+            <a
+              href="#"
+              data-bind="html: $parent.closeIcon, click: $parent.branchRemove.bind($parent), attr: { 'data-ta-clickable': name + '-remove' }"
+            ></a>
+          </div>
+          <!-- /ko -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

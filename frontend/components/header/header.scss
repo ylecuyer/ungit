@@ -1,0 +1,28 @@
+.navbar {
+  .form-container {
+    margin-left: 180px;
+    margin-right: 72px;
+
+    .path-input-form {
+      .add-to-repolist {
+        position: absolute;
+        right: 4px;
+        top: 6px;
+        background: transparent;
+        border: 0;
+        opacity: 0.3;
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+
+  .version-and-license {
+    position: absolute;
+    right: 10px;
+    bottom: 2px;
+    font-size: 12px;
+  }
+}

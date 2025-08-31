@@ -1,0 +1,131 @@
+import ko from 'knockout';
+import octicons from '@primer/octicons';
+import components from '/source/js/components.js';
+import programEvents from '/source/js/program-events.js';
+import { encodePath } from '../../../backend/source/address-parser.js';
+import repositoryTemplate from './repository.html?raw';
+
+components.register('repository', (args) => new RepositoryViewModel(args.server, args.path));
+const repositoryElement = document.createElement('template');
+repositoryElement.id = 'repository';
+repositoryElement.innerHTML = repositoryTemplate;
+document.body.appendChild(repositoryElement);
+
+class RepositoryViewModel {
+  constructor(server, path) {
+    this.server = server;
+    this.isBareDir = path.status() === 'bare';
+    this.repoPath = path.repoPath;
+    this.gitErrors = components.create('gitErrors', { server, repoPath: this.repoPath });
+    this.graph = components.create('graph', { server, repoPath: this.repoPath });
+    this.remotes = components.create('remotes', { server, repoPath: this.repoPath });
+    this.submodules = components.create('submodules', { server, repoPath: this.repoPath });
+    this.stash = this.isBareDir
+      ? {}
+      : components.create('stash', { server, repoPath: this.repoPath });
+    this.staging = this.isBareDir
+      ? {}
+      : components.create('staging', { server, repoPath: this.repoPath, graph: this.graph });
+    this.branches = components.create('branches', {
+      server,
+      graph: this.graph,
+      repoPath: this.repoPath,
+    });
+    this.repoPath.subscribe((value) => {
+      this.server.watchRepository(value);
+    });
+    this.server.watchRepository(this.repoPath());
+    this.showLog = this.isBareDir ? ko.observable(true) : this.staging.isStageValid;
+    this.parentModulePath = ko.observable();
+    this.parentModuleLink = ko.observable();
+    this.isSubmodule = ko.computed(() => this.parentModulePath() && this.parentModuleLink());
+    this.refreshSubmoduleStatus();
+    if (window.location.search.includes('noheader=true')) {
+      this.refreshButton = components.create('refreshbutton', { isLarge: false });
+    } else {
+      this.refreshButton = false;
+    }
+    this.ignoreIcon = octicons.file.toSVG({ height: 18 });
+  }
+
+  updateNode(parentElement) {
+    ko.renderTemplate('repository', this, {}, parentElement);
+  }
+
+  onProgramEvent(event) {
+    if (this.gitErrors.onProgramEvent) this.gitErrors.onProgramEvent(event);
+    if (this.graph.onProgramEvent) this.graph.onProgramEvent(event);
+    if (this.staging.onProgramEvent) this.staging.onProgramEvent(event);
+    if (this.stash.onProgramEvent) this.stash.onProgramEvent(event);
+    if (this.remotes.onProgramEvent) this.remotes.onProgramEvent(event);
+    if (this.submodules.onProgramEvent) this.submodules.onProgramEvent(event);
+    if (this.branches.onProgramEvent) this.branches.onProgramEvent(event);
+    if (event.event == 'connected') this.server.watchRepository(this.repoPath());
+
+    // If we get a reconnect event it's usually because the server crashed and then restarted
+    // or something like that, so we need to tell it to start watching the path again
+  }
+
+  updateAnimationFrame(deltaT) {
+    if (this.graph.updateAnimationFrame) this.graph.updateAnimationFrame(deltaT);
+  }
+
+  refreshSubmoduleStatus() {
+    return this.server
+      .getPromise('/baserepopath', { path: this.repoPath() })
+      .then((baseRepoPath) => {
+        if (baseRepoPath.path) {
+          return this.server
+            .getPromise('/submodules', { path: baseRepoPath.path })
+            .then((submodules) => {
+              const baseName = this.repoPath().substring(baseRepoPath.path.length + 1);
+              for (let n = 0; n < submodules.length; n++) {
+                if (submodules[n].path === baseName) {
+                  this.parentModulePath(baseRepoPath.path);
+                  this.parentModuleLink(`/#/repository?path=${encodePath(baseRepoPath.path)}`);
+                  return;
+                }
+              }
+            });
+        }
+      })
+      .catch(() => {
+        this.parentModuleLink(undefined);
+        this.parentModulePath(undefined);
+      });
+  }
+
+  editGitignore() {
+    return this.server
+      .getPromise('/gitignore', { path: this.repoPath() })
+      .then((res) => {
+        return components.showModal('texteditmodal', {
+          title: `${this.repoPath()}${ungit.config.fileSeparator}.gitignore`,
+          content: res.content,
+          closeFunc: (isYes) => {
+            if (isYes) {
+              this.server.putPromise('/gitignore', {
+                path: this.repoPath(),
+                data: document.querySelector('dialog .text-area-content').value,
+              });
+            }
+          },
+        });
+      })
+      .catch((e) => {
+        // Not a git error but we are going to treat like one
+        programEvents.dispatch({
+          event: 'git-error',
+          data: {
+            command: `fs.write "${this.repoPath()}${ungit.config.fileSeparator}.gitignore"`,
+            error: e.message || e.errorSummary,
+            stdout: '',
+            stderr: e.stack,
+            repoPath: this.repoPath(),
+          },
+        });
+      });
+  }
+}
+
+export default RepositoryViewModel;

@@ -1,0 +1,29 @@
+<div class="container home animated fadeInLeft" data-bind="shown: shown">
+  <div class="nux" data-bind="visible: showNux">
+    <img src="images/logo.svg" class="logo-large" />
+    <div class="alert alert-info">
+      <h4>Enter a path to a repository to get started!</h4>
+      Then press the <span data-bind="html: addIcon"></span> symbol to make it show up here.
+    </div>
+  </div>
+  <div class="grid gap-6" data-bind="foreach: repos">
+    <div class="card">
+      <header>
+        <h2 data-bind="text: title"></h2>
+      </header>
+      <section data-bind="visible: pathRemoved">
+        <div class="alert border-amber-50 bg-amber-50 text-amber-900 dark:border-amber-950 dark:bg-amber-950 dark:text-amber-100 flex gap-2">
+          <div data-bind="html: alertIcon""></div>
+          <section>This path doesn't exist on disk</section>
+        </div>
+      </section>
+      <footer class="flex gap-2 justify-end">
+        <button class="btn-destructive" data-bind="click: remove">Forget</button>
+        <a class="btn"
+          data-bind="attr: { href: link }, css: { 'path-removed': pathRemoved }">
+          Open
+        </a>
+      </footer>
+    </div>
+  </div>
+</div>

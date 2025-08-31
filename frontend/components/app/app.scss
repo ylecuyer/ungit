@@ -1,0 +1,9 @@
+.app {
+  margin-top: 15px;
+  margin-left: var(--sidebar-width);
+
+  .container-fluid {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}

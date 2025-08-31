@@ -1,0 +1,30 @@
+// diff2html style overrides
+
+// do not show d2h header
+.d2h-file-header {
+  display: none;
+}
+
+// Custom colors for diff changes
+.d2h-file-diff .d2h-del.d2h-change,
+.d2h-del {
+  background-color: #e86756;
+  color: #ffffff;
+}
+
+.d2h-file-diff .d2h-ins.d2h-change,
+.d2h-ins {
+  background-color: #66f27b;
+  color: #000000;
+}
+
+.d2h-code-line del,
+.d2h-code-side-line del {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.d2h-code-line ins,
+.d2h-code-side-line ins {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+// end custom colors for diff changes

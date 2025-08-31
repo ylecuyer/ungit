@@ -1,0 +1,30 @@
+@import '../../source/sass/variables';
+
+.branch {
+  color: black;
+  .options {
+    font-size: inherit;
+    color: $gray-dark;
+
+    label {
+      cursor: pointer;
+      font-weight: normal;
+      margin: 0 15px 0 0;
+
+      &:last-child {
+        margin: 0;
+      }
+    }
+
+    input {
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: pointer;
+    }
+  }
+
+  .dropdown-menu.octicon {
+    width: 18px;
+  }
+}

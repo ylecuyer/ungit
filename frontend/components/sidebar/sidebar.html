@@ -1,0 +1,26 @@
+<aside class="sidebar" data-side="left">
+  <nav>
+    <header>
+      <div class="btn-ghost p-2 w-full justify-start flex h-12">
+        <img src="images/icon.svg" class="size-8" />
+        <div class="flex flex-col">
+          <span class="truncate font-medium">Ungit</span>
+          <span class="truncate text-xs">v1.5.28</span>
+        </div>
+      </div>
+    </header>
+    <section class="scrollbar">
+      <div role="group">
+        <h3>Bookmarked repositories</h3>
+        <ul data-bind="foreach: repos" data-aid="bookmarked-repos">
+          <li>
+            <a data-bind="text: name, attr: { href: link }"></a>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <footer>
+      <a class="btn-ghost justify-start" href="https://github.com/ylecuyer/ungit" data-bind="html: githubLink" target="_blank"></a>
+    </footer>
+  </nav>
+</aside>

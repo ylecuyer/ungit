@@ -1,0 +1,228 @@
+<div
+  class="card px-6"
+  data-bind="css: { commitValidationError: commitValidationError }"
+>
+  <div class="panel-body">
+
+    <div data-bind="visible: showNux" class="nux">
+      Nothing to commit.
+      <a data-aid="amend-commit" class="amend-link" href="#" data-bind="click: () => amend(true), visible: canAmend"
+        >Amend previous commit?</a
+      >
+      <a
+        data-aid="empty-commit"
+        class="empty-commit-link"
+        href="#"
+        data-bind="click: toggleEmptyCommit, visible: canEmptyCommit"
+        >Create an empty commit?</a
+      >
+    </div>
+
+    <div class="flex gap-4" data-bind="visible: !showNux()">
+      <div class="basis-1/4">
+        <div class="form">
+          <input
+            class="form-control rounded-b-none"
+            type="text"
+            placeholder="Title (required)"
+            data-aid="stg-commit-title"
+            aria-label="Commit message title"
+            data-bind="value: commitMessageTitle, valueUpdate: 'afterkeydown', enable: !inRebase(), event: {keypress: onEnter}"
+          />
+          <textarea
+            class="form-control commit-body rounded-t-none"
+            rows="2"
+            placeholder="Body"
+            data-aid="stg-commit-body"
+            aria-label="Commit message body"
+            data-bind="value: commitMessageBody, valueUpdate: 'afterkeydown', enable: !inRebase(), event: {keypress: onAltEnter}"
+          ></textarea>
+          <label class="label gap-3 my-2" data-bind="visible: canAmend" data-aid="stg-amend-checkbox">
+            <input
+              type="checkbox"
+              class="input"
+              data-bind="checked: amend"
+            />
+            Amend last commit
+          </label>
+          <div class="flex gap-2 mt-2">
+            <div class="btn-group flex commit-grp" data-bind="visible: isStageValid">
+              <button
+                class="btn btn-main commit-btn"
+                data-aid="stg-commit-btn"
+                data-bind="click: commit, enable: !commitValidationError()"
+              >
+                Commit
+              </button>
+              
+              <div id="demo-dropdown-menu" class="dropdown-menu">
+                <button
+                          data-bind="enable: !commitValidationError()"
+                type="button" id="demo-dropdown-menu-trigger" aria-haspopup="menu" aria-controls="demo-dropdown-menu-menu" aria-expanded="false" class="btn dropdown-toggle">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down text-muted-foreground opacity-50 shrink-0"><path d="m6 9 6 6 6-6"></path></svg>
+                </button>
+                <div id="demo-dropdown-menu-popover" data-popover aria-hidden="true" class="min-w-56">
+                  <div role="menu">
+                    <div role="group">
+                            <a role="menuitem"
+                              href="#"
+                              data-bind="click: commitnpush, css: { disabled: !canPush() }"
+                              class="commitnpush"
+                              >Commit & Push</a
+                            >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button
+              class="btn-outline"
+              data-aid="stg-cancel"
+              data-bind="click: cancelAmendEmpty, visible: showCancelButton"
+            >
+              Cancel
+            </button>
+            <button
+              class="btn btn-primary"
+              data-aid="stg-btn-continue"
+              data-bind="click: conflictContinue, visible: conflictText, enable: !commitValidationError()"
+            >
+              Continue <span data-bind="text: conflictText" />
+            </button>
+            <button
+              data-aid="stg-btn-abort"
+              class="btn btn-warning btn-stg-abort"
+              data-bind="click: conflictAbort, visible: conflictText"
+            >
+              Abort <span data-bind="text: conflictText" />
+            </button>
+          </div>
+          <span
+            class="validationError"
+            data-bind="text: commitValidationError, visible: commitValidationError"
+          ></span>
+        </div>
+      </div>
+      <div class="basis-3/4">
+        <div class="flex gap-2">
+          <div class="commands btn-group btn-group-sm">
+            <span class="badge-secondary" data-bind="text: stats"></span>
+            <button
+              class="btn-outline"
+              data-bind="click: toggleAllStages"
+              data-tooltip="Toggle all uncommitted files for commit"
+              data-side="bottom"
+            >
+              <span class="glyphicon" data-bind="css: toggleSelectAllGlyphClass"></span>
+              Toggle all
+            </button>
+            <button
+              class="btn-outline"
+              data-bind="click: discardAllChanges"
+              title="Discard all uncommitted file changes, including not showing files"
+              data-tooltip="Discard all uncommitted file changes, including not showing files"
+              data-side="bottom"
+            >
+              <span data-bind="html: discardAllIcon"></span>
+              Discard all
+            </button>
+            <button
+              class="btn-outline"
+              data-aid="stash-all"
+              data-bind="click: stashAll, css: { disabled: !canStashAll() }"
+              data-tooltip="Stash all uncommitted file changes, including not showing files"
+              data-side="bottom"
+            >
+              <span data-bind="html: stashIcon"></span>
+              Stash all
+            </button>
+          </div>
+          <div class="flex gap-2">
+            <button
+              class="btn-outline"
+              data-bind="click: wordWrap.toggle, css: {active: wordWrap.isActive}"
+              data-tooltip="Wrap words per line"
+              data-side="bottom"
+            >
+              <span data-bind="text: wordWrap.text"></span>
+            </button>
+            <button
+              class="btn-outline"
+              data-bind="click: textDiffType.toggle, css: {active: textDiffType.isActive}"
+              data-tooltip="Show side by side diff view"
+              data-side="bottom"
+            >
+              <span data-bind="text: textDiffType.text"></span>
+            </button>
+            <button
+              class="btn-outline"
+              data-bind="click: whiteSpace.toggle, css: {active: whiteSpace.isActive}"
+              data-tooltip="Hide whitespace changes in diff"
+              data-side="bottom"
+            >
+              <span data-bind="text: whiteSpace.text"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="files" data-bind="foreach: files">
+          <div class="file" data-bind="css: { showingDiffs: isShowingDiffs }">
+            <div
+              class="checkmark"
+              data-bind="click: toggleStaged, css: { checked: editState() !== 'none' }"
+            >
+              <span
+                class="glyphicon"
+                data-bind="css: { 'glyphicon-check': editState() === 'staged', 'glyphicon-unchecked': editState() === 'none', 'glyphicon-list-alt': editState() === 'patched'}"
+              ></span>
+            </div>
+            <button class="name btn btn-default" data-bind="click: toggleDiffs">
+              <span data-bind="text: displayName"></span>
+            </button>
+            <span class="new" data-bind="visible: isNew">New</span>
+            <span class="deleted" data-bind="visible: removed">Removed</span>
+            <span class="additions" data-bind="text: additions"></span>
+            <span class="deletions" data-bind="text: deletions"></span>
+            <span class="modified" data-bind="visible: modified">Modified</span>
+            <span class="conflict" data-bind="visible: conflict"
+              ><span class="badge-destructive">Conflicts</span
+              ><span
+                class="btn-outline launchmergetool explanation"
+                data-bind="visible: mergeTool, click: launchMergeTool"
+                >Launch Merge Tool</span
+              >
+              <span data-aid="mark-as-resolved" class="btn-sm-secondary markresolved explanation" data-bind="click: resolveConflict"
+                >Mark as Resolved</span
+              ></span
+            >
+            <button
+              class="patch btn"
+              data-bind="visible: isShowPatch(), click: patchClick"
+              data-toggle="tooltip"
+              title="Patch changes"
+            >
+              Patch
+            </button>
+            <button
+              class="ignore btn"
+              data-bind="html: $parent.ignoreIcon, click: ignoreFile"
+              data-toggle="tooltip"
+              data-aid="ignore-file"
+              title="Add to .gitignore"
+            ></button>
+            <button
+              class="discard btn"
+              data-bind="html: $parent.discardIcon, click: discardChanges"
+              data-toggle="tooltip"
+              title="Discard changes"
+              data-aid="discard"
+            ></button>
+            <!-- ko if: isShowingDiffs -->
+            <div class="diffContainer" data-bind="component: diff"></div>
+            <!-- /ko -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

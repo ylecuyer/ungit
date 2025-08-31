@@ -1,0 +1,48 @@
+<div class="stash-toggle stash-toggle-text border" data-bind="click: toggleShowStash, visible: !isShow()" data-aid="show-stashes">
+  <span class="expand-icon" data-bind="html: expandIcon"></span>
+  Stash (<span data-bind="text: stashedChanges().length"></span>)
+</div>
+<div class="panel panel-default stash" data-bind="visible: visible">
+  <div class="panel-body">
+    <h4 class="stash-toggle-text" data-bind="click: toggleShowStash">
+      <span class="expand-icon" data-bind="html: expandedIcon"></span>
+      Stashed changes (<span data-bind="text: stashedChanges().length"></span>)
+    </h4>
+    <div class="list-group" data-bind="foreach: stashedChanges">
+      <div class="list-group-item" data-aid="stash-item">
+        <a
+          href="#"
+          class="stash-apply octicon-circled"
+          data-bind="html: applyIcon, click: apply"
+          data-toggle="tooltip"
+          data-aid="apply-stash"
+          title="Apply this stash"
+        ></a>
+        <a
+          href="#"
+          class="toggle-show-commit-diffs"
+          data-bind="click: toggleShowCommitDiffs"
+          data-toggle="tooltip"
+          data-aid="show-stash-diff"
+          title="Show stash diff"
+        >
+          <h4 class="list-group-item-heading" data-bind="text: title"></h4>
+          <p class="list-group-item-text" data-bind="text: message"></p>
+        </a>
+        <!-- ko if: showCommitDiff() -->
+        <div class="diff-wrapper">
+          <div class="diff-inner" data-bind="component: commitDiff"></div>
+        </div>
+        <!-- /ko -->
+        <button
+          type="button"
+          class="btn btn-default list-item-remove"
+          data-bind="html: dropIcon, click: drop"
+          data-toggle="tooltip"
+          data-aid="delete-stash"
+          title="Drop this stash"
+        ></button>
+      </div>
+    </div>
+  </div>
+</div>

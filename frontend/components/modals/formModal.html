@@ -1,0 +1,33 @@
+<dialog class="dialog w-full sm:max-w-[425px] max-h-[612px]" onclick="if (event.target === this) this.close()">
+  <article>
+    <header>
+      <h2 data-bind="text: title"></h2>
+    </header>
+
+    <!-- Autocomplete is off here because of https://github.com/FredrikNoren/ungit/issues/363 -->
+    <form class="form p-10" data-bind="submit: submit" autocomplete="off">
+      <section>
+        <div class="grid gap-6"data-bind="foreach: items">
+          <div class="grid gap-2">
+            <label data-bind="text: name, attr: { for: name }"></label>
+            <input type="text" data-bind="value: value, attr: { id: name, type: type, autofocus: autoFocus }" />
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <button type="button" class="btn-outline" data-bind="click: close, visible: showCancel">
+          Cancel
+        </button>
+        <button type="submit" class="btn" data-aid="form-modal-submit" data-bind="click: submit">Submit</button>
+      </footer>
+    </form>
+
+    <button type="button" aria-label="Close dialog" onclick="this.closest('dialog').close()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x">
+        <path d="M18 6 6 18" />
+        <path d="m6 6 12 12" />
+      </svg>
+    </button>
+  </article>
+</dialog>

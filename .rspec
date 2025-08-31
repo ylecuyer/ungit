@@ -1,0 +1,4 @@
+--require ./tests/clicktests/spec_helper
+--default-path ./tests/clicktests/
+--colour
+--order random

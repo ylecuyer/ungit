@@ -1,0 +1,54 @@
+import ko from 'knockout';
+import components from '/source/js/components.js';
+import signals from 'signals';
+import loginTemplate from './login.html?raw';
+
+components.register('login', (args) => new LoginViewModel(args.server));
+const loginElement = document.createElement('template');
+loginElement.id = 'login';
+loginElement.innerHTML = loginTemplate;
+document.body.appendChild(loginElement);
+
+class LoginViewModel {
+  constructor(server) {
+    this.server = server;
+    this.loggedIn = new signals.Signal();
+    this.status = ko.observable('loading');
+    this.username = ko.observable();
+    this.password = ko.observable();
+    this.loginError = ko.observable();
+    this.server
+      .getPromise('/loggedin')
+      .then((status) => {
+        if (status.loggedIn) {
+          this.loggedIn.dispatch();
+          this.status('loggedIn');
+        } else {
+          this.status('login');
+        }
+      })
+      .catch(() => {});
+  }
+
+  updateNode(parentElement) {
+    ko.renderTemplate('login', this, {}, parentElement);
+  }
+
+  login() {
+    this.server
+      .postPromise('/login', { username: this.username(), password: this.password() })
+      .then(() => {
+        this.loggedIn.dispatch();
+        this.status('loggedIn');
+      })
+      .catch((err) => {
+        if (err.res.body.error) {
+          this.loginError(err.res.body.error);
+        } else {
+          this.server.unhandledRejection(err);
+        }
+      });
+  }
+}
+
+export default LoginViewModel;

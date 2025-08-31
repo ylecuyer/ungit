@@ -1,0 +1,41 @@
+<div class="btn-group flex fetchButton submodule">
+  <button type="button" class="btn-outline btn-main" data-bind="click: function() {}">
+    <span data-bind="html: submodulesIcon"></span>
+    <span data-bind="text: 'Submodules'"></span>
+  </button>
+
+
+  <div id="submodule-dropdown-menu" class="dropdown-menu">
+    <button type="button" data-aid="submodule-dropdown-menu" id="submodule-dropdown-menu-trigger" aria-haspopup="menu" aria-controls="submodule-dropdown-menu-menu" aria-expanded="false" class="btn-outline dropdown-toggle">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down text-muted-foreground opacity-50 shrink-0"><path d="m6 9 6 6 6-6"></path></svg>
+    </button>
+    <div id="submodule-dropdown-menu-popover" data-popover aria-hidden="true" class="min-w-56">
+      <div role="menu">
+        <div role="group">
+          <!-- ko foreach: submodules -->
+          <div class="flex gap-2">
+            <a role="menuitem"
+              href="#"
+              data-bind="text: name, click: $parent.submodulePathClick, attr: { 'data-ta-clickable': name }"
+            ></a>
+            <a
+              href="#"
+              data-bind="html: $parent.linkIcon, click: $parent.submoduleLinkClick, attr: { 'data-ta-clickable': name + '-weblink' }"
+            ></a>
+            <a
+              href="#"
+              data-bind="html: $parent.closeIcon, click: $parent.submoduleRemove.bind($parent), attr: { 'data-ta-clickable': name + '-remove' }"
+            ></a>
+          </div>
+          <!-- /ko -->
+          <!-- ko if: submodules().length-->
+          <hr role="separator" />
+          <a role="menuitem" href="#" class="update-submodule" data-bind="click: updateSubmodules">Update Submodules</a>
+          <hr role="separator" />
+          <!-- /ko -->
+          <a role="menuitem" href="#" class="add-submodule" data-aid="add-submodule" data-bind="click: showAddSubmoduleDialog">Add Submodules</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

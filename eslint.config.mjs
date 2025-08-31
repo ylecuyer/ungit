@@ -6,7 +6,7 @@ import prettierPlugin from 'eslint-plugin-prettier/recommended';
 
 export default [
   {
-    ignores: ['public/js', '**/*.bundle.js'],
+    ignores: ['frontend/dist'],
   },
 
   js.configs.recommended,
@@ -16,7 +16,7 @@ export default [
 
   // components
   {
-    files: ['components/**'],
+    files: ['frontend/components/**'],
 
     languageOptions: {
       globals: {
@@ -33,14 +33,13 @@ export default [
 
   // public/source
   {
-    files: ['public/source/**'],
+    files: ['frontend/source/js/**'],
 
     languageOptions: {
       globals: {
         ...globals.browser,
         io: 'readonly',
         jQuery: 'writable',
-        Raven: 'readonly',
         ungit: 'readonly',
       },
     },
@@ -51,23 +50,9 @@ export default [
     },
   },
 
-  // public/main.js
-  {
-    files: ['public/main.js'],
-
-    rules: {
-      'n/no-unpublished-require': [
-        'error',
-        {
-          allowModules: ['electron'],
-        },
-      ],
-    },
-  },
-
   // source
   {
-    files: ['source/**'],
+    files: ['backend/source/**'],
 
     rules: {
       'no-control-regex': 'off',
@@ -77,7 +62,7 @@ export default [
 
   // test
   {
-    files: ['test/**'],
+    files: ['tests/unittests/**'],
 
     languageOptions: {
       globals: {
@@ -92,7 +77,7 @@ export default [
 
   // clicktests
   {
-    files: ['clicktests/**'],
+    files: ['tests/clicktests/**'],
 
     languageOptions: {
       globals: {
