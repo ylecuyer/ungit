@@ -13,4 +13,3 @@ import '/components/repository/repository.scss';
 import '/components/staging/staging.scss';
 import '/components/stash/stash.scss';
 import '/components/textdiff/textdiff.scss';
-import '/components/sidebar/sidebar.scss';
