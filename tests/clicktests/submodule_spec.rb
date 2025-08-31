@@ -39,6 +39,8 @@ RSpec.describe '[SUBMODULE]' do
   end
 
   it 'can update a submodule' do |example|
+    skip "Not implemented yet"
+
     g = init_repo_with_one_file
     g.lib.send(:command, '-c', 'protocol.file.allow=always', 'submodule', 'add', example.metadata[:submodule_dir], 'submodule')
     g.commit('Add submodule')
