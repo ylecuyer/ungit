@@ -1,4 +1,4 @@
-import ko from 'knockout';
+/*import ko from 'knockout';
 import octicons from '@primer/octicons';
 import components from '/source/js/components.js';
 import navigation from '/source/js/navigation.js';
@@ -49,3 +49,34 @@ class HeaderViewModel {
 }
 
 export default HeaderViewModel;
+
+*/
+
+import ko from 'knockout';
+import components from '/source/js/components.js';
+import headerTemplate from './header.html?raw';
+
+import { createApp } from 'vue';
+import Header from '../Header.vue';
+import RefreshButton from '../RefreshButton.vue';
+import Octicon from '../Octicon.vue';
+
+components.register('header', (args) => new HeaderViewModel(args.app));
+const headerElement = document.createElement('template');
+headerElement.id = 'header';
+headerElement.innerHTML = headerTemplate;
+document.body.appendChild(headerElement);
+
+class HeaderViewModel {
+  constructor() {
+  }
+
+
+  updateNode(parentElement) {
+    ko.renderTemplate('header', this, {}, parentElement);
+    app = createApp(Header);
+    app.component('RefreshButton', RefreshButton);
+    app.component('Octicon', Octicon);
+    app.mount('#header-app');
+  }
+}

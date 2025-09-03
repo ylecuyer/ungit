@@ -6,7 +6,6 @@ import '/components/branches/branches.scss';
 import '/components/commit/commit.scss';
 import '/components/crash/crash.scss';
 import '/components/graph/graph.scss';
-import '/components/header/header.scss';
 import '/components/imagediff/imagediff.scss';
 import '/components/path/path.scss';
 import '/components/repository/repository.scss';
