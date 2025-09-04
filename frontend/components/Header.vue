@@ -9,27 +9,44 @@
                 <path d="M9 3v18"></path>
             </svg>
             </button>
-            <form class="path-input-form flex w-full" data-bind="submit: submitPath">
+            <form class="path-input-form flex w-full" @submit.prevent="submitPath">
             <input
                 class="w-full"
                 type="text"
-                data-bind="value: path, autocomplete: path"
+                v-model="path"
                 placeholder="Enter path to repository"
                 aria-label="Path to repository"
             />
             </form>
-            <button class="btn-secondary add-to-repolist" type="button" data-aid="bookmark-repo-btn"
-            data-bind="html: addIcon, visible: showAddToRepoListButton, click: addCurrentPathToRepoList" data-side="bottom"
-            data-tooltip="Add current git directory to Ungit home page"></button>
+            <BookmarkButton :path="path" />
             <RefreshButton />
         </div>
     </header>
 </template>
 
 <script setup>
+import { ref } from 'vue';
+
+import navigation from '/source/js/navigation.js';
+import { encodePath } from '../../backend/source/address-parser.js';
+import programEvents from '/source/js/program-events.js';
+
+programEvents.add((event) => {
+    console.log(event);
+    if (event.event == 'navigated-to-path') {
+        path.value = event.path;
+    }
+});
+
 defineOptions({
     name: 'Header',
 });
+
+const path = ref('');
+
+const submitPath = () => {
+    navigation.browseTo(`repository?path=${encodePath(path.value)}`);
+};
 </script>
 
 <style>
