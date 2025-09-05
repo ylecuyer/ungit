@@ -1,3 +1,4 @@
+
 import ko from 'knockout';
 import _ from 'lodash';
 import octicons from '@primer/octicons';
@@ -6,6 +7,10 @@ import components from '/source/js/components.js';
 import storage from '/source/js/storage.js';
 import { ComponentRoot } from '../ComponentRoot';
 import stashTemplate from './stash.html?raw';
+
+import { createApp } from 'vue';
+import Stash from '../Stash.vue';
+import Octicon from '../Octicon.vue';
 
 components.register('stash', (args) => new StashViewModel(args.server, args.repoPath));
 const stashElement = document.createElement('template');
@@ -76,6 +81,9 @@ class StashViewModel extends ComponentRoot {
 
   updateNode(parentElement) {
     ko.renderTemplate('stash', this, {}, parentElement);
+    app = createApp(Stash);
+    app.component('Octicon', Octicon);
+    app.mount('#stash-app');
   }
 
   onProgramEvent(event) {
