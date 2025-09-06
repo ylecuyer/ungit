@@ -1,0 +1,18 @@
+<template>
+    <div class="textdiff">
+      <!-- ko if: isParsed -->
+      <div
+        data-bind="template: {nodes: ko.utils.parseHtmlFragment(htmlSrc)}, css: {'word-wrap': wordWrap.value}"
+      ></div>
+      <!-- /ko -->
+      <div class="load-more" data-bind="visible: hasMore">
+        <button class="btn btn-default" data-bind="click: loadMore">Load more</button>
+      </div>
+    </div>
+</template>
+
+<script setup>
+defineOptions({
+  name: 'TextDiff'
+})
+</script>

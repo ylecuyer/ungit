@@ -12,6 +12,10 @@ import { createApp } from 'vue';
 import Stash from '../Stash.vue';
 import StashItem from '../StashItem.vue';
 import Octicon from '../Octicon.vue';
+import CommitDiff from '../CommitDiff.vue';
+import FileDiff from '../FileDiff.vue';
+import ImageDiff from '../ImageDiff.vue';
+import TextDiff from '../TextDiff.vue';
 
 components.register('stash', (args) => new StashViewModel(args.server, args.repoPath));
 const stashElement = document.createElement('template');
@@ -25,7 +29,6 @@ class StashItemViewModel {
     this.server = stash.server;
     this.id = data.reflogId;
     this.sha1 = data.sha1;
-    this.title = `${data.reflogName} ${moment(new Date(data.commitDate)).fromNow()}`;
     this.message = data.message;
     this.showCommitDiff = ko.observable(false);
 
@@ -72,6 +75,10 @@ class StashViewModel extends ComponentRoot {
     app = createApp(Stash, { repoPath: this.repoPath() });
     app.component('Octicon', Octicon);
     app.component('StashItem', StashItem);
+    app.component('CommitDiff', CommitDiff);
+    app.component('FileDiff', FileDiff);
+    app.component('ImageDiff', ImageDiff);
+    app.component('TextDiff', TextDiff);
     app.mount('#stash-app');
   }
 

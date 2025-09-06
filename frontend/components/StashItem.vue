@@ -18,11 +18,11 @@
         data-aid="show-stash-diff"
         title="Show stash diff"
       >
-        <h4 class="list-group-item-heading">{{ stash.title }}</h4>
+        <h4 class="list-group-item-heading">{{ title }}</h4>
         <p class="list-group-item-text">{{ stash.message }}</p>
       </a>
       <div class="diff-wrapper" v-if="showCommitDiff">
-        <div class="diff-inner" data-bind="component: commitDiff"></div>
+        <CommitDiff class="diff-inner" :showDiffButtons="true" :commitLineDiffs="stash.fileLineDiffs" />
       </div>
       <button
         type="button"
@@ -36,13 +36,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+
+import moment from 'moment';
 
 defineOptions({
   name: 'StashItem'
 })
 
-defineProps(['stash', 'repoPath']);
+const props = defineProps(['stash', 'repoPath']);
+
+const title = computed(() => `${props.stash.reflogName} ${moment(new Date(props.stash.commitDate)).fromNow()}`);
 
 const apply = (reflogId) => {
     ungit.server
