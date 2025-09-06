@@ -1,7 +1,7 @@
 
 import ko from 'knockout';
 import _ from 'lodash';
-import octicons from '@primer/octicons';
+import octicons, { repo } from '@primer/octicons';
 import moment from 'moment';
 import components from '/source/js/components.js';
 import storage from '/source/js/storage.js';
@@ -10,6 +10,7 @@ import stashTemplate from './stash.html?raw';
 
 import { createApp } from 'vue';
 import Stash from '../Stash.vue';
+import StashItem from '../StashItem.vue';
 import Octicon from '../Octicon.vue';
 
 components.register('stash', (args) => new StashViewModel(args.server, args.repoPath));
@@ -41,12 +42,6 @@ class StashItemViewModel {
     this.applyIcon = octicons.pencil.toSVG({ height: 20 });
   }
 
-  apply() {
-    this.server
-      .delPromise(`/stashes/${this.id}`, { path: this.stash.repoPath(), apply: true })
-      .catch((e) => this.server.unhandledRejection(e));
-  }
-
   drop() {
     components.showModal('yesnomodal', {
       title: 'Are you sure you want to drop the stash?',
@@ -70,62 +65,17 @@ class StashViewModel extends ComponentRoot {
     super();
     this.server = server;
     this.repoPath = repoPath;
-    this.refresh = _.debounce(this._refresh, 250, this.defaultDebounceOption);
-    this.stashedChanges = ko.observable([]);
-    this.isShow = ko.observable(storage.getItem('showStash') === 'true');
-    this.visible = ko.computed(() => this.stashedChanges().length > 0 && this.isShow());
-    this.expandIcon = octicons['chevron-right'].toSVG({ height: 18 });
-    this.expandedIcon = octicons['chevron-down'].toSVG({ height: 22 });
-    this.refresh();
   }
 
   updateNode(parentElement) {
     ko.renderTemplate('stash', this, {}, parentElement);
-    app = createApp(Stash);
+    app = createApp(Stash, { repoPath: this.repoPath() });
     app.component('Octicon', Octicon);
+    app.component('StashItem', StashItem);
     app.mount('#stash-app');
   }
 
-  onProgramEvent(event) {
-    if (event.event == 'request-app-content-refresh' || event.event == 'git-directory-changed') {
-      this.refresh();
-    }
-  }
 
-  async _refresh() {
-    ungit.logger.debug('stash.refresh() triggered');
-
-    try {
-      const stashes = await this.server.getPromise('/stashes', { path: this.repoPath() });
-      if (this.isSamePayload(stashes)) {
-        return;
-      }
-
-      let changed = this.stashedChanges().length != stashes.length;
-      if (!changed) {
-        changed = !this.stashedChanges().every((item1) =>
-          stashes.some((item2) => item1.sha1 == item2.sha1)
-        );
-      }
-
-      if (changed) {
-        this.stashedChanges(stashes.map((item) => new StashItemViewModel(this, item)));
-      }
-    } catch (err) {
-      if (err.errorCode != 'no-such-path') {
-        this.server.unhandledRejection(err);
-      } else {
-        ungit.logger.warn('refresh failed: ', err);
-      }
-    } finally {
-      ungit.logger.debug('stash.refresh() finished');
-    }
-  }
-
-  toggleShowStash() {
-    this.isShow(!this.isShow());
-    storage.setItem('showStash', this.isShow());
-  }
 }
 
 export { StashViewModel as default, StashItemViewModel };

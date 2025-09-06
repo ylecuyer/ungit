@@ -1,49 +1,16 @@
 <template>
     <div class="stash-toggle stash-toggle-text border" v-show="stashedChanges.length > 0 && !visible" @click="toggleShowStash" data-aid="show-stashes">
       <Octicon class="expand-icon" name="chevron-right" />
-      Stash (<span data-bind="text: stashedChanges().length"></span>)
+      Stash ({{  stashedChanges.length }})
     </div>
     <div class="panel panel-default stash" v-show="stashedChanges.length > 0 && visible">
       <div class="panel-body">
         <h4 class="stash-toggle-text" @click="toggleShowStash">
           <Octicon class="expand-icon" name="chevron-down" />
-          Stashed changes (<span data-bind="text: stashedChanges().length"></span>)
+          Stashed changes ({{ stashedChanges.length }})
         </h4>
-        <div class="list-group" data-bind="foreach: stashedChanges">
-          <div class="list-group-item" data-aid="stash-item">
-            <a
-              href="#"
-              class="stash-apply octicon-circled"
-              data-bind="html: applyIcon, click: apply"
-              data-toggle="tooltip"
-              data-aid="apply-stash"
-              title="Apply this stash"
-            ></a>
-            <a
-              href="#"
-              class="toggle-show-commit-diffs"
-              data-bind="click: toggleShowCommitDiffs"
-              data-toggle="tooltip"
-              data-aid="show-stash-diff"
-              title="Show stash diff"
-            >
-              <h4 class="list-group-item-heading" data-bind="text: title"></h4>
-              <p class="list-group-item-text" data-bind="text: message"></p>
-            </a>
-            <!-- ko if: showCommitDiff() -->
-            <div class="diff-wrapper">
-              <div class="diff-inner" data-bind="component: commitDiff"></div>
-            </div>
-            <!-- /ko -->
-            <button
-              type="button"
-              class="btn btn-default list-item-remove"
-              data-bind="html: dropIcon, click: drop"
-              data-toggle="tooltip"
-              data-aid="delete-stash"
-              title="Drop this stash"
-            ></button>
-          </div>
+        <div class="list-group" v-for="stash in stashedChanges" :key="stash.sha1">
+            <StashItem :stash="stash" :repoPath="repoPath" />
         </div>
       </div>
     </div>
@@ -52,10 +19,14 @@
 <script setup>
 import { ref } from 'vue';
 import storage from '/source/js/storage.js';
+import programEvents from '/source/js/program-events.js';
+import { repo } from '@primer/octicons';
 
 defineOptions({
   name: 'Stash'
 })
+
+const props = defineProps(['repoPath']);
 
 const visible = ref(storage.getItem('showStash') === 'true');
 
@@ -66,7 +37,43 @@ const toggleShowStash = () => {
 
 const stashedChanges = ref([]);
 
+programEvents.add((event) => {
+    if (event.event == 'request-app-content-refresh' || event.event == 'git-directory-changed') {
+      _refresh();
+    }
+});
 
+const _refresh = async () => {
+    console.warn('stash.refresh() triggered');
+    ungit.logger.debug('stash.refresh() triggered');
+
+    try {
+        const stashes = await ungit.server.getPromise('/stashes', { path: props.repoPath });
+        /* TODO put back cache 
+        if (this.isSamePayload(stashes)) {
+            return;
+        }*/
+
+        let changed = stashedChanges.value.length != stashes.length;
+        if (!changed) {
+            changed = !stashedChanges.value.every((item1) =>
+                stashes.some((item2) => item1.sha1 == item2.sha1)
+            );
+        }
+
+        if (changed) {
+            stashedChanges.value = stashes;
+        }
+    } catch (err) {
+        if (err.errorCode != 'no-such-path') {
+            ungit.server.unhandledRejection(err);
+        } else {
+            ungit.logger.warn('refresh failed: ', err);
+        }
+    } finally {
+        ungit.logger.debug('stash.refresh() finished');
+    }
+}
 </script>
 
 <style>
