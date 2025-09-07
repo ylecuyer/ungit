@@ -36,6 +36,7 @@ const loadCount = ref(loadLimit);
 
 const numberOfSelectedPatchLines = ref(0);
 const patchLineList = ref([]);
+const patching = ref(false);
 
 const htmlSrc = ref('');
 const isParsed = ref(false);
@@ -92,7 +93,7 @@ const render = () => {
     return (!diffJson ? getDiffJson() : Promise.resolve()).then(() => {
         if (!diffJson || diffJson.length == 0) return; // check if diffs are available (binary files do not support them)
 
-        /*
+        /* TODO put back load more
         if (!diffJson[0].allBlocks) {
             diffJson[0].allBlocks = diffJson[0].blocks;
         }
@@ -127,7 +128,7 @@ const render = () => {
         // ko's binding resolution is not recursive, which means below ko.bind refresh method doesn't work for
         // data bind at getPatchCheckBox that is rendered with "html" binding.
         // which is reason why manually updating the html content and refreshing kobinding to have it render...
-        if (patchLineList) {
+        if (patching.value && patchLineList) {
             html = html.replace(/<span class="d2h-code-line-prefix">(\+|-)/g, (match, capture) => {
                 if (patchLineList[index] === undefined) {
                     patchLineList[index] = true;
@@ -160,5 +161,9 @@ watchEffect(() => {
 <style scoped>
 .d2hwordwrap {
     word-wrap: true
+}
+
+.textdiff {
+    background-color: white;
 }
 </style>
