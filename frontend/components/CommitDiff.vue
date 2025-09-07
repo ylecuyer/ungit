@@ -37,24 +37,10 @@
         </div>
 
         <div v-for="commitLineDiff in commitLineDiffs" class="commitdiff">
-          <div class="file">
-            <div class="head commit-diff-filename" @click.prevent="showDiff = !showDiff">
-              <span> {{ commitLineDiff.displayName }}</span>
-              <span class="file-stats" v-if="commitLineDiff.additions != '-'">
-                (<span>{{ commitLineDiff.additions }}</span><span>{{ commitLineDiff.deletions }}</span>)
-              </span>
-            </div>
-            <FileDiff class="diffContainer commit-file-diff" :fileType="commitLineDiff.type" :showDiff="true"
-                :repoPath="repoPath"
-                :filename="commitLineDiff.fileName"
-                :oldFileName="commitLineDiff.oldFileName"
-                :sha1="sha1"
-                :textDiffType="textDiff"
-                :isShowingDiffs="showDiff"
-                :whiteSpace="showWhiteSpace"
-                :wordWrap="wordWrap"
-            />
-          </div>
+            <CommitLineDiff :commitLineDiff="commitLineDiff" :repoPath="repoPath" :sha1="sha1"
+                :textDiff="textDiff"
+                :showWhiteSpace="showWhiteSpace"
+                :wordWrap="wordWrap" />
         </div>
     </div>
 </template>

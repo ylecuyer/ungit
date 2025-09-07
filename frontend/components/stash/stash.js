@@ -13,6 +13,7 @@ import Stash from '../Stash.vue';
 import StashItem from '../StashItem.vue';
 import Octicon from '../Octicon.vue';
 import CommitDiff from '../CommitDiff.vue';
+import CommitLineDiff from '../CommitLineDiff.vue';
 import FileDiff from '../FileDiff.vue';
 import ImageDiff from '../ImageDiff.vue';
 import TextDiff from '../TextDiff.vue';
@@ -76,6 +77,7 @@ class StashViewModel extends ComponentRoot {
     app.component('Octicon', Octicon);
     app.component('StashItem', StashItem);
     app.component('CommitDiff', CommitDiff);
+    app.component('CommitLineDiff', CommitLineDiff);
     app.component('FileDiff', FileDiff);
     app.component('ImageDiff', ImageDiff);
     app.component('TextDiff', TextDiff);
