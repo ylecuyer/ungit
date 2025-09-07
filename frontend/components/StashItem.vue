@@ -22,7 +22,7 @@
         <p class="list-group-item-text">{{ stash.message }}</p>
       </a>
       <div class="diff-wrapper" v-if="showCommitDiff">
-        <CommitDiff class="diff-inner" :showDiffButtons="true" :commitLineDiffs="stash.fileLineDiffs" />
+        <CommitDiff class="diff-inner" :showDiffButtons="true" :commitLineDiffs="stash.fileLineDiffs" :repoPath="repoPath" :sha1="stash.sha1" />
       </div>
       <button
         type="button"

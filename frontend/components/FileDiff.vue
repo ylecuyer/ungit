@@ -1,9 +1,9 @@
 <template>
     <div v-if="showDiff">
         <ImageDiff v-if="fileType === 'image'"
+            :repoPath="repoPath"
             :filename="filename"
             :oldFileName="oldFileName"
-            :repoPath="repoPath"
             :sha1="sha1"
             :textDiffType="textDiffType"
             :isShowingDiffs="isShowingDiffs"
@@ -11,9 +11,9 @@
             :wordWrap="wordWrap"
         />
         <TextDiff v-else
+            :repoPath="repoPath"
             :filename="filename"
             :oldFileName="oldFileName"
-            :repoPath="repoPath"
             :sha1="sha1"
             :textDiffType="textDiffType"
             :isShowingDiffs="isShowingDiffs"
@@ -28,7 +28,8 @@ defineOptions({
   name: 'FileDiff'
 })
 
-defineProps([
+const props = defineProps([
+    'repoPath',
     'showDiff',
     'fileType',
     'filename',
