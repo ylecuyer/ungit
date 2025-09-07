@@ -78,10 +78,21 @@ const getDiffJson = () => {
       });
 }
 
+const getPatchCheckBox = (symbol, index, isActive) => {
+    if (isActive) {
+      numberOfSelectedPatchLines.value = numberOfSelectedPatchLines.value + 1;
+    }
+    return `<span class="d2h-code-line-prefix"><span data-bind="visible: editState() !== 'patched'">${symbol}</span><input ${
+      isActive ? 'checked' : ''
+    } type="checkbox" data-bind="visible: editState() === 'patched', click: togglePatchLine.bind($data, ${index})">`;
+  }
+
+
 const render = () => {
     return (!diffJson ? getDiffJson() : Promise.resolve()).then(() => {
         if (!diffJson || diffJson.length == 0) return; // check if diffs are available (binary files do not support them)
 
+        /*
         if (!diffJson[0].allBlocks) {
             diffJson[0].allBlocks = diffJson[0].blocks;
         }
@@ -102,6 +113,7 @@ const render = () => {
 
         loadCount.value = _loadCount;
         hasMore.value = _lineCount > _loadCount;
+        */
 
         let html = d2h_html(diffJson, {
             outputFormat:
@@ -121,7 +133,7 @@ const render = () => {
                     patchLineList[index] = true;
                 }
 
-                return this.getPatchCheckBox(capture, index, patchLineList[index++]);
+                return getPatchCheckBox(capture, index, patchLineList[index++]);
             });
         }
 
