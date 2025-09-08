@@ -1,7 +1,5 @@
 import ko from 'knockout';
-import octicons from '@primer/octicons';
 import components from '/source/js/components.js';
-import programEvents from '/source/js/program-events.js';
 import { encodePath } from '../../../backend/source/address-parser.js';
 import repositoryTemplate from './repository.html?raw';
 
@@ -20,6 +18,7 @@ class RepositoryViewModel {
     this.graph = components.create('graph', { server, repoPath: this.repoPath });
     this.remotes = components.create('remotes', { server, repoPath: this.repoPath });
     this.submodules = components.create('submodules', { server, repoPath: this.repoPath });
+    this.gitignore = components.create('gitignore', { server, repoPath: this.repoPath });
     this.stash = this.isBareDir
       ? {}
       : components.create('stash', { server, repoPath: this.repoPath });
@@ -45,7 +44,6 @@ class RepositoryViewModel {
     } else {
       this.refreshButton = false;
     }
-    this.ignoreIcon = octicons.file.toSVG({ height: 18 });
   }
 
   updateNode(parentElement) {
@@ -92,38 +90,6 @@ class RepositoryViewModel {
       .catch(() => {
         this.parentModuleLink(undefined);
         this.parentModulePath(undefined);
-      });
-  }
-
-  editGitignore() {
-    return this.server
-      .getPromise('/gitignore', { path: this.repoPath() })
-      .then((res) => {
-        return components.showModal('texteditmodal', {
-          title: `${this.repoPath()}${ungit.config.fileSeparator}.gitignore`,
-          content: res.content,
-          closeFunc: (isYes) => {
-            if (isYes) {
-              this.server.putPromise('/gitignore', {
-                path: this.repoPath(),
-                data: document.querySelector('dialog .text-area-content').value,
-              });
-            }
-          },
-        });
-      })
-      .catch((e) => {
-        // Not a git error but we are going to treat like one
-        programEvents.dispatch({
-          event: 'git-error',
-          data: {
-            command: `fs.write "${this.repoPath()}${ungit.config.fileSeparator}.gitignore"`,
-            error: e.message || e.errorSummary,
-            stdout: '',
-            stderr: e.stack,
-            repoPath: this.repoPath(),
-          },
-        });
       });
   }
 }
