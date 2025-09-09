@@ -18,7 +18,7 @@ class SidebarViewModel {
 
   updateNode(parentElement) {
     ko.renderTemplate('sidebar', this, {}, parentElement);
-    app = createApp(Sidebar);
+    let app = createApp(Sidebar);
     app.component('Octicon', Octicon);
     app.mount('#sidebar-app');
   }
