@@ -20,7 +20,7 @@ class HeaderViewModel {
 
   updateNode(parentElement) {
     ko.renderTemplate('header', this, {}, parentElement);
-    app = createApp(Header);
+    let app = createApp(Header);
     app.component('BookmarkButton', BookmarkButton);
     app.component('RefreshButton', RefreshButton);
     app.component('Octicon', Octicon);
