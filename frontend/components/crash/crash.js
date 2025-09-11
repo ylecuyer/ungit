@@ -1,6 +1,8 @@
 import ko from 'knockout';
 import components from '/source/js/components.js';
 import crashTemplate from './crash.html?raw';
+import { createApp } from 'vue';
+import Crash from '../Crash.vue';
 
 components.register('crash', (err) => new CrashViewModel(err));
 const crashElement = document.createElement('template');
@@ -15,6 +17,8 @@ class CrashViewModel {
 
   updateNode(parentElement) {
     ko.renderTemplate('crash', this, {}, parentElement);
+    let app = createApp(Crash, { eventcause: this.eventcause });
+    app.mount('#crash-app');
   }
 }
 
