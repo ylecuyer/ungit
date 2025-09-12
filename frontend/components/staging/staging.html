@@ -45,6 +45,14 @@
             />
             Amend last commit
           </label>
+          <label class="label gap-3 my-2" data-aid="stg-skipci-checkbox">
+            <input
+              type="checkbox"
+              class="input"
+              data-bind="checked: skipCi"
+            />
+            Skip CI
+          </label>
           <div class="flex gap-2 mt-2">
             <div class="btn-group flex commit-grp" data-bind="visible: isStageValid">
               <button

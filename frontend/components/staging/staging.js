@@ -28,6 +28,7 @@ class StagingViewModel extends ComponentRoot {
     this.graph = graph;
     this.filesByPath = {};
     this.files = ko.observableArray();
+    this.skipCi = ko.observable(false);
     this.commitMessageTitleCount = ko.observable(0);
     this.commitMessageTitle = ko.observable();
     this.commitMessageTitle.subscribe((value) => {
@@ -282,6 +283,9 @@ class StagingViewModel extends ComponentRoot {
       }));
     let commitMessage = this.commitMessageTitle();
     if (this.commitMessageBody()) commitMessage += `\n\n${this.commitMessageBody()}`;
+    if (this.skipCi()) {
+      commitMessage = `[ci-skip] ${commitMessage}`;
+    }
 
     this.server
       .postPromise('/commit', {
@@ -293,6 +297,7 @@ class StagingViewModel extends ComponentRoot {
       })
       .then(() => {
         this.resetMessages();
+        this.skipCi(false);
         programEvents.dispatch({ event: 'branch-updated' });
       })
       .catch((e) => this.server.unhandledRejection(e));
@@ -307,6 +312,9 @@ class StagingViewModel extends ComponentRoot {
       }));
     let commitMessage = this.commitMessageTitle();
     if (this.commitMessageBody()) commitMessage += `\n\n${this.commitMessageBody()}`;
+    if (this.skipCi()) {
+      commitMessage = `[ci-skip] ${commitMessage}`;
+    }
 
     this.server
       .postPromise('/commit', {
@@ -318,6 +326,7 @@ class StagingViewModel extends ComponentRoot {
       })
       .then(() => {
         this.resetMessages();
+        this.skipCi(false);
         return this.server.postPromise('/push', {
           path: this.repoPath(),
           remote: this.graph.currentRemote(),
