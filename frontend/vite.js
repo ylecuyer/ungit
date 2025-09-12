@@ -7,5 +7,4 @@ import '/components/graph/graph.scss';
 import '/components/imagediff/imagediff.scss';
 import '/components/path/path.scss';
 import '/components/repository/repository.scss';
-import '/components/staging/staging.scss';
 import '/components/textdiff/textdiff.scss';
