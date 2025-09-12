@@ -7,7 +7,7 @@
 
       <div v-if="showNux" class="nux">
         Nothing to commit.
-        <a data-aid="amend-commit" class="amend-link" href="#" v-if="canAmend" @click="() => amend(true)"
+        <a data-aid="amend-commit" class="amend-link" href="#" v-if="canAmend" @click.prevent="amend = true"
           >Amend previous commit?</a
         >
         <a
