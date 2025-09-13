@@ -31,7 +31,7 @@ class StagingViewModel extends ComponentRoot {
     let app = createApp(Staging, { repoPath: this.repoPath(), graph: this.graph });
     app.component('Octicon', Octicon);
     app.component('StagingFile', StagingFile);
-    app.mount('#staging-app');
+    this.vm = app.mount('#staging-app');
   }
 }
 

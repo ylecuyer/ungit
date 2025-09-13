@@ -170,7 +170,7 @@ patchLineList.value = [];
 }
 
 const discardChanges = () => {
-    const timeSinceLastMute = new Date().getTime() - staging.mutedTime;
+    const timeSinceLastMute = new Date().getTime() - ungit.mutedTime;
     const isMuteWarning = timeSinceLastMute < ungit.config.disableDiscardMuteTime;
     ungit.logger.debug(
       `discard time since mute: ${timeSinceLastMute}, isMuteWarning: ${isMuteWarning}`
@@ -190,7 +190,7 @@ const discardChanges = () => {
               .catch((e) => ungit.server.unhandledRejection(e));
           }
           if (isMute) {
-            staging.mutedTime = new Date().getTime();
+            ungit.mutedTime = new Date().getTime();
           }
         },
       });

@@ -31,7 +31,7 @@
               data-tooltip="Wrap words per line"
               data-side="bottom"
             >
-              <span v-text="wordWrap ? 'Wrap Lines' : 'No Wrap'"</span>
+              <span v-text="wordWrap ? 'Wrap Lines' : 'No Wrap'"></span>
             </button>
           </div>
         </div>

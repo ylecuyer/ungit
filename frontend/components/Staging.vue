@@ -29,7 +29,9 @@
               placeholder="Title (required)"
               data-aid="stg-commit-title"
               aria-label="Commit message title"
-              data-bind="value: commitMessageTitle, valueUpdate: 'afterkeydown', enable: !inRebase(), event: {keypress: onEnter}"
+              v-model="commitMessageTitle"
+              :disabled="inRebase"
+              @keypress="onEnter"
             />
             <textarea
               class="form-control commit-body rounded-t-none"
@@ -37,13 +39,15 @@
               placeholder="Body"
               data-aid="stg-commit-body"
               aria-label="Commit message body"
-              data-bind="value: commitMessageBody, valueUpdate: 'afterkeydown', enable: !inRebase(), event: {keypress: onAltEnter}"
+              :disabled="inRebase"
+              v-model="commitMessageBody"
+              @keypress="onAltEnter"
             ></textarea>
-            <label class="label gap-3 my-2" data-bind="visible: canAmend" data-aid="stg-amend-checkbox">
+            <label class="label gap-3 my-2" v-if="canAmend" data-aid="stg-amend-checkbox">
               <input
                 type="checkbox"
                 class="input"
-                data-bind="checked: amend"
+                v-model="amend"
               />
               Amend last commit
             </label>
@@ -51,7 +55,7 @@
               <input
                 type="checkbox"
                 class="input"
-                :checked="skipCi"
+                v-model="skipCi"
               />
               Skip CI
             </label>
@@ -157,27 +161,30 @@
             <div class="flex gap-2">
               <button
                 class="btn-outline"
-                data-bind="click: wordWrap.toggle, css: {active: wordWrap.isActive}"
+                :class="{active: wordWrap}"
+                @click.prevent="wordWrap = !wordWrap"
                 data-tooltip="Wrap words per line"
                 data-side="bottom"
               >
-                <span data-bind="text: wordWrap.text"></span>
+                <span v-text="wordWrap ? 'Wrap Lines' : 'No Wrap'"></span>
               </button>
               <button
                 class="btn-outline"
-                data-bind="click: textDiffType.toggle, css: {active: textDiffType.isActive}"
+                :class="{active: textDiffType == 'sidebysidediff' }"
+                @click.prevent="textDiffType = textDiffType == 'sidebysidediff' ? 'textdiff' : 'sidebysidediff'"
                 data-tooltip="Show side by side diff view"
                 data-side="bottom"
               >
-                <span data-bind="text: textDiffType.text"></span>
+                <span>{{ textDiffType == 'sidebysidediff' ? 'Side by Side' : 'Inline' }}</span>
               </button>
               <button
                 class="btn-outline"
-                data-bind="click: whiteSpace.toggle, css: {active: whiteSpace.isActive}"
+                @click.prevent="whiteSpace = !whiteSpace"
+                :class="{active: whiteSpace}"
                 data-tooltip="Hide whitespace changes in diff"
                 data-side="bottom"
               >
-                <span data-bind="text: whiteSpace.text"></span>
+                <span>{{ whiteSpace ? 'Show Whitespace' : 'Hide Whitespace' }}</span>
               </button>
             </div>
           </div>
@@ -207,6 +214,10 @@ defineOptions({
   name: 'Staging',
 });
 
+const wordWrap = ref(false);
+const textDiffType = ref('textdiff');
+const whiteSpace = ref(false);
+
 const filesToDisplayIncrmentBy = 50;
 const filesToDisplayLimit = filesToDisplayIncrmentBy;
 const mergeTool = ungit.config.mergeTool;
@@ -235,7 +246,7 @@ const commitValidationError = computed(() => {
       if (patchFiles.length > 0) return 'Cannot patch with side by side view.';
     }
   }
-  return '';
+  return null;
 });
 
 const showCancelButton = computed(() => amend.value || emptyCommit.value);
@@ -272,10 +283,6 @@ watch(amend, (value) => {
 const canAmend = computed(() => HEAD.value && !inRebase.value && !inMerge.value && !emptyCommit.value);
 const skipCi = ref(false);
 
-var textDiffType = components.create('textdiff.type');
-var whiteSpace = components.create('textdiff.whitespace');
-
-
 watch(commitMessageTitle, (value) => {
   commitMessageTitleCount.value = value.length;
 });
@@ -289,9 +296,12 @@ const showNux = computed(
 
 var loadAnyway = false;
 var isDiagOpen = false;
-var mutedTime = null;
 
 const isStageValid = computed(() => !inRebase.value && !inMerge.value && !inCherry.value);
+
+defineExpose({
+  isStageValid
+});
 
 var conflictContinue;
 var conflictAbort;
@@ -351,20 +361,20 @@ const _refreshContent = async () => {
     if (isSamePayload(status)) {
       return;
     }
-    if (Object.keys(status.files).length > filesToDisplayLimit && !this.loadAnyway) {
-      if (this.isDiagOpen) {
+    if (Object.keys(status.files).length > filesToDisplayLimit && !loadAnyway) {
+      if (isDiagOpen) {
         return;
       }
-      this.isDiagOpen = true;
+      isDiagOpen = true;
       components.showModal('toomanyfilesmodal', {
         title: 'Too many unstaged files',
         details: 'It is recommended to use command line as ungit may be too slow.',
         closeFunc: (isYes) => {
-          this.isDiagOpen = false;
+          isDiagOpen = false;
           if (isYes) {
             window.location.href = '/#/';
           } else {
-            this.loadAnyway = true;
+            loadAnyway = true;
             loadStatus(status);
           }
         },
@@ -565,7 +575,7 @@ const conflictResolution = (apiPath) => {
 
 const invalidateFilesDiffs = () => {
   files.value.forEach((file) => {
-    file.diff().invalidateDiff();
+    // file.diff().invalidateDiff(); // TODO
   });
 }
 
@@ -599,20 +609,20 @@ const stashAll = () => {
 
 const toggleAllStages = () => {
   const _allStageFlag = allStageFlag.value;
-  for (const n in files.values) {
-    files.value[n].editState(_allStageFlag ? 'staged' : 'none');
+  for (const n in files.value) {
+    // files.value[n].editState(_allStageFlag ? 'staged' : 'none'); // TODO
   }
 }
 
-const onEnter = (d, e) => {
-  if (e.keyCode === 13 && !commitValidationError.value) {
+const onEnter = (d) => {
+  if (d.keyCode === 13 && !commitValidationError.value) {
     commit();
   }
   return true;
 }
 
-const onAltEnter = (d, e) => {
-  if (e.keyCode === 13 && e.altKey && !commitValidationError.value) {
+const onAltEnter = (d) => {
+  if (d.keyCode === 13 && d.altKey && !commitValidationError.value) {
     commit();
   }
   return true;

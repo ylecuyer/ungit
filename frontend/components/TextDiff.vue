@@ -53,7 +53,6 @@ const getDiffArguments = () => {
     };
 }
 
-
 const getDiffJson = () => {
     return ungit.server
       .getPromise('/diff', getDiffArguments())
