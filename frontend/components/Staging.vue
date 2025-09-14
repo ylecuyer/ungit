@@ -484,10 +484,10 @@ const resetMessages = () => {
   commitMessageBody.value = '';
   for (const key in filesByPath) {
     const element = filesByPath[key];
-    element.diff().invalidateDiff();
+    element.diff.invalidateDiff();
     element.patchLineList.removeAll();
     element.isShowingDiffs(false);
-    element.editState(element.editState() === 'patched' ? 'none' : element.editState());
+    element.editState =  element.editState === 'patched' ? 'none' : element.editState;
   }
   amend.value = false;
   emptyCommit.value = false;
