@@ -68,7 +68,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, watchEffect } from 'vue';
 import components from '/source/js/components.js';
 import programEvents from '/source/js/program-events.js';
 
@@ -78,7 +78,11 @@ defineOptions({
 
 const props = defineProps(['repoPath', 'name', 'oldName', 'displayName', 'inMerge', 'inRebase']);
 
-const editState = ref('staged'); // staged, patched and none
+const editState = defineModel('editState');
+watchEffect(() => {
+  // ensures parent always sees the current value, even at init
+  editState.value = "staged";
+})
 const name = ref(props.name);
 const oldName = ref(props.oldName);
 const displayName = ref(props.displayName);
@@ -102,7 +106,9 @@ const modified = computed(() => {
 });
 const fileType = ref('text');
 const patchLineList = ref([]);
-const diff = ref();
+const diff = defineModel('diff', {
+    default: null,
+});
 const isShowPatch = computed(
     () =>
     // if not new file
@@ -120,7 +126,7 @@ const mergeTool = computed(() => conflict.value && mergeTool !== false);
 
 watch(editState, (value) => {
     if (value === 'none') {
-    patchLineList.value.removeAll();
+    //patchLineList.value.removeAll(); TODO
     } else if (value === 'patched') {
     if (diff.value.render) diff.value.render();
     }
@@ -143,22 +149,28 @@ return components.create(!name.value || `${fileType.value}diff`, {
 }
 
 const setState = (state) =>{
-displayName.value = state.displayName;
-isNew.value = state.isNew;
-removed.value = state.removed;
-conflict.value = state.conflict;
-renamed.value = state.renamed;
-fileType.value = state.type;
-additions.value = state.additions != '-' ? `+${state.additions}` : '';
-deletions.value = state.deletions != '-' ? `-${state.deletions}` : '';
-if (diff.value) {
-    diff.value.invalidateDiff();
-} else {
-    diff.value = getSpecificDiff();
+    displayName.value = state.displayName;
+    isNew.value = state.isNew;
+    removed.value = state.removed;
+    conflict.value = state.conflict;
+    renamed.value = state.renamed;
+    fileType.value = state.type;
+    additions.value = state.additions != '-' ? `+${state.additions}` : '';
+    deletions.value = state.deletions != '-' ? `-${state.deletions}` : '';
+    if (diff.value) {
+        diff.value.invalidateDiff();
+    } else {
+        diff.value = getSpecificDiff();
+    }
+    if (diff.value.isNew) diff.value.isNew(state.isNew);
+    if (diff.value.isRemoved) diff.value.isRemoved(state.removed);
 }
-if (diff.value.isNew) diff.value.isNew(state.isNew);
-if (diff.value.isRemoved) diff.value.isRemoved(state.removed);
-}
+
+defineExpose({
+  diff,
+  setState,
+});
+
 
 const toggleStaged = () => {
 if (editState.value === 'none') {

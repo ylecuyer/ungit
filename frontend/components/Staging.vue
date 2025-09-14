@@ -189,14 +189,17 @@
             </div>
           </div>
 
-          <div class="files" v-for="file in files">
+          <div class="files" v-for="file in files"> 
             <StagingFile :repoPath="props.repoPath"
-              :name="file.name"
-              :oldName="file.oldName"
+              :name="file.fileName"
+              :oldName="file.oldFileName"
               :displayName="file.displayName"
-              :inMerge="inMerge"
-              :inRebase="inRebase"
-            />
+              :inMerge="inMerge.value"
+              :inRebase="inRebase.value"
+              v-model:editState="file.editState"
+              v-model:diff="file.diff"
+              >
+            </StagingFile>
           </div>
         </div>
       </div>
@@ -209,6 +212,7 @@ import { ref, watch, watchEffect, computed } from 'vue';
 import programEvents from '/source/js/program-events.js';
 import components from '/source/js/components.js';
 import _ from 'lodash';
+import StagingFile from './StagingFile.vue';
 
 defineOptions({
   name: 'Staging',
@@ -232,7 +236,7 @@ const commitValidationError = computed(() => {
       !emptyCommit.value &&
       !amend.value &&
       !files.value.some(
-        (file) => /*file.editState() === 'staged' || file.editState() === 'patched'*/ true // TODO
+        (file) => file.editState === 'staged' || file.editState === 'patched'
       )
     ) {
       return 'No files to commit';
@@ -252,7 +256,7 @@ const commitValidationError = computed(() => {
 const showCancelButton = computed(() => amend.value || emptyCommit.value);
 
 const nFiles = computed(() => files.value.length);
-const nStagedFiles = computed(() => files.value.filter((f) => /*f.editState() === 'staged'*/ true).length); // TODO
+const nStagedFiles = computed(() => files.value.filter((f) => f.editState === 'staged' ).length);
 const allStageFlag = computed(() => nFiles.value !== nStagedFiles.value);
 const stats = computed(() => `${nFiles.value} files, ${nStagedFiles.value} to be commited`);
 
@@ -435,20 +439,23 @@ const setFiles = (_files) => {
     let fileViewModel = filesByPath[fileStatus.fileName];
     if (!fileViewModel) {
       filesByPath[fileStatus.fileName] = fileViewModel = {
-        staging: this,
+        repoPath: props.repoPath,
         name: fileStatus.fileName,
         oldName: fileStatus.oldFileName,
-        displayName: fileStatus.displayName
+        displayName: fileStatus.displayName,
+        inMerge: inMerge.value,
+        inRebase: inRebase.value,
       };
     } else {
       // this is mainly for patching and it may not fire due to the fact that
       // '/commit' triggers working-tree-changed which triggers throttled refresh
-      fileViewModel.diff().invalidateDiff();
+      fileViewModel.vm?.diff.value.invalidateDiff();
     }
-    // fileViewModel.setState(fileStatus); // TODO
+    fileViewModel.vm?.setState(fileStatus);
     newFiles.push(fileViewModel);
   }
   files.value = newFiles;
+  console.log("files setFiles", files.value);
 }
 
 const toggleAmend = (amend) => {
@@ -488,10 +495,10 @@ const resetMessages = () => {
 
 const commit = () => {
   const _files = files.value
-    .filter((file) => file.editState() !== 'none')
+    .filter((file) => file.editState !== 'none')
     .map((file) => ({
-      name: file.name(),
-      patchLineList: file.editState() === 'patched' ? file.patchLineList() : null,
+      name: file.name,
+      patchLineList: file.editState === 'patched' ? file.patchLineList : null,
     }));
   let commitMessage = commitMessageTitle.value;
   if (commitMessageBody.value) commitMessage += `\n\n${commitMessageBody.value}`;
@@ -502,7 +509,7 @@ const commit = () => {
     .postPromise('/commit', {
       path: props.repoPath,
       message: commitMessage,
-      _files,
+      files: _files,
       amend: amend.value,
       emptyCommit: emptyCommit.value,
     })
@@ -575,7 +582,7 @@ const conflictResolution = (apiPath) => {
 
 const invalidateFilesDiffs = () => {
   files.value.forEach((file) => {
-    // file.diff().invalidateDiff(); // TODO
+      file.diff?.invalidateDiff(); //TODO
   });
 }
 
@@ -609,9 +616,9 @@ const stashAll = () => {
 
 const toggleAllStages = () => {
   const _allStageFlag = allStageFlag.value;
-  for (const n in files.value) {
-    // files.value[n].editState(_allStageFlag ? 'staged' : 'none'); // TODO
-  }
+  files.value.forEach((file) => {
+    file.editState = _allStageFlag ? 'staged' : 'none';
+  });
 }
 
 const onEnter = (d) => {
