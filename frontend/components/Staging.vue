@@ -15,7 +15,7 @@
           class="empty-commit-link"
           href="#"
           v-if="canEmptyCommit"
-          @click="toggleEmptyCommit"
+          @click.prevent="toggleEmptyCommit"
           >Create an empty commit?</a
         >
       </div>
