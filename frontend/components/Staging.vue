@@ -474,7 +474,6 @@ const toggleAmend = (amend) => {
 }
 
 const toggleEmptyCommit = () => {
-  debugger
   commitMessageTitle.value = 'Empty commit';
   commitMessageBody.value = '';
   emptyCommit.value = true;
