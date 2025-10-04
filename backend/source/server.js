@@ -17,6 +17,11 @@ process.on('uncaughtException', (err) => {
   process.exit();
 });
 
+process.on('unhandledRejection', (reason, p) => {
+  logger.error('Unhandled Rejection at: Promise ', p, ' reason: ', reason);
+  process.exit();
+});
+
 const users = config.users;
 config.users = null; // So that we don't send the users to the client
 

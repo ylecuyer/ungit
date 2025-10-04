@@ -365,7 +365,9 @@ exports.registerApi = (env) => {
   app.get(`${exports.pathPrefix}/diff/image`, ensureAuthenticated, ensurePathExists, (req, res) => {
     res.type(path.extname(req.query.filename));
     if (req.query.version !== 'current') {
-      gitPromise.binaryFileContent(req.query.path, req.query.filename, req.query.version, res);
+      gitPromise.binaryFileContent(req.query.path, req.query.filename, req.query.version, res).catch((err) => {
+        logger.error('Error getting binary content', err);
+      });
     } else {
       res.sendFile(path.join(req.query.path, req.query.filename));
     }
