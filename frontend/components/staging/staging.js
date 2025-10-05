@@ -7,6 +7,9 @@ import { createApp } from 'vue';
 import Staging from '../Staging.vue';
 import Octicon from '../Octicon.vue';
 import StagingFile from '../StagingFile.vue';
+import FileDiff from '../FileDiff.vue';
+import ImageDiff from '../ImageDiff.vue';
+import TextDiff from '../TextDiff.vue';
 
 
 components.register(
@@ -31,6 +34,9 @@ class StagingViewModel extends ComponentRoot {
     let app = createApp(Staging, { repoPath: this.repoPath(), graph: this.graph });
     app.component('Octicon', Octicon);
     app.component('StagingFile', StagingFile);
+    app.component('FileDiff', FileDiff);
+    app.component('ImageDiff', ImageDiff);
+    app.component('TextDiff', TextDiff);
     this.vm = app.mount('#staging-app');
   }
 }

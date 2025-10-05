@@ -1,70 +1,41 @@
 <template>
-    <div class="file" data-bind="css: { showingDiffs: isShowingDiffs }">
-      <div
-        class="checkmark"
-        @click="toggleStaged"
-        :class="{ checked: editState !== 'none' }"
-      >
-        <span
-          class="glyphicon"
-          :class="{
+  <div class="file" data-bind="css: { showingDiffs: isShowingDiffs }">
+    <div class="checkmark" @click="toggleStaged" :class="{ checked: editState !== 'none' }">
+      <span class="glyphicon" :class="{
             'glyphicon-check': editState === 'staged',
             'glyphicon-unchecked': editState === 'none',
             'glyphicon-list-alt': editState === 'patched'
-          }"
-        ></span>
-      </div>
-      <button class="name btn btn-default" @click.prevent="toggleDiffs">
-        <span v-text="displayName"></span>
-      </button>
-      <span class="new" v-if="isNew">New</span>
-      <span class="deleted" v-if="removed">Removed</span>
-      <span class="additions" v-text="additions"></span>
-      <span class="deletions" v-text="deletions"></span>
-      <span class="modified" v-if="modified">Modified</span>
-      <span class="conflict" v-if="conflict"
-        ><span class="badge-destructive">Conflicts</span
-        ><span
-          class="btn-outline launchmergetool explanation"
-          v-if="mergeTool"
-          @click.prevent="launchMergeTool"
-          >Launch Merge Tool</span
-        >
-        <span data-aid="mark-as-resolved" class="btn-sm-secondary markresolved explanation" @click.prevent="resolveConflict"
-          >Mark as Resolved</span
-        ></span
-      >
-      <button
-        class="patch btn"
-        v-if="isShowPatch"
-        @click.prevent="patchClick"
-        data-toggle="tooltip"
-        title="Patch changes"
-      >
-        Patch
-      </button>
-      <button
-        class="ignore btn"
-        @click.prevent="ignoreFile"
-        data-toggle="tooltip"
-        data-aid="ignore-file"
-        title="Add to .gitignore"
-      >
-        <Octicon name="skip" />
-      </button>
-      <button
-        class="discard btn"
-        @click.prevent="discardChanges"
-        data-toggle="tooltip"
-        title="Discard changes"
-        data-aid="discard"
-      >
-        <Octicon name="x" />
-      </button>
-      <!-- ko if: isShowingDiffs -->
-      <div class="diffContainer" data-bind="component: diff"></div>
-      <!-- /ko -->
+          }"></span>
     </div>
+    <button class="name btn btn-default" @click.prevent="toggleDiffs">
+      <span v-text="displayName"></span>
+    </button>
+    <span class="new" v-if="isNew">New</span>
+    <span class="deleted" v-if="removed">Removed</span>
+    <span class="additions" v-text="additions"></span>
+    <span class="deletions" v-text="deletions"></span>
+    <span class="modified" v-if="modified">Modified</span>
+    <span class="conflict" v-if="conflict"><span class="badge-destructive">Conflicts</span><span
+        class="btn-outline launchmergetool explanation" v-if="mergeTool" @click.prevent="launchMergeTool">Launch Merge
+        Tool</span>
+      <span data-aid="mark-as-resolved" class="btn-sm-secondary markresolved explanation"
+        @click.prevent="resolveConflict">Mark as Resolved</span></span>
+    <button class="patch btn" v-if="isShowPatch" @click.prevent="patchClick" data-toggle="tooltip"
+      title="Patch changes">
+      Patch
+    </button>
+    <button class="ignore btn" @click.prevent="ignoreFile" data-toggle="tooltip" data-aid="ignore-file"
+      title="Add to .gitignore">
+      <Octicon name="skip" />
+    </button>
+    <button class="discard btn" @click.prevent="discardChanges" data-toggle="tooltip" title="Discard changes"
+      data-aid="discard">
+      <Octicon name="x" />
+    </button>
+    <FileDiff class="diffContainer" :fileType="fileType" :showDiff="isShowingDiffs" :repoPath="repoPath"
+      :filename="name" :oldFileName="oldName" :textDiffType="textDiffType" :isShowingDiffs="isShowingDiffs"
+      :whiteSpace="whiteSpace" :wordWrap="wordWrap" />
+  </div>
 </template>
 
 <script setup>
@@ -76,7 +47,7 @@ defineOptions({
   name: 'StagingFile',
 });
 
-const props = defineProps(['repoPath', 'name', 'oldName', 'displayName', 'inMerge', 'inRebase']);
+const props = defineProps(['repoPath', 'name', 'oldName', 'displayName', 'inMerge', 'inRebase', 'textDiffType', 'whiteSpace', 'wordWrap']);
 
 const editState = defineModel('editState');
 watchEffect(() => {

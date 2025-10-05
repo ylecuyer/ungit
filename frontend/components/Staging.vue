@@ -191,11 +191,14 @@
 
           <div class="files" v-for="file in files"> 
             <StagingFile :repoPath="props.repoPath"
-              :name="file.fileName"
-              :oldName="file.oldFileName"
+              :name="file.name"
+              :oldName="file.oldName"
               :displayName="file.displayName"
               :inMerge="inMerge.value"
               :inRebase="inRebase.value"
+              :whiteSpace="whiteSpace"
+              :textDiffType="textDiffType"
+              :wordWrap="wordWrap"
               v-model:editState="file.editState"
               v-model:diff="file.diff"
               >
@@ -296,7 +299,6 @@ const commitMessageBody = ref(null);
 const showNux = computed(
   () => files.value.length == 0 && !amend.value && !inRebase.value && !emptyCommit.value
 );
-
 
 var loadAnyway = false;
 var isDiagOpen = false;

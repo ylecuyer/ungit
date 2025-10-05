@@ -20,7 +20,6 @@
 import { ref } from 'vue';
 import storage from '/source/js/storage.js';
 import programEvents from '/source/js/program-events.js';
-import { repo } from '@primer/octicons';
 
 defineOptions({
   name: 'Stash'
