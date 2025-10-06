@@ -4,6 +4,8 @@ import moment from 'moment';
 import octicons from '@primer/octicons';
 import components from '/source/js/components.js';
 import commitTemplate from './commit.html?raw';
+import { createApp } from 'vue';
+import Commit from '../Commit.vue';
 
 components.register('commit', (args) => new CommitViewModel(args));
 const commitElement = document.createElement('template');
@@ -13,6 +15,7 @@ document.body.appendChild(commitElement);
 
 class CommitViewModel {
   constructor(gitNode) {
+    this.gitNode = gitNode;
     this.graph = gitNode.graph;
     this.repoPath = gitNode.graph.repoPath;
     this.sha1 = gitNode.sha1;
@@ -28,13 +31,10 @@ class CommitViewModel {
     this.body = ko.observable();
     this.authorDate = ko.observable();
     this.authorDateFromNow = ko.observable();
-    this.authorName = ko.observable();
-    this.authorEmail = ko.observable();
     this.fileLineDiffs = ko.observable();
     this.numberOfAddedLines = ko.observable();
     this.numberOfRemovedLines = ko.observable();
     this.parents = ko.observable();
-    this.authorGravatar = ko.computed(() => md5((this.authorEmail() || '').trim().toLowerCase()));
     this.gitCommitIcon = octicons['git-commit'].toSVG({ height: 18 });
 
     this.showCommitDiff = ko.computed(
@@ -51,30 +51,15 @@ class CommitViewModel {
 
   updateNode(parentElement) {
     ko.renderTemplate('commit', this, {}, parentElement);
+    this.app = createApp(Commit, { gitNode: this.gitNode});
+    this.app.mount("#commit-app-" + this.sha1);
   }
 
   setData(args) {
-    const message = args.message.split('\n');
-    this.message(args.message);
-    this.title(message[0]);
-    this.body(message.slice(message[1] ? 1 : 2).join('\n'));
-    this.authorDate(moment(new Date(args.authorDate)));
-    this.authorDateFromNow(this.authorDate().fromNow());
-    this.authorName(args.authorName);
-    this.authorEmail(args.authorEmail);
-    this.numberOfAddedLines(args.additions);
-    this.numberOfRemovedLines(args.deletions);
-    this.parents(args.parents || []);
-    this.fileLineDiffs(args.fileLineDiffs);
-    this.commitDiff = ko.observable(
-      components.create('commitDiff', {
-        fileLineDiffs: this.fileLineDiffs(),
-        sha1: this.sha1,
-        repoPath: this.repoPath,
-        server: this.server,
-        showDiffButtons: this.selected,
-      })
-    );
+    if (this.app) {
+      console.log("app:", this.app);
+      this.app._setData(args);
+    }
   }
 
   updateLastAuthorDateFromNow(deltaT) {
