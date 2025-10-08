@@ -1,11 +1,13 @@
 import ko from 'knockout';
-import md5 from 'blueimp-md5';
-import moment from 'moment';
-import octicons from '@primer/octicons';
 import components from '/source/js/components.js';
 import commitTemplate from './commit.html?raw';
+<<<<<<< Updated upstream
+=======
 import { createApp } from 'vue';
 import Commit from '../Commit.vue';
+import Octicon from '../Octicon.vue';
+import CommitDiff from '../CommitDiff.vue';
+>>>>>>> Stashed changes
 
 components.register('commit', (args) => new CommitViewModel(args));
 const commitElement = document.createElement('template');
@@ -15,7 +17,6 @@ document.body.appendChild(commitElement);
 
 class CommitViewModel {
   constructor(gitNode) {
-    this.gitNode = gitNode;
     this.graph = gitNode.graph;
     this.repoPath = gitNode.graph.repoPath;
     this.sha1 = gitNode.sha1;
@@ -23,19 +24,24 @@ class CommitViewModel {
     this.highlighted = gitNode.highlighted;
     this.nodeIsMousehover = gitNode.nodeIsMousehover;
     this.selected = gitNode.selected;
-    this.pgpVerifiedString = gitNode.pgpVerifiedString;
-    this.pgpIcon = octicons.verified.toSVG({ height: 18 });
     this.element = ko.observable();
+<<<<<<< Updated upstream
     this.message = ko.observable();
     this.title = ko.observable();
     this.body = ko.observable();
     this.authorDate = ko.observable();
     this.authorDateFromNow = ko.observable();
+    this.authorName = ko.observable();
+    this.authorEmail = ko.observable();
+=======
+>>>>>>> Stashed changes
     this.fileLineDiffs = ko.observable();
-    this.numberOfAddedLines = ko.observable();
-    this.numberOfRemovedLines = ko.observable();
     this.parents = ko.observable();
+<<<<<<< Updated upstream
+    this.authorGravatar = ko.computed(() => md5((this.authorEmail() || '').trim().toLowerCase()));
     this.gitCommitIcon = octicons['git-commit'].toSVG({ height: 18 });
+=======
+>>>>>>> Stashed changes
 
     this.showCommitDiff = ko.computed(
       () => this.fileLineDiffs() && this.fileLineDiffs().length > 0
@@ -51,23 +57,52 @@ class CommitViewModel {
 
   updateNode(parentElement) {
     ko.renderTemplate('commit', this, {}, parentElement);
-    this.app = createApp(Commit, { gitNode: this.gitNode});
-    this.app.mount("#commit-app-" + this.sha1);
+<<<<<<< Updated upstream
   }
 
   setData(args) {
-    if (this.app) {
-      console.log("app:", this.app);
-      this.app._setData(args);
-    }
+    const message = args.message.split('\n');
+    this.message(args.message);
+    this.title(message[0]);
+    this.body(message.slice(message[1] ? 1 : 2).join('\n'));
+    this.authorDate(moment(new Date(args.authorDate)));
+    this.authorDateFromNow(this.authorDate().fromNow());
+    this.authorName(args.authorName);
+    this.authorEmail(args.authorEmail);
+    this.numberOfAddedLines(args.additions);
+    this.numberOfRemovedLines(args.deletions);
+    this.parents(args.parents || []);
+    this.fileLineDiffs(args.fileLineDiffs);
+    this.commitDiff = ko.observable(
+      components.create('commitDiff', {
+        fileLineDiffs: this.fileLineDiffs(),
+        sha1: this.sha1,
+        repoPath: this.repoPath,
+        server: this.server,
+        showDiffButtons: this.selected,
+      })
+    );
+=======
+    this.app = createApp(Commit, {
+      gitNode: this.gitNode,
+      sha1: this.gitNode.sha1,
+      pgpVerifiedString: this.gitNode.pgpVerifiedString(),
+    });
+    this.app.component('Octicon', Octicon);
+    this.app.component('CommitDiff', CommitDiff);
+    this.vm = this.app.mount("#commit-app-" + this.sha1);
+  }
+
+  setData(args) {
+    setTimeout(() => {
+      this.vm._setData(args);
+    }, 500);
+>>>>>>> Stashed changes
   }
 
   updateLastAuthorDateFromNow(deltaT) {
-    this.lastUpdatedAuthorDateFromNow = this.lastUpdatedAuthorDateFromNow || 0;
-    this.lastUpdatedAuthorDateFromNow += deltaT;
-    if (this.lastUpdatedAuthorDateFromNow > 60 * 1000) {
-      this.lastUpdatedAuthorDateFromNow = 0;
-      this.authorDateFromNow(this.authorDate().fromNow());
+    if (this.vm) {
+      this.vm._updateLastAuthorDateFromNow(deltaT);
     }
   }
 
