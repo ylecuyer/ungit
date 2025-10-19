@@ -21,35 +21,35 @@
           <div>
             <span
               class="title"
-              data-bind="text: (title().length > 72 ? title().substring(0, 72) + '...' : title)"
+              v-text="title.length > 72 ? title.substring(0, 72) + '...' : title"
             ></span>
             <span class="text-muted"
-              >by <a data-bind="text: authorName, attr: { href: 'mailto:' + authorEmail() }"></a
+              >by <a :href="`mailto:${authorEmail}`">{{ authorName }}</a
             ></span>
-            <!-- ko if: pgpVerifiedString() -->
-            <span
+            <span v-if="pgpVerifiedString"
               class="text-muted"
-              data-bind="html: pgpIcon, attr: { title: pgpVerifiedString() }"
+              :title="pgpVerifiedString"
               data-toggle="tooltip"
-            ></span>
-            <!-- /ko -->
+            >
+                <octicon name="verified" />
+          </span>
           </div>
           <div class="text-muted nodeSummaryContainer">
             <span
               class="badge-outline"
-              data-bind="attr: { 'title': authorDate }"
+              :title="authorDate"
               data-side="bottom"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm7-3.25v2.992l2.028.812a.75.75 0 0 1-.557 1.392l-2.5-1A.751.751 0 0 1 7 8.25v-3.5a.75.75 0 0 1 1.5 0Z"></path></svg>
-              <span data-bind="text: authorDateFromNow"></span>
+              <span v-text="authorDateFromNow"></span>
             </span>
             <span class="badge-outline">
-              +<span data-bind="text: numberOfAddedLines"></span>, -<span
-              data-bind="text: numberOfRemovedLines"
+              +<span v-text="numberOfAddedLines"></span>, -<span
+              v-text="numberOfRemovedLines"
             ></span></span>
             <div class="badge-outline">
-              <span data-bind="html: gitCommitIcon"></span>
-              <span title="Commit" data-bind="text: sha1.substring(0, 8)"></span>
+              <Octicon name="git-commit" />
+              <span title="Commit" v-text="sha1.substring(0, 8)"></span>
             </div>
           </div>
         </div>
@@ -77,6 +77,8 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import moment from 'moment';
+import Octicon from './Octicon.vue';
 
 defineOptions({
     name: 'Commit',
@@ -90,19 +92,26 @@ const authorGravatar = computed(() => {
     return md5(email.trim().toLowerCase());
 });
 
-const props = defineProps(['gitNode']);
+const props = defineProps(['gitNode', 'sha1', 'pgpVerifiedString']);
+const message = ref('');
+const title = ref('');
+const body = ref('');
+const authorDate = ref(null);
+const authorDateFromNow = ref('');
+const numberOfAddedLines = ref(0);
+const numberOfRemovedLines = ref(0);
 
 const _setData = (args) => {
     const message = args.message.split('\n');
-    // this.message(args.message);
-    // this.title(message[0]);
-    // this.body(message.slice(message[1] ? 1 : 2).join('\n'));
-    // this.authorDate(moment(new Date(args.authorDate)));
-    // this.authorDateFromNow(this.authorDate().fromNow());
+    message.value = args.message;
+    title.value = message[0];
+    body.value = message.slice(message[1] ? 1 : 2).join('\n');
+    authorDate.value = moment(new Date(args.authorDate));
+    authorDateFromNow.value = authorDate.value.fromNow();
     authorName.value = args.authorName;
     authorEmail.value = args.authorEmail;
-    // this.numberOfAddedLines(args.additions);
-    // this.numberOfRemovedLines(args.deletions);
+    numberOfAddedLines.value = args.additions;
+    numberOfRemovedLines.value = args.deletions;
     // this.parents(args.parents || []);
     // this.fileLineDiffs(args.fileLineDiffs);
     // this.commitDiff = ko.observable(
@@ -116,8 +125,18 @@ const _setData = (args) => {
     // );
 }
 
+const lastUpdatedAuthorDateFromNow = ref(0);
+const _updateLastAuthorDateFromNow = (deltaT) => {
+  lastUpdatedAuthorDateFromNow.value = lastUpdatedAuthorDateFromNow.value || 0;
+  lastUpdatedAuthorDateFromNow.value += deltaT;
+  if (lastUpdatedAuthorDateFromNow.value > 60 * 1000) {
+    lastUpdatedAuthorDateFromNow.value = 0;
+    authorDateFromNow.value = authorDate.value.fromNow();
+  }
+};
+
 defineExpose({
-    _setData
+    _setData, _updateLastAuthorDateFromNow
 })
 
 </script>
