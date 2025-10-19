@@ -15,7 +15,6 @@
           class="size-15 shrink-0 object-cover rounded-full"
           :src="`/api/avatar?email=${authorEmail}`"
           :alt="`Profile Picture of ${authorName}`"
-          onerror="this.style.display='none';"
         />
         <div>
           <div>
@@ -92,7 +91,7 @@ const authorGravatar = computed(() => {
     return md5(email.trim().toLowerCase());
 });
 
-const props = defineProps(['gitNode', 'sha1', 'pgpVerifiedString']);
+const props = defineProps(['gitNode', 'sha1', 'pgpVerifiedString', 'repoPath', 'server', 'showDiffButtons']);
 const message = ref('');
 const title = ref('');
 const body = ref('');
@@ -100,29 +99,30 @@ const authorDate = ref(null);
 const authorDateFromNow = ref('');
 const numberOfAddedLines = ref(0);
 const numberOfRemovedLines = ref(0);
+const parents = ref([]);
+const fileLineDiffs = ref([]);
+const commitDiff = ref(null);
 
 const _setData = (args) => {
-    const message = args.message.split('\n');
-    message.value = args.message;
-    title.value = message[0];
-    body.value = message.slice(message[1] ? 1 : 2).join('\n');
-    authorDate.value = moment(new Date(args.authorDate));
-    authorDateFromNow.value = authorDate.value.fromNow();
-    authorName.value = args.authorName;
-    authorEmail.value = args.authorEmail;
-    numberOfAddedLines.value = args.additions;
-    numberOfRemovedLines.value = args.deletions;
-    // this.parents(args.parents || []);
-    // this.fileLineDiffs(args.fileLineDiffs);
-    // this.commitDiff = ko.observable(
-    //   components.create('commitDiff', {
-    //     fileLineDiffs: this.fileLineDiffs(),
-    //     sha1: this.sha1,
-    //     repoPath: this.repoPath,
-    //     server: this.server,
-    //     showDiffButtons: this.selected,
-    //   })
-    // );
+  const message = args.message.split('\n');
+  message.value = args.message;
+  title.value = message[0];
+  body.value = message.slice(message[1] ? 1 : 2).join('\n');
+  authorDate.value = moment(new Date(args.authorDate));
+  authorDateFromNow.value = authorDate.value.fromNow();
+  authorName.value = args.authorName;
+  authorEmail.value = args.authorEmail;
+  numberOfAddedLines.value = args.additions;
+  numberOfRemovedLines.value = args.deletions;
+  parents.value = args.parents || [];
+  fileLineDiffs.value = args.fileLineDiffs || [];
+  commitDiff.value = {
+    fileLineDiffs: fileLineDiffs.value,
+    sha1: props.sha1,
+    repoPath: props.repoPath,
+    server: props.server,
+    showDiffButtons: props.showDiffButtons,
+  }
 }
 
 const lastUpdatedAuthorDateFromNow = ref(0);

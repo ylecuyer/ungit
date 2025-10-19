@@ -5,6 +5,7 @@ import { createApp } from 'vue';
 import Commit from '../Commit.vue';
 import Octicon from '../Octicon.vue';
 import CommitDiff from '../CommitDiff.vue';
+import { repo } from '@primer/octicons';
 
 components.register('commit', (args) => new CommitViewModel(args));
 const commitElement = document.createElement('template');
@@ -44,6 +45,9 @@ class CommitViewModel {
       gitNode: this.gitNode,
       sha1: this.gitNode.sha1,
       pgpVerifiedString: this.gitNode.pgpVerifiedString(),
+      repoPath: this.repoPath,
+      server: this.server,
+      showDiffButtons: this.gitNode.selected,
     });
     this.app.component('Octicon', Octicon);
     this.app.component('CommitDiff', CommitDiff);
