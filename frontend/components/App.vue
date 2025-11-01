@@ -20,6 +20,8 @@
 defineOptions({
     name: 'App',
 });
+
+const props = defineProps(['server']);
 </script>
 
 <style>

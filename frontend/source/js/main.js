@@ -104,17 +104,22 @@ import { createApp } from 'vue';
 import App from '../../components/App.vue';
 import Sidebar from '../../components/Sidebar.vue';
 import Header from '../../components/Header.vue';
+import Octicon from '../../components/Octicon.vue';
+import BookmarkButton from '../../components/BookmarkButton.vue';
+import RefreshButton from '../../components/RefreshButton.vue';
 
 function start() {
   server = new Server();
   appContainer = new AppContainerViewModel();
   ungit.server = server;
   let app = createApp(App, {
-    appContainer: appContainer,
     server: server
   });
   app.component('Sidebar', Sidebar);
   app.component('Header', Header);
+  app.component('Octicon', Octicon);
+  app.component('BookmarkButton', BookmarkButton);
+  app.component('RefreshButton', RefreshButton);
   app.mount('#app-app');
   ungit.__app = app;
   programEvents.add(async (event) => {
@@ -155,7 +160,7 @@ function start() {
   };
   window.requestAnimationFrame(updateAnimationFrame);
 
-  ko.applyBindings(appContainer);
+  // TODO remove ko.applyBindings(appContainer);
 
   // routing
   navigation.crossroads.addRoute('/', function () {
