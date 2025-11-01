@@ -102,11 +102,22 @@ AppContainerViewModel.prototype.templateChooser = function (data) {
 
 var app, appContainer, server;
 
+import { createApp } from 'vue';
+import App from '../../components/App.vue';
+import Sidebar from '../../components/Sidebar.vue';
+import Header from '../../components/Header.vue';
+
 function start() {
   server = new Server();
   appContainer = new AppContainerViewModel();
   ungit.server = server;
-  app = components.create('app', { appContainer: appContainer, server: server });
+  let app = createApp(App, {
+    appContainer: appContainer,
+    server: server
+  });
+  app.component('Sidebar', Sidebar);
+  app.component('Header', Header);
+  app.mount('#app-app');
   ungit.__app = app;
   programEvents.add(async (event) => {
     ungit.logger.info(`received event: ${event.event}`);
@@ -125,7 +136,7 @@ function start() {
       windowTitle.update();
     }
 
-    app.onProgramEvent(event);
+    // TODO app.onProgramEvent(event);
   });
   if (ungit.config.authentication) {
     var authenticationScreen = components.create('login', { server: server });
@@ -150,14 +161,14 @@ function start() {
 
   // routing
   navigation.crossroads.addRoute('/', function () {
-    app.content(components.create('home', { app: app }));
+    // TODO app.content(components.create('home', { app: app }));
     windowTitle.path = 'ungit';
     windowTitle.update();
   });
 
   navigation.crossroads.addRoute('/repository{?query}', function (query) {
     programEvents.dispatch({ event: 'navigated-to-path', path: query.path });
-    app.content(components.create('path', { server: server, path: query.path }));
+    // TODO app.content(components.create('path', { server: server, path: query.path }));
     windowTitle.path = query.path;
     windowTitle.update();
   });

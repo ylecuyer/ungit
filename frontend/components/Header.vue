@@ -64,9 +64,3 @@ const submitPath = () => {
     navigation.browseTo(`repository?path=${encodePath(path.value)}`);
 };
 </script>
-
-<style>
-header {
-    padding-left: var(--sidebar-width);
-}
-</style>
