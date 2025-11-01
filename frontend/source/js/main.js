@@ -101,6 +101,8 @@ AppContainerViewModel.prototype.templateChooser = function (data) {
 var app, appContainer, server;
 
 import { createApp } from 'vue';
+import Main from '../../components/Main.vue';
+import Crash from '../../components/Crash.vue';
 import App from '../../components/App.vue';
 import Sidebar from '../../components/Sidebar.vue';
 import Header from '../../components/Header.vue';
@@ -112,9 +114,11 @@ function start() {
   server = new Server();
   appContainer = new AppContainerViewModel();
   ungit.server = server;
-  let app = createApp(App, {
+  let app = createApp(Main, {
     server: server
   });
+  app.component('Crash', Crash);
+  app.component('App', App);
   app.component('Sidebar', Sidebar);
   app.component('Header', Header);
   app.component('Octicon', Octicon);
@@ -122,25 +126,7 @@ function start() {
   app.component('RefreshButton', RefreshButton);
   app.mount('#app-app');
   ungit.__app = app;
-  programEvents.add(async (event) => {
-    ungit.logger.info(`received event: ${event.event}`);
-    if (event.event == 'disconnected' || event.event == 'git-crash-error') {
-      console.error(`ungit crash: ${event.event}`, event.error, event.stacktrace);
-      const err =
-        event.event == 'disconnected' && (await adBlocker.detectAnyAdblocker())
-          ? 'adblocker'
-          : event.event;
-      appContainer.content(components.create('crash', err));
-      windowTitle.crash = true;
-      windowTitle.update();
-    } else if (event.event == 'connected') {
-      appContainer.content(app);
-      windowTitle.crash = false;
-      windowTitle.update();
-    }
 
-    // TODO app.onProgramEvent(event);
-  });
   if (ungit.config.authentication) {
     var authenticationScreen = components.create('login', { server: server });
     appContainer.content(authenticationScreen);
