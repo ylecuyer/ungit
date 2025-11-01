@@ -5,7 +5,6 @@ import '/components/commitdiff/commitdiff.js';
 import '/components/crash/crash.js';
 import '/components/gitErrors/gitErrors.js';
 import '/components/graph/graph.js';
-import '/components/header/header.js';
 import '/components/home/home.js';
 import '/components/imagediff/imagediff.js';
 import '/components/login/login.js';
@@ -17,7 +16,6 @@ import '/components/staging/staging.js';
 import '/components/stash/stash.js';
 import '/components/submodules/submodules.js';
 import '/components/textdiff/textdiff.js';
-import '/components/sidebar/sidebar.js';
 import '/components/gitignore/gitignore.js';
 
 import $ from 'jquery';
