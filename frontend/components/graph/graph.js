@@ -9,6 +9,9 @@ import EdgeViewModel from './edge.js';
 import { ComponentRoot } from '../ComponentRoot.js';
 import graphTemplate from './graph.html?raw';
 import graphGraphicsTemplate from './graph-graphics.html?raw';
+import { createApp } from 'vue';
+import Graph from '../Graph.vue';
+import Octicon from '../Octicon.vue';
 
 const numberOfNodesPerLoad = ungit.config.numberOfNodesPerLoad;
 
@@ -99,6 +102,10 @@ class GraphViewModel extends ComponentRoot {
 
   updateNode(parentElement) {
     ko.renderTemplate('graph', this, {}, parentElement);
+    let app = createApp(Graph, {
+    });
+    app.component('Octicon', Octicon);
+    app.mount('#branches-app');
   }
 
   getNode(sha1, logEntry) {
