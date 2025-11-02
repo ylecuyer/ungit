@@ -112,6 +112,14 @@ import BookmarkButton from '../../components/BookmarkButton.vue';
 import RefreshButton from '../../components/RefreshButton.vue';
 import Path from '../../components/Path.vue';
 import Repository from '../../components/Repository.vue';
+import GitErrors from '../../components/GitErrors.vue';
+import Stash from '../../components/Stash.vue';
+import Staging from '../../components/Staging.vue';
+import StashItem from '../../components/StashItem.vue';
+import Remotes from '../../components/Remotes.vue';
+import Submodules from '../../components/Submodules.vue';
+import Branches from '../../components/Branches.vue';
+import Gitignore from '../../components/Gitignore.vue';
 
 function start() {
   server = new Server();
@@ -138,6 +146,14 @@ function start() {
   app.component('BookmarkButton', BookmarkButton);
   app.component('RefreshButton', RefreshButton);
   app.component('Repository', Repository);
+  app.component('GitErrors', GitErrors);
+  app.component('Stash', Stash);
+  app.component('Staging', Staging);
+  app.component('StashItem', StashItem);
+  app.component('Remotes', Remotes);
+  app.component('Submodules', Submodules);
+  app.component('Branches', Branches);
+  app.component('Gitignore', Gitignore);
   app.use(router);
   app.mount('#app-app');
   ungit.__app = app;

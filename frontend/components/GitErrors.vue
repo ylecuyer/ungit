@@ -1,5 +1,4 @@
 <template>
-  <!-- ko foreach: gitErrors -->
   <div v-for="gitError in gitErrors" class="static my-4 alert border-amber-50 bg-amber-50 text-amber-900 dark:border-amber-950 dark:bg-amber-950 dark:text-amber-100" data-bind="css: { 'alert-danger': !isWarning, 'alert-warning': isWarning }">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

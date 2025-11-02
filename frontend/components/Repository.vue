@@ -1,6 +1,6 @@
 <template>
     <div class="repository-view animated fadeInLeft" data-bind="attr: { style: 'tab-size: ' + ungit.config.tabSize }">
-        <!-- ko component: gitErrors --><!-- /ko -->
+        <GitErrors :repoPath="repoPath" />
 
         <!-- ko if: isSubmodule -->
         <div class="submodule alert alert-warning">
@@ -9,9 +9,8 @@
         </div>
         <!-- /ko -->
 
-        <!-- ko component: stash --><!-- /ko -->
-
-        <!-- ko component: staging --><!-- /ko -->
+        <Stash :repoPath="repoPath" />
+        <Staging :repoPath="repoPath" :graph="null" />
 
         <!-- ko if: staging.conflictText -->
         <h2 class="text-muted">
@@ -26,10 +25,10 @@
             <!-- ko if: refreshButton -->
             <!-- ko component: refreshButton --><!-- /ko -->
             <!-- /ko -->
-            <!-- ko component: remotes --><!-- /ko -->
-            <!-- ko component: submodules --><!-- /ko -->
-            <!-- ko component: branches --><!-- /ko -->
-            <!-- ko component: gitignore --><!-- /ko -->
+            <Remotes :repoPath="repoPath" />
+            <Submodules :repoPath="repoPath" />
+            <!-- <Branches :repoPath="repoPath" :graph="graph" /> --> 
+            <Gitignore :repoPath="repoPath" />
         </div>
 
         <!-- ko component: graph --><!-- /ko -->
@@ -39,9 +38,14 @@
 </template>
 
 <script setup>
+import { graph } from '@primer/octicons';
+import GitErrors from './GitErrors.vue';
+
 defineOptions({
     name: 'Repository',
 });
+
+const props = defineProps(['server', 'repoPath']);
 </script>
 
 <style>

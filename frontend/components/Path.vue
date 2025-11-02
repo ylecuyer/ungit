@@ -57,7 +57,7 @@
         </div>
 
         <div v-if="status == 'inited' || status == 'bare'">
-            <Repository :server="server" :path="repoPath" />
+            <Repository :server="server" :repoPath="repoPath" />
         </div>
     </div>
 </template>
