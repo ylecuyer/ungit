@@ -1,0 +1,61 @@
+<template>
+    <div class="repository-view animated fadeInLeft" data-bind="attr: { style: 'tab-size: ' + ungit.config.tabSize }">
+        <!-- ko component: gitErrors --><!-- /ko -->
+
+        <!-- ko if: isSubmodule -->
+        <div class="submodule alert alert-warning">
+            <h4>This is a submodule</h4>
+            Base repository: <a data-bind="text: parentModulePath, attr: { href: parentModuleLink}"></a>
+        </div>
+        <!-- /ko -->
+
+        <!-- ko component: stash --><!-- /ko -->
+
+        <!-- ko component: staging --><!-- /ko -->
+
+        <!-- ko if: staging.conflictText -->
+        <h2 class="text-muted">
+            <span data-bind="text: staging.conflictText" /> in progress
+            <small>resolve conflicts to continue</small>
+        </h2>
+        <!-- /ko -->
+
+        <!-- ko if: showLog -->
+
+        <div class="repository-actions flex gap-2">
+            <!-- ko if: refreshButton -->
+            <!-- ko component: refreshButton --><!-- /ko -->
+            <!-- /ko -->
+            <!-- ko component: remotes --><!-- /ko -->
+            <!-- ko component: submodules --><!-- /ko -->
+            <!-- ko component: branches --><!-- /ko -->
+            <!-- ko component: gitignore --><!-- /ko -->
+        </div>
+
+        <!-- ko component: graph --><!-- /ko -->
+
+        <!-- /ko -->
+    </div>
+</template>
+
+<script setup>
+defineOptions({
+    name: 'Repository',
+});
+</script>
+
+<style>
+.repository-view {
+  position: relative;
+  height: auto;
+  margin-bottom: 1px;
+  padding-bottom: 1px;
+
+  .repository-actions {
+    position: absolute;
+    margin-top: 20px;
+    right: 0;
+    z-index: 30;
+  }
+}
+</style>

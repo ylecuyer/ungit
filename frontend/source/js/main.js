@@ -111,6 +111,7 @@ import Octicon from '../../components/Octicon.vue';
 import BookmarkButton from '../../components/BookmarkButton.vue';
 import RefreshButton from '../../components/RefreshButton.vue';
 import Path from '../../components/Path.vue';
+import Repository from '../../components/Repository.vue';
 
 function start() {
   server = new Server();
@@ -121,7 +122,7 @@ function start() {
   });
   const routes = [
     { path: '/', component: Home },
-    { path: '/repository', component: Path },
+    { path: '/repository', component: Path, props: route => ({ server: server, repoPath: route.query.path }) }
   ]
   const router = createRouter({
     history: createWebHashHistory(),
@@ -136,6 +137,7 @@ function start() {
   app.component('Octicon', Octicon);
   app.component('BookmarkButton', BookmarkButton);
   app.component('RefreshButton', RefreshButton);
+  app.component('Repository', Repository);
   app.use(router);
   app.mount('#app-app');
   ungit.__app = app;
