@@ -100,6 +100,7 @@ AppContainerViewModel.prototype.templateChooser = function (data) {
 var app, appContainer, server;
 
 import { createApp } from 'vue';
+import { createWebHashHistory, createRouter } from 'vue-router'
 import Main from '../../components/Main.vue';
 import Crash from '../../components/Crash.vue';
 import App from '../../components/App.vue';
@@ -109,6 +110,7 @@ import Header from '../../components/Header.vue';
 import Octicon from '../../components/Octicon.vue';
 import BookmarkButton from '../../components/BookmarkButton.vue';
 import RefreshButton from '../../components/RefreshButton.vue';
+import Path from '../../components/Path.vue';
 
 function start() {
   server = new Server();
@@ -117,7 +119,16 @@ function start() {
   let app = createApp(Main, {
     server: server
   });
+  const routes = [
+    { path: '/', component: Home },
+    { path: '/repository', component: Path },
+  ]
+  const router = createRouter({
+    history: createWebHashHistory(),
+    routes,
+  })
   app.component('Crash', Crash);
+  app.component('Path', Path);
   app.component('App', App);
   app.component('Home', Home);
   app.component('Sidebar', Sidebar);
@@ -125,6 +136,7 @@ function start() {
   app.component('Octicon', Octicon);
   app.component('BookmarkButton', BookmarkButton);
   app.component('RefreshButton', RefreshButton);
+  app.use(router);
   app.mount('#app-app');
   ungit.__app = app;
 

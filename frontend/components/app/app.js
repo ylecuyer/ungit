@@ -14,13 +14,6 @@ document.body.appendChild(appElement);
 
 class AppViewModel {
   constructor(appContainer, server) {
-    this.appContainer = appContainer;
-    this.server = server;
-    this.template = 'app';
-    if (window.location.search.indexOf('noheader=true') < 0) {
-      this.header = components.create('header', { app: this });
-    }
-    this.sidebar = components.create('sidebar');
     this.modal = ko.observable(null);
     this.repoList = ko.observableArray(this.getRepoList()); // visitedRepositories is legacy, remove in the next version
     this.repoList.subscribe((newValue) => {
