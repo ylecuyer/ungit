@@ -1,9 +1,10 @@
 <template>
+  <div>
     <Sidebar />
-
     <Header />
 
     <div class="app">
+      <Home />
 
     <!-- ko if: content -->
     <div class="container-fluid" data-bind="component: content"></div>
@@ -14,6 +15,7 @@
     <!-- ko template: { name: templateChooser, data: modal } -->
     <!-- /ko -->
     <!-- /ko -->
+  </diV>
 </template>
 
 <script setup>
