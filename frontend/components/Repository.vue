@@ -10,7 +10,7 @@
         <!-- /ko -->
 
         <Stash :repoPath="repoPath" />
-        <Staging :repoPath="repoPath" :graph="null" />
+        <!-- <Staging :repoPath="repoPath" :graph="null" /> -->
 
         <!-- ko if: staging.conflictText -->
         <h2 class="text-muted">
@@ -22,9 +22,6 @@
         <!-- ko if: showLog -->
 
         <div class="repository-actions flex gap-2">
-            <!-- ko if: refreshButton -->
-            <!-- ko component: refreshButton --><!-- /ko -->
-            <!-- /ko -->
             <Remotes :repoPath="repoPath" />
             <Submodules :repoPath="repoPath" />
             <!-- <Branches :repoPath="repoPath" :graph="graph" /> --> 
@@ -40,6 +37,7 @@
 <script setup>
 import { graph } from '@primer/octicons';
 import GitErrors from './GitErrors.vue';
+import RefreshButton from './RefreshButton.vue';
 
 defineOptions({
     name: 'Repository',

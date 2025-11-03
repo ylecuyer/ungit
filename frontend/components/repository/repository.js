@@ -39,11 +39,6 @@ class RepositoryViewModel {
     this.parentModuleLink = ko.observable();
     this.isSubmodule = ko.computed(() => this.parentModulePath() && this.parentModuleLink());
     this.refreshSubmoduleStatus();
-    if (window.location.search.includes('noheader=true')) {
-      this.refreshButton = components.create('refreshbutton', { isLarge: false });
-    } else {
-      this.refreshButton = false;
-    }
   }
 
   updateNode(parentElement) {
