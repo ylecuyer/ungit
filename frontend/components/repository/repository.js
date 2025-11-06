@@ -15,26 +15,10 @@ class RepositoryViewModel {
     this.repoPath = path.repoPath;
     this.gitErrors = components.create('gitErrors', { server, repoPath: this.repoPath });
     this.graph = components.create('graph', { server, repoPath: this.repoPath });
-    this.remotes = components.create('remotes', { server, repoPath: this.repoPath });
-    this.submodules = components.create('submodules', { server, repoPath: this.repoPath });
-    this.gitignore = components.create('gitignore', { server, repoPath: this.repoPath });
-    this.stash = this.isBareDir
-      ? {}
-      : components.create('stash', { server, repoPath: this.repoPath });
-    this.staging = this.isBareDir
-      ? {}
-      : components.create('staging', { server, repoPath: this.repoPath, graph: this.graph });
-    this.branches = components.create('branches', {
-      server,
-      graph: this.graph,
-      repoPath: this.repoPath,
-    });
     this.repoPath.subscribe((value) => {
       this.server.watchRepository(value);
     });
     this.server.watchRepository(this.repoPath());
-    this.showLog = this.isBareDir ? ko.observable(true) : true; this.staging.vm?.isStageValid;
-    this.refreshSubmoduleStatus();
   }
 
   updateNode(parentElement) {
