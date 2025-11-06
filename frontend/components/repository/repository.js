@@ -35,9 +35,6 @@ class RepositoryViewModel {
     });
     this.server.watchRepository(this.repoPath());
     this.showLog = this.isBareDir ? ko.observable(true) : true; this.staging.vm?.isStageValid;
-    this.parentModulePath = ko.observable();
-    this.parentModuleLink = ko.observable();
-    this.isSubmodule = ko.computed(() => this.parentModulePath() && this.parentModuleLink());
     this.refreshSubmoduleStatus();
   }
 
@@ -63,30 +60,6 @@ class RepositoryViewModel {
     if (this.graph.updateAnimationFrame) this.graph.updateAnimationFrame(deltaT);
   }
 
-  refreshSubmoduleStatus() {
-    return this.server
-      .getPromise('/baserepopath', { path: this.repoPath() })
-      .then((baseRepoPath) => {
-        if (baseRepoPath.path) {
-          return this.server
-            .getPromise('/submodules', { path: baseRepoPath.path })
-            .then((submodules) => {
-              const baseName = this.repoPath().substring(baseRepoPath.path.length + 1);
-              for (let n = 0; n < submodules.length; n++) {
-                if (submodules[n].path === baseName) {
-                  this.parentModulePath(baseRepoPath.path);
-                  this.parentModuleLink(`/#/repository?path=${encodePath(baseRepoPath.path)}`);
-                  return;
-                }
-              }
-            });
-        }
-      })
-      .catch(() => {
-        this.parentModuleLink(undefined);
-        this.parentModulePath(undefined);
-      });
-  }
 }
 
 export default RepositoryViewModel;

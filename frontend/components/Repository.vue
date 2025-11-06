@@ -2,12 +2,10 @@
     <div class="repository-view animated fadeInLeft" data-bind="attr: { style: 'tab-size: ' + ungit.config.tabSize }">
         <GitErrors :repoPath="repoPath" />
 
-        <!-- ko if: isSubmodule -->
-        <div class="submodule alert alert-warning">
+        <div v-if="isSubmodule" class="submodule alert alert-warning">
             <h4>This is a submodule</h4>
-            Base repository: <a data-bind="text: parentModulePath, attr: { href: parentModuleLink}"></a>
+            Base repository: <a v-text="parentModulePath" :href="parentModuleLink"></a>
         </div>
-        <!-- /ko -->
 
         <Stash :repoPath="repoPath" />
         <!-- <Staging :repoPath="repoPath" :graph="null" /> -->
@@ -35,15 +33,54 @@
 </template>
 
 <script setup>
-import { graph } from '@primer/octicons';
-import GitErrors from './GitErrors.vue';
-import RefreshButton from './RefreshButton.vue';
+import { ref, computed, watchEffect } from 'vue';
+import { encodePath } from '../../backend/source/address-parser.js';
 
 defineOptions({
     name: 'Repository',
 });
 
 const props = defineProps(['server', 'repoPath']);
+
+const parentModulePath = ref(undefined);
+const parentModuleLink = ref(undefined);
+const isSubmodule = computed(() => {
+    return parentModulePath.value && parentModuleLink.value;
+});
+
+const refreshSubmoduleStatus = () => {
+    console.log("Refreshing submodule status for", props.repoPath);
+    return props.server
+        .getPromise('/baserepopath', { path: props.repoPath })
+        .then((baseRepoPath) => {
+            console.log("Base repo path", baseRepoPath);
+            if (baseRepoPath.path) {
+                return props.server
+                    .getPromise('/submodules', { path: baseRepoPath.path })
+                    .then((submodules) => {
+                        console.log("Submodules", submodules);
+                        const baseName = props.repoPath.substring(baseRepoPath.path.length + 1);
+                        for (let n = 0; n < submodules.length; n++) {
+                            console.log("Checking submodule", submodules[n].path, "against", baseName);
+                            if (submodules[n].path === baseName) {
+                                parentModulePath.value = baseRepoPath.path;
+                                parentModuleLink.value = `/#/repository?path=${encodePath(baseRepoPath.path)}`;
+                                return;
+                            }
+                        }
+                    });
+            }
+        })
+        .catch((err) => {
+            console.error("Error refreshing submodule status:", err);
+            parentModuleLink.value = undefined;
+            parentModulePath.value = undefined;
+        });
+}
+
+watchEffect(
+    refreshSubmoduleStatus
+);
 </script>
 
 <style>
