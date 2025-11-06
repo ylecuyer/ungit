@@ -8,27 +8,23 @@
         </div>
 
         <Stash :repoPath="repoPath" />
-        <!-- <Staging :repoPath="repoPath" :graph="null" /> -->
+        <Staging :repoPath="repoPath" :graph="null" ref="stagingRef" />
 
-        <!-- ko if: staging.conflictText -->
-        <h2 class="text-muted">
+        <h2 v-if="stagingRef?.value?.conflictText" class="text-muted">
             <span data-bind="text: staging.conflictText" /> in progress
             <small>resolve conflicts to continue</small>
         </h2>
-        <!-- /ko -->
 
-        <!-- ko if: showLog -->
+        <div v-if="showLog" >
+            <div  class="repository-actions flex gap-2">
+                <Remotes :repoPath="repoPath" />
+                <Submodules :repoPath="repoPath" />
+                <!-- <Branches :repoPath="repoPath" :graph="graph" /> --> 
+                <Gitignore :repoPath="repoPath" />
+            </div>
 
-        <div class="repository-actions flex gap-2">
-            <Remotes :repoPath="repoPath" />
-            <Submodules :repoPath="repoPath" />
-            <!-- <Branches :repoPath="repoPath" :graph="graph" /> --> 
-            <Gitignore :repoPath="repoPath" />
+            <!-- ko component: graph --><!-- /ko -->
         </div>
-
-        <!-- ko component: graph --><!-- /ko -->
-
-        <!-- /ko -->
     </div>
 </template>
 
@@ -40,7 +36,11 @@ defineOptions({
     name: 'Repository',
 });
 
-const props = defineProps(['server', 'repoPath']);
+const props = defineProps(['server', 'repoPath', 'status']);
+
+const isBareDir = computed(() => {
+    return props.status === 'bare';
+});
 
 const parentModulePath = ref(undefined);
 const parentModuleLink = ref(undefined);
@@ -81,6 +81,12 @@ const refreshSubmoduleStatus = () => {
 watchEffect(
     refreshSubmoduleStatus
 );
+
+const stagingRef = ref(null)
+
+const showLog = computed(() => {
+    return isBareDir.value ? true : stagingRef.value?.isStageValid;
+});
 </script>
 
 <style>

@@ -12,7 +12,6 @@ document.body.appendChild(repositoryElement);
 class RepositoryViewModel {
   constructor(server, path) {
     this.server = server;
-    this.isBareDir = path.status() === 'bare';
     this.repoPath = path.repoPath;
     this.gitErrors = components.create('gitErrors', { server, repoPath: this.repoPath });
     this.graph = components.create('graph', { server, repoPath: this.repoPath });
