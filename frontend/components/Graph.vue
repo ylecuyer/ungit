@@ -1,6 +1,6 @@
 <template>
     <div class="graph" data-bind="scrolledToEnd: scrolledToEnd, click: handleBubbledClick">
-    <!-- ko template: { name: 'graphGraphics' } --><!-- /ko -->
+    <GraphGraphics />
 
     <div class="nodes" data-bind="foreach: nodes">
         <div
@@ -133,11 +133,152 @@
 </template>
 
 <script setup>
-
-import { ref, computed } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
+import _ from 'lodash';
 
 defineOptions({
     name: 'Graph',
 });
 
+const props = defineProps(['server', 'repoPath']);
+
+const currentRemote = ref(null);
+const nodes = ref([]);
+const edges = ref([]);
+const refs = ref([]);
+const numberOfNodesPerLoad = ungit.config.numberOfNodesPerLoad;
+const limit = ref(numberOfNodesPerLoad);
+const skip = ref(0);
+
+const checkedOutBranch = ref(null);
+const checkedOutRef = computed(() => {
+      return checkedOutBranch.value ? getRef(`refs/heads/${checkedOutBranch.value}`) : null;
+});
+const commitNodeColor = computed(() => {
+      return HEAD.value ? HEAD.value.color() : '#4A4A4A';
+});
+const commitNodeEdge = computed(() => {
+      if (!HEAD.value || !HEAD.value.cx() || !HEAD.value.cy()) return;
+      return `M 610 68 L ${HEAD.value.cx()} ${HEAD.value.cy()}`;
+});
+
+const currentActionContext = ref(null);
+const scrolledToEnd = _.debounce(
+    () => {
+        limit.value = numberOfNodesPerLoad + limit.value;
+        this.loadNodesFromApi();
+    },
+    500,
+    true
+);
+
+const loadAhead = _.debounce(
+    () => {
+        if (skip.value <= 0) return;
+        skip.value = Math.max(skip.value - numberOfNodesPerLoad, 0);
+        loadNodesFromApi();
+    },
+    500,
+    true
+);
+
+const commitOpacity = ref(1.0);
+
+const hoverGraphActionGraphic = ref(null);
+
+const hoverGraphAction = ref(null);
+
+const graphWidth = ref(null);
+const graphHeight = ref(800);
+
+const defaultDebounceOption = {
+    maxWait: 1500,
+    leading: false,
+    trailing: true
+};
+
+var apiCache = undefined;
+
+const isSamePayload = (value) => {
+    const jsonString = JSON.stringify(value);
+
+    if (apiCache === jsonString) {
+        ungit.logger.debug(`ignoring redraw for same branches payload.`);
+        return true;
+    }
+    ungit.logger.debug(`redrawing branches payload.  \n${jsonString}`);
+
+    apiCache = jsonString;
+    return false;
+}
+
+let _isLoadNodesFromApiRunning = false;
+const _loadNodesFromApi = async () => {
+    _isLoadNodesFromApiRunning = true;
+    ungit.logger.debug('graph.loadNodesFromApi() triggered');
+    const nodeSize = this.nodes().length;
+    const edges = [];
+
+    try {
+        const log = await props.server.getPromise('/gitlog', {
+            path: props.repoPath(),
+            limit: limit.value,
+            skip: skip.value,
+        });
+        if (isSamePayload(log)) {
+            return;
+        }
+        const nodes = this.computeNode(
+            (log.nodes || []).map((logEntry) => {
+                return this.getNode(logEntry.sha1, logEntry); // convert to node object
+            })
+        );
+
+        // create edges
+        nodes.forEach((node) => {
+            node.parents().forEach((parentSha1) => {
+                edges.push(this.getEdge(node.sha1, parentSha1));
+            });
+            node.render();
+        });
+
+        this.edges(edges);
+        this.nodes(nodes);
+        if (nodes.length > 0) {
+            this.graphHeight(nodes[nodes.length - 1].cy() + 80);
+        }
+        this.graphWidth(1000 + this.heighstBranchOrder * 90);
+    } catch (e) {
+        props.server.unhandledRejection(e);
+    } finally {
+        if (window.innerHeight - this.graphHeight() > 0 && nodeSize != this.nodes().length) {
+            this.scrolledToEnd();
+        }
+        _isLoadNodesFromApiRunning = false;
+        ungit.logger.debug('graph.loadNodesFromApi() finished');
+    }
+}
+
+const loadNodesFromApi = _.debounce(_loadNodesFromApi, 250, defaultDebounceOption);
+
+
+  const _updateBranches = async () => {
+    const checkout = await props.server.getPromise('/checkout', { path: props.repoPath });
+
+    try {
+      ungit.logger.debug('setting checkedOutBranch', checkout);
+      checkedOutBranch.value  = checkout;
+    } catch (err) {
+      if (err.errorCode != 'not-a-repository') {
+        props.server.unhandledRejection(err);
+      } else {
+        ungit.logger.warn('updateBranches failed', err);
+      }
+    }
+  }
+
+
+const updateBranches = _.debounce(_updateBranches, 250, defaultDebounceOption);
+//watchEffect(loadNodesFromApi);
+watchEffect(updateBranches);
 </script>

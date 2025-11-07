@@ -8,7 +8,6 @@ import GitRefViewModel from './git-ref.js';
 import EdgeViewModel from './edge.js';
 import { ComponentRoot } from '../ComponentRoot.js';
 import graphTemplate from './graph.html?raw';
-import graphGraphicsTemplate from './graph-graphics.html?raw';
 import { createApp } from 'vue';
 import Graph from '../Graph.vue';
 import Octicon from '../Octicon.vue';
@@ -20,59 +19,14 @@ const graphElement = document.createElement('template');
 graphElement.id = 'graph';
 graphElement.innerHTML = graphTemplate;
 document.body.appendChild(graphElement);
-const graphGraphicsElement = document.createElement('template');
-graphGraphicsElement.id = 'graphGraphics';
-graphGraphicsElement.innerHTML = graphGraphicsTemplate;
-document.body.appendChild(graphGraphicsElement);
 
 class GraphViewModel extends ComponentRoot {
   constructor(server, repoPath) {
     super();
-    this._isLoadNodesFromApiRunning = false;
-    this.updateBranches = _.debounce(this._updateBranches, 250, this.defaultDebounceOption);
-    this.loadNodesFromApi = _.debounce(this._loadNodesFromApi, 250, this.defaultDebounceOption);
     this._markIdeologicalStamp = 0;
-    this.repoPath = repoPath;
-    this.limit = ko.observable(numberOfNodesPerLoad);
-    this.skip = ko.observable(0);
-    this.server = server;
-    this.currentRemote = ko.observable();
-    this.nodes = ko.observableArray();
-    this.edges = ko.observableArray();
-    this.refs = ko.observableArray();
     this.nodesById = {};
     this.edgesById = {};
     this.refsByRefName = {};
-    this.checkedOutBranch = ko.observable();
-    this.checkedOutRef = ko.computed(() =>
-      this.checkedOutBranch() ? this.getRef(`refs/heads/${this.checkedOutBranch()}`) : null
-    );
-    this.HEADref = ko.observable();
-    this.HEAD = ko.computed(() => (this.HEADref() ? this.HEADref().node() : undefined));
-    this.commitNodeColor = ko.computed(() => (this.HEAD() ? this.HEAD().color() : '#4A4A4A'));
-    this.commitNodeEdge = ko.computed(() => {
-      if (!this.HEAD() || !this.HEAD().cx() || !this.HEAD().cy()) return;
-      return `M 610 68 L ${this.HEAD().cx()} ${this.HEAD().cy()}`;
-    });
-    this.currentActionContext = ko.observable();
-    this.scrolledToEnd = _.debounce(
-      () => {
-        this.limit(numberOfNodesPerLoad + this.limit());
-        this.loadNodesFromApi();
-      },
-      500,
-      true
-    );
-    this.loadAhead = _.debounce(
-      () => {
-        if (this.skip() <= 0) return;
-        this.skip(Math.max(this.skip() - numberOfNodesPerLoad, 0));
-        this.loadNodesFromApi();
-      },
-      500,
-      true
-    );
-    this.commitOpacity = ko.observable(1.0);
     this.heighstBranchOrder = 0;
     this.hoverGraphActionGraphic = ko.observable();
     this.hoverGraphActionGraphic.subscribe(
@@ -94,8 +48,6 @@ class GraphViewModel extends ComponentRoot {
 
     this.loadNodesFromApi();
     this.updateBranches();
-    this.graphWidth = ko.observable();
-    this.graphHeight = ko.observable(800);
     this.searchIcon = octicons.search.toSVG({ height: 18 });
     this.plusIcon = octicons.plus.toSVG({ height: 18 });
   }
@@ -314,20 +266,6 @@ class GraphViewModel extends ComponentRoot {
     });
   }
 
-  async _updateBranches() {
-    const checkout = await this.server.getPromise('/checkout', { path: this.repoPath() });
-
-    try {
-      ungit.logger.debug('setting checkedOutBranch', checkout);
-      this.checkedOutBranch(checkout);
-    } catch (err) {
-      if (err.errorCode != 'not-a-repository') {
-        this.server.unhandledRejection(err);
-      } else {
-        ungit.logger.warn('updateBranches failed', err);
-      }
-    }
-  }
 
   setRemoteTags(remoteTags) {
     const version = Date.now();

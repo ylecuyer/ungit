@@ -8,7 +8,7 @@
         </div>
 
         <Stash :repoPath="repoPath" />
-        <Staging :repoPath="repoPath" :graph="null" ref="stagingRef" />
+        <Staging :repoPath="repoPath" :graph="graphRef" ref="stagingRef" />
 
         <h2 v-if="stagingRef?.value?.conflictText" class="text-muted">
             <span data-bind="text: staging.conflictText" /> in progress
@@ -19,11 +19,11 @@
             <div  class="repository-actions flex gap-2">
                 <Remotes :repoPath="repoPath" />
                 <Submodules :repoPath="repoPath" />
-                <Branches :repoPath="repoPath" :graph="graph" />
+                <Branches :repoPath="repoPath" :graph="graphRef" />
                 <Gitignore :repoPath="repoPath" />
             </div>
 
-            <!-- ko component: graph --><!-- /ko -->
+            <Graph :server="server" :repoPath="repoPath" ref="graphRef" />
         </div>
     </div>
 </template>

@@ -120,6 +120,8 @@ import Remotes from '../../components/Remotes.vue';
 import Submodules from '../../components/Submodules.vue';
 import Branches from '../../components/Branches.vue';
 import Gitignore from '../../components/Gitignore.vue';
+import Graph from '../../components/Graph.vue';
+import GraphGraphics from '../../components/GraphGraphics.vue';
 
 function start() {
   server = new Server();
@@ -154,6 +156,8 @@ function start() {
   app.component('Submodules', Submodules);
   app.component('Branches', Branches);
   app.component('Gitignore', Gitignore);
+  app.component('Graph', Graph);
+  app.component('GraphGraphics', GraphGraphics);
   app.use(router);
   app.mount('#app-app');
   ungit.__app = app;
