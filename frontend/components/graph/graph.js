@@ -23,11 +23,6 @@ document.body.appendChild(graphElement);
 class GraphViewModel extends ComponentRoot {
   constructor(server, repoPath) {
     super();
-    this._markIdeologicalStamp = 0;
-    this.nodesById = {};
-    this.edgesById = {};
-    this.refsByRefName = {};
-    this.heighstBranchOrder = 0;
     this.hoverGraphActionGraphic = ko.observable();
     this.hoverGraphActionGraphic.subscribe(
       (value) => {
@@ -60,12 +55,6 @@ class GraphViewModel extends ComponentRoot {
     app.mount('#branches-app');
   }
 
-  getNode(sha1, logEntry) {
-    let nodeViewModel = this.nodesById[sha1];
-    if (!nodeViewModel) nodeViewModel = this.nodesById[sha1] = new GitNodeViewModel(this, sha1);
-    if (logEntry) nodeViewModel.setData(logEntry);
-    return nodeViewModel;
-  }
 
   getRef(ref, constructIfUnavailable) {
     if (constructIfUnavailable === undefined) constructIfUnavailable = true;
@@ -126,95 +115,9 @@ class GraphViewModel extends ComponentRoot {
     }
   }
 
-  traverseNodeLeftParents(node, callback) {
-    callback(node);
-    const parent = this.nodesById[node.parents()[0]];
-    if (parent) {
-      this.traverseNodeLeftParents(parent, callback);
-    }
-  }
 
-  computeNode(nodes) {
-    this.markNodesIdeologicalBranches(this.refs());
 
-    const updateTimeStamp = moment().valueOf();
-    if (this.HEAD()) {
-      this.traverseNodeLeftParents(this.HEAD(), (node) => {
-        node.ancestorOfHEADTimeStamp = updateTimeStamp;
-      });
-    }
 
-    // Filter out nodes which doesn't have a branch (staging and orphaned nodes)
-    nodes = nodes.filter(
-      (node) =>
-        (node.ideologicalBranch() && !node.ideologicalBranch().isStash) ||
-        node.ancestorOfHEADTimeStamp == updateTimeStamp
-    );
-
-    let branchSlotCounter = this.HEAD() ? 1 : 0;
-
-    // Then iterate from the bottom to fix the orders of the branches
-    for (let i = nodes.length - 1; i >= 0; i--) {
-      const node = nodes[i];
-      if (node.ancestorOfHEADTimeStamp == updateTimeStamp) continue;
-      const ideologicalBranch = node.ideologicalBranch();
-
-      // First occurrence of the branch, find an empty slot for the branch
-      if (ideologicalBranch.lastSlottedTimeStamp != updateTimeStamp) {
-        ideologicalBranch.lastSlottedTimeStamp = updateTimeStamp;
-        ideologicalBranch.branchOrder = branchSlotCounter++;
-      }
-
-      node.branchOrder(ideologicalBranch.branchOrder);
-    }
-
-    this.heighstBranchOrder = branchSlotCounter - 1;
-    let prevNode;
-    nodes.forEach((node) => {
-      node.ancestorOfHEAD(node.ancestorOfHEADTimeStamp == updateTimeStamp);
-      if (node.ancestorOfHEAD()) node.branchOrder(0);
-      node.aboveNode = prevNode;
-      if (prevNode) prevNode.belowNode = node;
-      prevNode = node;
-    });
-
-    return nodes;
-  }
-
-  getEdge(nodeAsha1, nodeBsha1) {
-    const id = `${nodeAsha1}-${nodeBsha1}`;
-    let edge = this.edgesById[id];
-    if (!edge) {
-      edge = this.edgesById[id] = new EdgeViewModel(this, nodeAsha1, nodeBsha1);
-    }
-    return edge;
-  }
-
-  markNodesIdeologicalBranches(refs) {
-    refs = refs.filter((r) => !!r.node());
-    refs = refs.sort((a, b) => {
-      if (a.isLocal && !b.isLocal) return -1;
-      if (b.isLocal && !a.isLocal) return 1;
-      if (a.isBranch && !b.isBranch) return -1;
-      if (b.isBranch && !a.isBranch) return 1;
-      if (a.isHEAD && !b.isHEAD) return 1;
-      if (!a.isHEAD && b.isHEAD) return -1;
-      if (a.isStash && !b.isStash) return 1;
-      if (b.isStash && !a.isStash) return -1;
-      if (a.node() && a.node().date && b.node() && b.node().date)
-        return a.node().date - b.node().date;
-      return a.refName < b.refName ? -1 : 1;
-    });
-    const stamp = this._markIdeologicalStamp++;
-    refs.forEach((ref) => {
-      this.traverseNodeParents(ref.node(), (node) => {
-        if (node.stamp == stamp) return false;
-        node.stamp = stamp;
-        node.ideologicalBranch(ref);
-        return true;
-      });
-    });
-  }
 
   traverseNodeParents(node, callback) {
     if (!callback(node)) return false;

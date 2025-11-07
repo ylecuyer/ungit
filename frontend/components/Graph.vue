@@ -135,12 +135,20 @@
 <script setup>
 import { ref, computed, watchEffect } from 'vue';
 import _ from 'lodash';
+import moment from 'moment';
+import GitNodeViewModel from './graph/git-node.js';
 
 defineOptions({
     name: 'Graph',
 });
 
 const props = defineProps(['server', 'repoPath']);
+
+let nodesById = {};
+let _markIdeologicalStamp = 0;
+let edgesById = {};
+let refsByRefName = {};
+let heighstBranchOrder = 0;
 
 const currentRemote = ref(null);
 const nodes = ref([]);
@@ -191,6 +199,8 @@ const hoverGraphAction = ref(null);
 const graphWidth = ref(null);
 const graphHeight = ref(800);
 
+const HEAD = ref(null);
+
 const defaultDebounceOption = {
     maxWait: 1500,
     leading: false,
@@ -212,47 +222,155 @@ const isSamePayload = (value) => {
     return false;
 }
 
+
+const markNodesIdeologicalBranches = (_refs) => {
+    _refs = _refs.filter((r) => !!r.node());
+    _refs = _refs.sort((a, b) => {
+        if (a.isLocal && !b.isLocal) return -1;
+        if (b.isLocal && !a.isLocal) return 1;
+        if (a.isBranch && !b.isBranch) return -1;
+        if (b.isBranch && !a.isBranch) return 1;
+        if (a.isHEAD && !b.isHEAD) return 1;
+        if (!a.isHEAD && b.isHEAD) return -1;
+        if (a.isStash && !b.isStash) return 1;
+        if (b.isStash && !a.isStash) return -1;
+        if (a.node() && a.node().date && b.node() && b.node().date)
+            return a.node().date - b.node().date;
+        return a.refName < b.refName ? -1 : 1;
+    });
+    const stamp = _markIdeologicalStamp++;
+    _refs.forEach((_ref) => {
+        traverseNodeParents(_ref.node(), (node) => {
+            if (node.stamp == stamp) return false;
+            node.stamp = stamp;
+            node.ideologicalBranch(_ref);
+            return true;
+        });
+    });
+}
+
+const traverseNodeLeftParents = (node, callback) => {
+    callback(node);
+    const parent = nodesById[node.parents()[0]];
+    if (parent) {
+        traverseNodeLeftParents(parent, callback);
+    }
+}
+
+const computeNode = (nodes) => {
+    markNodesIdeologicalBranches(refs.value);
+
+    const updateTimeStamp = moment().valueOf();
+    if (HEAD.value) {
+        traverseNodeLeftParents(HEAD.value, (node) => {
+            node.ancestorOfHEADTimeStamp = updateTimeStamp;
+        });
+    }
+
+    // Filter out nodes which doesn't have a branch (staging and orphaned nodes)
+    /* TODO
+    nodes = nodes.filter(
+        (node) => {
+            (node.ideologicalBranch() && !node.ideologicalBranch().isStash) ||
+            node.ancestorOfHEADTimeStamp == updateTimeStamp
+        }
+    );
+    */
+
+    let branchSlotCounter = HEAD.value ? 1 : 0;
+
+    // Then iterate from the bottom to fix the orders of the branches
+    for (let i = nodes.length - 1; i >= 0; i--) {
+        const node = nodes[i];
+        if (node.ancestorOfHEADTimeStamp == updateTimeStamp) continue;
+        /* TODO
+        const ideologicalBranch = node.ideologicalBranch();
+
+        // First occurrence of the branch, find an empty slot for the branch
+        if (ideologicalBranch.lastSlottedTimeStamp != updateTimeStamp) {
+            ideologicalBranch.lastSlottedTimeStamp = updateTimeStamp;
+            ideologicalBranch.branchOrder = branchSlotCounter++;
+        }
+
+        node.branchOrder(ideologicalBranch.branchOrder);
+        */
+    }
+
+    /* TODO
+    heighstBranchOrder.value = branchSlotCounter - 1;
+    let prevNode;
+    nodes.forEach((node) => {
+        node.ancestorOfHEAD(node.ancestorOfHEADTimeStamp == updateTimeStamp);
+        if (node.ancestorOfHEAD()) node.branchOrder(0);
+        node.aboveNode = prevNode;
+        if (prevNode) prevNode.belowNode = node;
+        prevNode = node;
+    });
+    */
+
+    return nodes;
+}
+
+
+const getNode = (sha1, logEntry) => {
+    let nodeViewModel = nodesById[sha1];
+    if (!nodeViewModel) nodeViewModel = nodesById[sha1] = new GitNodeViewModel(this, sha1);
+    if (logEntry) nodeViewModel.setData(logEntry);
+    return nodeViewModel;
+}
+
+const getEdge = (nodeAsha1, nodeBsha1) => {
+    const id = `${nodeAsha1}-${nodeBsha1}`;
+    let edge = edgesById[id];
+    if (!edge) {
+        edge = edgesById[id] = new EdgeViewModel(this, nodeAsha1, nodeBsha1);
+    }
+    return edge;
+}
+
 let _isLoadNodesFromApiRunning = false;
 const _loadNodesFromApi = async () => {
     _isLoadNodesFromApiRunning = true;
     ungit.logger.debug('graph.loadNodesFromApi() triggered');
-    const nodeSize = this.nodes().length;
+    const nodeSize = nodes.value.length;
     const edges = [];
 
     try {
         const log = await props.server.getPromise('/gitlog', {
-            path: props.repoPath(),
+            path: props.repoPath,
             limit: limit.value,
             skip: skip.value,
         });
         if (isSamePayload(log)) {
             return;
         }
-        const nodes = this.computeNode(
+        const _nodes = computeNode(
             (log.nodes || []).map((logEntry) => {
-                return this.getNode(logEntry.sha1, logEntry); // convert to node object
+                return getNode(logEntry.sha1, logEntry); // convert to node object
             })
         );
 
         // create edges
-        nodes.forEach((node) => {
+        _nodes.forEach((node) => {
+            /* TODO
             node.parents().forEach((parentSha1) => {
-                edges.push(this.getEdge(node.sha1, parentSha1));
+                edges.push(getEdge(node.sha1, parentSha1));
             });
             node.render();
+            */
         });
 
-        this.edges(edges);
-        this.nodes(nodes);
-        if (nodes.length > 0) {
-            this.graphHeight(nodes[nodes.length - 1].cy() + 80);
+        edges.value = edges;
+        nodes.value = _nodes;
+        if (nodes.value.length > 0) {
+            // TODO graphHeight.value = nodes.value[nodes.value.length - 1].cy() + 80;
         }
-        this.graphWidth(1000 + this.heighstBranchOrder * 90);
+        // TODO graphWidth.value = 1000 + highestBranchOrder.value * 90;
     } catch (e) {
         props.server.unhandledRejection(e);
     } finally {
-        if (window.innerHeight - this.graphHeight() > 0 && nodeSize != this.nodes().length) {
-            this.scrolledToEnd();
+        if (window.innerHeight - graphHeight.value > 0 && nodeSize != nodes.value.length) {
+            scrolledToEnd();
         }
         _isLoadNodesFromApiRunning = false;
         ungit.logger.debug('graph.loadNodesFromApi() finished');
@@ -279,6 +397,6 @@ const loadNodesFromApi = _.debounce(_loadNodesFromApi, 250, defaultDebounceOptio
 
 
 const updateBranches = _.debounce(_updateBranches, 250, defaultDebounceOption);
-//watchEffect(loadNodesFromApi);
+watchEffect(loadNodesFromApi);
 watchEffect(updateBranches);
 </script>

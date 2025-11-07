@@ -8,9 +8,10 @@ import GraphActions from './git-graph-actions.js';
 const maxBranchesToDisplay = parseInt((ungit.config.numRefsToShow / 5) * 3); // 3/5 of refs to show to branches
 const maxTagsToDisplay = ungit.config.numRefsToShow - maxBranchesToDisplay; // 2/5 of refs to show to tags
 
-class GitNodeViewModel extends Animateable {
+class GitNodeViewModel { // TODO extends Animateable {
   constructor(graph, sha1) {
-    super(graph);
+    // TODO super(graph);
+    return; // TODO
     this.graph = graph;
     this.sha1 = sha1;
     this.isInited = false;
@@ -153,6 +154,7 @@ class GitNodeViewModel extends Animateable {
   }
 
   setData(logEntry) {
+    return; // TODO
     this.title(logEntry.message.split('\n')[0]);
     this.parents(logEntry.parents || []);
     this.commitTime = logEntry.commitDate;
