@@ -137,6 +137,7 @@ import { ref, computed, watchEffect } from 'vue';
 import _ from 'lodash';
 import moment from 'moment';
 import GitNodeViewModel from './graph/git-node.js';
+import GitRefViewModel from './graph/git-ref.js';
 
 defineOptions({
     name: 'Graph',
@@ -257,7 +258,8 @@ const traverseNodeLeftParents = (node, callback) => {
     }
 }
 
-const computeNode = (nodes) => {
+const computeNode = (_nodes) => {
+    debugger
     markNodesIdeologicalBranches(refs.value);
 
     const updateTimeStamp = moment().valueOf();
@@ -268,20 +270,18 @@ const computeNode = (nodes) => {
     }
 
     // Filter out nodes which doesn't have a branch (staging and orphaned nodes)
-    /* TODO
-    nodes = nodes.filter(
+    _nodes = _nodes.filter(
         (node) => {
             (node.ideologicalBranch() && !node.ideologicalBranch().isStash) ||
             node.ancestorOfHEADTimeStamp == updateTimeStamp
         }
     );
-    */
 
     let branchSlotCounter = HEAD.value ? 1 : 0;
 
     // Then iterate from the bottom to fix the orders of the branches
-    for (let i = nodes.length - 1; i >= 0; i--) {
-        const node = nodes[i];
+    for (let i = _nodes.length - 1; i >= 0; i--) {
+        const node = _nodes[i];
         if (node.ancestorOfHEADTimeStamp == updateTimeStamp) continue;
         /* TODO
         const ideologicalBranch = node.ideologicalBranch();
@@ -299,7 +299,7 @@ const computeNode = (nodes) => {
     /* TODO
     heighstBranchOrder.value = branchSlotCounter - 1;
     let prevNode;
-    nodes.forEach((node) => {
+    _nodes.forEach((node) => {
         node.ancestorOfHEAD(node.ancestorOfHEADTimeStamp == updateTimeStamp);
         if (node.ancestorOfHEAD()) node.branchOrder(0);
         node.aboveNode = prevNode;
@@ -308,13 +308,35 @@ const computeNode = (nodes) => {
     });
     */
 
-    return nodes;
+    return _nodes;
 }
 
+const HEADref = ref(null);
+
+const getRef = (ref, constructIfUnavailable) => {
+    if (constructIfUnavailable === undefined) constructIfUnavailable = true;
+    let refViewModel = refsByRefName[ref];
+    if (!refViewModel && constructIfUnavailable) {
+        refViewModel = refsByRefName[ref] = new GitRefViewModel(ref, {
+            currentActionContext: currentActionContext,
+            checkedOutBranch: checkedOutBranch,
+            HEADref: HEADref
+        });
+        refs.value.push(refViewModel);
+        if (refViewModel.name === 'HEAD') {
+            HEADref.value = refViewModel;
+        }
+    }
+    return refViewModel;
+}
 
 const getNode = (sha1, logEntry) => {
     let nodeViewModel = nodesById[sha1];
-    if (!nodeViewModel) nodeViewModel = nodesById[sha1] = new GitNodeViewModel(this, sha1);
+    if (!nodeViewModel) nodeViewModel = nodesById[sha1] = new GitNodeViewModel({
+        currentActionContext: currentActionContext,
+        hoverGraphAction: hoverGraphAction,
+        checkedOutRef: checkedOutRef,
+    }, sha1);
     if (logEntry) nodeViewModel.setData(logEntry);
     return nodeViewModel;
 }
@@ -333,7 +355,7 @@ const _loadNodesFromApi = async () => {
     _isLoadNodesFromApiRunning = true;
     ungit.logger.debug('graph.loadNodesFromApi() triggered');
     const nodeSize = nodes.value.length;
-    const edges = [];
+    const _edges = [];
 
     try {
         const log = await props.server.getPromise('/gitlog', {
@@ -354,13 +376,13 @@ const _loadNodesFromApi = async () => {
         _nodes.forEach((node) => {
             /* TODO
             node.parents().forEach((parentSha1) => {
-                edges.push(getEdge(node.sha1, parentSha1));
+                _edges.push(getEdge(node.sha1, parentSha1));
             });
             node.render();
             */
         });
 
-        edges.value = edges;
+        edges.value = _edges;
         nodes.value = _nodes;
         if (nodes.value.length > 0) {
             // TODO graphHeight.value = nodes.value[nodes.value.length - 1].cy() + 80;

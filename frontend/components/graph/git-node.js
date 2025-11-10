@@ -8,10 +8,9 @@ import GraphActions from './git-graph-actions.js';
 const maxBranchesToDisplay = parseInt((ungit.config.numRefsToShow / 5) * 3); // 3/5 of refs to show to branches
 const maxTagsToDisplay = ungit.config.numRefsToShow - maxBranchesToDisplay; // 2/5 of refs to show to tags
 
-class GitNodeViewModel { // TODO extends Animateable {
+class GitNodeViewModel extends Animateable {
   constructor(graph, sha1) {
-    // TODO super(graph);
-    return; // TODO
+    super(graph);
     this.graph = graph;
     this.sha1 = sha1;
     this.isInited = false;
@@ -81,7 +80,7 @@ class GitNodeViewModel { // TODO extends Animateable {
     this.selected.subscribe(() => {
       programEvents.dispatch({ event: 'graph-render' });
     });
-    this.showNewRefAction = ko.computed(() => !graph.currentActionContext());
+    this.showNewRefAction = ko.computed(() => !graph.currentActionContext.value);
     this.showRefSearch = ko.computed(
       () => this.branches().length + this.tags().length > ungit.config.numRefsToShow
     );
@@ -102,17 +101,17 @@ class GitNodeViewModel { // TODO extends Animateable {
     this.cy = ko.observable();
 
     this.dropareaGraphActions = [
-      new GraphActions.Move(this.graph, this),
-      new GraphActions.Rebase(this.graph, this),
-      new GraphActions.Merge(this.graph, this),
-      new GraphActions.Push(this.graph, this),
-      new GraphActions.Reset(this.graph, this),
-      new GraphActions.Checkout(this.graph, this),
-      new GraphActions.Delete(this.graph, this),
-      new GraphActions.CherryPick(this.graph, this),
-      new GraphActions.Uncommit(this.graph, this),
-      new GraphActions.Revert(this.graph, this),
-      new GraphActions.Squash(this.graph, this),
+      new GraphActions.Move(graph, this),
+      new GraphActions.Rebase(graph, this),
+      new GraphActions.Merge(graph, this),
+      new GraphActions.Push(graph, this),
+      new GraphActions.Reset(graph, this),
+      new GraphActions.Checkout(graph, this),
+      new GraphActions.Delete(graph, this),
+      new GraphActions.CherryPick(graph, this),
+      new GraphActions.Uncommit(graph, this),
+      new GraphActions.Revert(graph, this),
+      new GraphActions.Squash(graph, this),
     ];
   }
 

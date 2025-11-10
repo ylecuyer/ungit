@@ -23,7 +23,6 @@ document.body.appendChild(graphElement);
 class GraphViewModel extends ComponentRoot {
   constructor(server, repoPath) {
     super();
-    this.hoverGraphActionGraphic = ko.observable();
     this.hoverGraphActionGraphic.subscribe(
       (value) => {
         if (value && value.destroy) value.destroy();
@@ -32,7 +31,6 @@ class GraphViewModel extends ComponentRoot {
       'beforeChange'
     );
 
-    this.hoverGraphAction = ko.observable();
     this.hoverGraphAction.subscribe((value) => {
       if (value && value.createHoverGraphic) {
         this.hoverGraphActionGraphic(value.createHoverGraphic());
@@ -56,18 +54,6 @@ class GraphViewModel extends ComponentRoot {
   }
 
 
-  getRef(ref, constructIfUnavailable) {
-    if (constructIfUnavailable === undefined) constructIfUnavailable = true;
-    let refViewModel = this.refsByRefName[ref];
-    if (!refViewModel && constructIfUnavailable) {
-      refViewModel = this.refsByRefName[ref] = new GitRefViewModel(ref, this);
-      this.refs.push(refViewModel);
-      if (refViewModel.name === 'HEAD') {
-        this.HEADref(refViewModel);
-      }
-    }
-    return refViewModel;
-  }
 
   async _loadNodesFromApi() {
     this._isLoadNodesFromApiRunning = true;

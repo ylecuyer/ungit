@@ -11,7 +11,7 @@ class ActionBase {
     this.server = graph.server;
     this.isRunning = ko.observable(false);
     this.isHighlighted = ko.computed(
-      () => !graph.hoverGraphAction() || graph.hoverGraphAction() == this
+      () => !graph.hoverGraphAction.value || graph.hoverGraphAction.value == this
     );
     this.text = text;
     this.style = style;
@@ -27,7 +27,7 @@ class ActionBase {
 
   doPerform() {
     if (this.isRunning()) return;
-    this.graph.hoverGraphAction(null);
+    this.graph.hoverGraphAction.value = null;
     this.isRunning(true);
     return this.perform()
       .catch((e) => this.server.unhandledRejection(e))
@@ -38,20 +38,20 @@ class ActionBase {
 
   dragEnter() {
     if (!this.visible()) return;
-    this.graph.hoverGraphAction(this);
+    this.graph.hoverGraphAction.value = this;
   }
 
   dragLeave() {
     if (!this.visible()) return;
-    this.graph.hoverGraphAction(null);
+    this.graph.hoverGraphAction.value = null;
   }
 
   mouseover() {
-    this.graph.hoverGraphAction(this);
+    this.graph.hoverGraphAction.value = this;
   }
 
   mouseout() {
-    this.graph.hoverGraphAction(null);
+    this.graph.hoverGraphAction.value = null;
   }
 }
 
@@ -62,14 +62,14 @@ class Move extends ActionBase {
     this.visible = ko.computed(() => {
       if (this.isRunning()) return true;
       return (
-        this.graph.currentActionContext() instanceof RefViewModel &&
-        this.graph.currentActionContext().node() != this.node
+        this.graph.currentActionContext.value instanceof RefViewModel &&
+        this.graph.currentActionContext.value.node() != this.node
       );
     });
   }
 
   perform() {
-    return this.graph.currentActionContext().moveTo(this.node.sha1);
+    return this.graph.currentActionContext.value.moveTo(this.node.sha1);
   }
 }
 
@@ -79,8 +79,8 @@ class Reset extends ActionBase {
     this.node = node;
     this.visible = ko.computed(() => {
       if (this.isRunning()) return true;
-      if (!(this.graph.currentActionContext() instanceof RefViewModel)) return false;
-      const context = this.graph.currentActionContext();
+      if (!(this.graph.currentActionContext.value instanceof RefViewModel)) return false;
+      const context = this.graph.currentActionContext.value;
       if (context.node() != this.node) return false;
       const remoteRef = context.getRemoteRef(this.graph.currentRemote());
       return (
@@ -95,7 +95,7 @@ class Reset extends ActionBase {
   }
 
   createHoverGraphic() {
-    const context = this.graph.currentActionContext();
+    const context = this.graph.currentActionContext.value;
     if (!context) return null;
     const remoteRef = context.getRemoteRef(this.graph.currentRemote());
     const nodes = context.node().getPathToCommonAncestor(remoteRef.node()).slice(0, -1);
@@ -103,7 +103,7 @@ class Reset extends ActionBase {
   }
 
   perform() {
-    const context = this.graph.currentActionContext();
+    const context = this.graph.currentActionContext.value;
     const remoteRef = context.getRemoteRef(this.graph.currentRemote());
     return new Promise((resolve, reject) => {
       components.showModal('yesnomodal', {
@@ -135,16 +135,16 @@ class Rebase extends ActionBase {
     this.visible = ko.computed(() => {
       if (this.isRunning()) return true;
       return (
-        this.graph.currentActionContext() instanceof RefViewModel &&
+        this.graph.currentActionContext.value instanceof RefViewModel &&
         (!ungit.config.showRebaseAndMergeOnlyOnRefs || this.node.refs().length > 0) &&
-        this.graph.currentActionContext().current() &&
-        this.graph.currentActionContext().node() != this.node
+        this.graph.currentActionContext.value.current() &&
+        this.graph.currentActionContext.value.node() != this.node
       );
     });
   }
 
   createHoverGraphic() {
-    let onto = this.graph.currentActionContext();
+    let onto = this.graph.currentActionContext.value;
     if (!onto) return;
     if (onto instanceof RefViewModel) onto = onto.node();
     const path = onto.getPathToCommonAncestor(this.node);
@@ -170,17 +170,17 @@ class Merge extends ActionBase {
     this.node = node;
     this.visible = ko.computed(() => {
       if (this.isRunning()) return true;
-      if (!this.graph.checkedOutRef() || !this.graph.checkedOutRef().node()) return false;
+      if (!this.graph.checkedOutRef.value || !this.graph.checkedOutRef.value.node()) return false;
       return (
-        this.graph.currentActionContext() instanceof RefViewModel &&
-        !this.graph.currentActionContext().current() &&
-        this.graph.checkedOutRef().node() == this.node
+        this.graph.currentActionContext.value instanceof RefViewModel &&
+        !this.graph.currentActionContext.value.current() &&
+        this.graph.checkedOutRef.value.node() == this.node
       );
     });
   }
 
   createHoverGraphic() {
-    let node = this.graph.currentActionContext();
+    let node = this.graph.currentActionContext.value;
     if (!node) return null;
     if (node instanceof RefViewModel) node = node.node();
     return new MergeViewModel(this.graph, this.node, node);
@@ -190,7 +190,7 @@ class Merge extends ActionBase {
     return this.server
       .postPromise('/merge', {
         path: this.graph.repoPath(),
-        with: this.graph.currentActionContext().localRefName,
+        with: this.graph.currentActionContext.value.localRefName,
       })
       .catch((err) => {
         if (err.errorCode != 'merge-failed') {
@@ -209,15 +209,15 @@ class Push extends ActionBase {
     this.visible = ko.computed(() => {
       if (this.isRunning()) return true;
       return (
-        this.graph.currentActionContext() instanceof RefViewModel &&
-        this.graph.currentActionContext().node() == this.node &&
-        this.graph.currentActionContext().canBePushed(this.graph.currentRemote())
+        this.graph.currentActionContext.value instanceof RefViewModel &&
+        this.graph.currentActionContext.value.node() == this.node &&
+        this.graph.currentActionContext.value.canBePushed(this.graph.currentRemote())
       );
     });
   }
 
   createHoverGraphic() {
-    const context = this.graph.currentActionContext();
+    const context = this.graph.currentActionContext.value;
     if (!context) return null;
     const remoteRef = context.getRemoteRef(this.graph.currentRemote());
     if (!remoteRef) return null;
@@ -225,7 +225,7 @@ class Push extends ActionBase {
   }
 
   perform() {
-    const ref = this.graph.currentActionContext();
+    const ref = this.graph.currentActionContext.value;
     const remoteRef = ref.getRemoteRef(this.graph.currentRemote());
 
     if (remoteRef) {
@@ -249,17 +249,17 @@ class Checkout extends ActionBase {
     this.node = node;
     this.visible = ko.computed(() => {
       if (this.isRunning()) return true;
-      if (this.graph.currentActionContext() instanceof RefViewModel)
+      if (this.graph.currentActionContext.value instanceof RefViewModel)
         return (
-          this.graph.currentActionContext().node() == this.node &&
-          !this.graph.currentActionContext().current()
+          this.graph.currentActionContext.value.node() == this.node &&
+          !this.graph.currentActionContext.value.current()
         );
-      return ungit.config.allowCheckoutNodes && this.graph.currentActionContext() == this.node;
+      return ungit.config.allowCheckoutNodes && this.graph.currentActionContext.value == this.node;
     });
   }
 
   perform() {
-    return this.graph.currentActionContext().checkout();
+    return this.graph.currentActionContext.value.checkout();
   }
 }
 
@@ -270,15 +270,15 @@ class Delete extends ActionBase {
     this.visible = ko.computed(() => {
       if (this.isRunning()) return true;
       return (
-        this.graph.currentActionContext() instanceof RefViewModel &&
-        this.graph.currentActionContext().node() == this.node &&
-        !this.graph.currentActionContext().current()
+        this.graph.currentActionContext.value instanceof RefViewModel &&
+        this.graph.currentActionContext.value.node() == this.node &&
+        !this.graph.currentActionContext.value.current()
       );
     });
   }
 
   perform() {
-    const context = this.graph.currentActionContext();
+    const context = this.graph.currentActionContext.value;
     let details = `"${context.refName}"`;
     if (context.isRemoteBranch) {
       details = `<code _style="font-size: 100%">REMOTE</code> ${details}`;
@@ -306,7 +306,7 @@ class CherryPick extends ActionBase {
     this.node = node;
     this.visible = ko.computed(() => {
       if (this.isRunning()) return true;
-      const context = this.graph.currentActionContext();
+      const context = this.graph.currentActionContext.value;
       return context === this.node && this.graph.HEAD() && context.sha1 !== this.graph.HEAD().sha1;
     });
   }
@@ -330,7 +330,7 @@ class Uncommit extends ActionBase {
     this.node = node;
     this.visible = ko.computed(() => {
       if (this.isRunning()) return true;
-      return this.graph.currentActionContext() == this.node && this.graph.HEAD() == this.node;
+      return this.graph.currentActionContext.value == this.node && this.graph.HEAD() == this.node;
     });
   }
 
@@ -343,7 +343,7 @@ class Uncommit extends ActionBase {
           targetNode = targetNode.belowNode;
         }
         this.graph.HEADref().node(targetNode ? targetNode : null);
-        this.graph.checkedOutRef().node(targetNode ? targetNode : null);
+        this.graph.checkedOutRef.value.node(targetNode ? targetNode : null);
       });
   }
 }
@@ -354,7 +354,7 @@ class Revert extends ActionBase {
     this.node = node;
     this.visible = ko.computed(() => {
       if (this.isRunning()) return true;
-      return this.graph.currentActionContext() == this.node;
+      return this.graph.currentActionContext.value == this.node;
     });
   }
 
@@ -373,15 +373,15 @@ class Squash extends ActionBase {
     this.visible = ko.computed(() => {
       if (this.isRunning()) return true;
       return (
-        this.graph.currentActionContext() instanceof RefViewModel &&
-        this.graph.currentActionContext().current() &&
-        this.graph.currentActionContext().node() != this.node
+        this.graph.currentActionContext.value instanceof RefViewModel &&
+        this.graph.currentActionContext.value.current() &&
+        this.graph.currentActionContext.value.node() != this.node
       );
     });
   }
 
   createHoverGraphic() {
-    let onto = this.graph.currentActionContext();
+    let onto = this.graph.currentActionContext.value;
     if (!onto) return;
     if (onto instanceof RefViewModel) onto = onto.node();
 
@@ -389,7 +389,7 @@ class Squash extends ActionBase {
   }
 
   perform() {
-    let onto = this.graph.currentActionContext();
+    let onto = this.graph.currentActionContext.value;
     if (!onto) return;
     if (onto instanceof RefViewModel) onto = onto.node();
     // remove last element as it would be a common ancestor.
@@ -416,7 +416,7 @@ class Squash extends ActionBase {
       //                ->     \
       //                        [bc]
       return this.graph
-        .currentActionContext()
+        .currentActionContext.value
         .moveTo(this.node.sha1, true)
         .then(() =>
           this.server.postPromise('/squash', { path: this.graph.repoPath(), target: onto.sha1 })

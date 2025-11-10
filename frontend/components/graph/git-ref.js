@@ -50,7 +50,7 @@ class RefViewModel extends Selectable {
     this.server = this.graph.server;
     this.isDragging = ko.observable(false);
     this.current = ko.computed(
-      () => this.isLocalBranch && this.graph.checkedOutBranch() == this.refName
+      () => this.isLocalBranch && this.graph.checkedOutBranch.value == this.refName
     );
     this.color = this._colorFromHashOfString(this.name);
 
@@ -165,8 +165,8 @@ class RefViewModel extends Selectable {
       .then((res) => {
         if (!res) return;
         const targetNode = this.graph.getNode(target);
-        if (this.graph.checkedOutBranch() == this.refName) {
-          this.graph.HEADref().node(targetNode);
+        if (this.graph.checkedOutBranch.value == this.refName) {
+          this.graph.HEADref.value.node(targetNode);
         }
         this.node(targetNode);
       })
