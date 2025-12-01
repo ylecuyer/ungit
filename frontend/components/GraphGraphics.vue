@@ -69,33 +69,31 @@
         <!-- /ko -->
         <!-- /ko -->
 
-        <!-- ko foreach: edges -->
-        <path
-        data-bind="element: element, event: { mouseover: edgeMouseOver, mouseout: edgeMouseOut }"
-        stroke="#4A4A4A"
-        stroke-width="8"
+        <path v-for="edge in edges"
+            data-bind="element: element, event: { mouseover: edgeMouseOver, mouseout: edgeMouseOut }"
+            :element="edge.element"
+            stroke="#4A4A4A"
+            stroke-width="8"
         />
-        <!-- /ko -->
 
-        <!-- ko foreach: nodes -->
-        <svg data-bind="element: element">
-        <circle
-            data-bind="attr: { r: r, fill: color, 'data-ta-clickable': 'node-clickable-' + $index() }, event: { mouseover: nodeMouseover, mouseout: nodeMouseout }, click: toggleSelected"
-            cx="30"
-            cy="30"
-        />
-        <!-- ko if: isNodeAccented -->
-        <circle
-            data-bind=" attr: { r: r() - 4 }, click: toggleSelected"
-            stroke="#252833"
-            stroke-width="4"
-            fill="transparent"
-            cx="30"
-            cy="30"
-        />
-        <!-- /ko -->
+        <svg v-for="(node, index) in nodes" :element="node.element">
+            <circle
+                data-bind="event: { mouseover: nodeMouseover, mouseout: nodeMouseout }, click: toggleSelected"
+                :r="node.r"
+                :fill="node.color"
+                :data-ta-clickable="'node-clickable-' + index"
+                cx="30"
+                cy="30"
+            />
+            <circle v-if="node.isNodeAccented"
+                data-bind=" attr: { r: r() - 4 }, click: toggleSelected"
+                stroke="#252833"
+                stroke-width="4"
+                fill="transparent"
+                cx="30"
+                cy="30"
+            />
         </svg>
-        <!-- /ko -->
 
         <!-- ko with: hoverGraphActionGraphic -->
         <!-- ko foreach: nodes -->
@@ -118,5 +116,5 @@ defineOptions({
   name: 'GraphGraphics',
 });
 
-const props = defineProps(['graphWidth', 'graphHeight', 'commitNodeEdge', "loadAhead", "skip"]);
+const props = defineProps(['graphWidth', 'graphHeight', 'commitNodeEdge', "loadAhead", "skip", "edges", "nodes"]);
 </script>
