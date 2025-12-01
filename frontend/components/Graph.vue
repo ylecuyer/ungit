@@ -1,6 +1,6 @@
 <template>
     <div class="graph" data-bind="scrolledToEnd: scrolledToEnd, click: handleBubbledClick">
-    <GraphGraphics />
+    <GraphGraphics :width="graphWidth" :height="graphHeight"/>
 
     <div class="nodes" data-bind="foreach: nodes">
         <div
@@ -259,7 +259,6 @@ const traverseNodeLeftParents = (node, callback) => {
 }
 
 const computeNode = (_nodes) => {
-    debugger
     markNodesIdeologicalBranches(refs.value);
 
     const updateTimeStamp = moment().valueOf();
@@ -386,8 +385,10 @@ const _loadNodesFromApi = async () => {
         nodes.value = _nodes;
         if (nodes.value.length > 0) {
             // TODO graphHeight.value = nodes.value[nodes.value.length - 1].cy() + 80;
+            graphHeight.value = 2000;
         }
         // TODO graphWidth.value = 1000 + highestBranchOrder.value * 90;
+        graphWidth.value = 3000;
     } catch (e) {
         props.server.unhandledRejection(e);
     } finally {

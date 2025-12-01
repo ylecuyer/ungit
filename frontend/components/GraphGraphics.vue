@@ -3,7 +3,8 @@
     class="graphLog"
     xmlns="http://www.w3.org/2000/svg"
     version="1.1"
-    data-bind="attr: { width: graphWidth, height: graphHeight }"
+    width="{{ graphWidth }}"
+    height="{{ graphHeight }}"
     >
     <defs>
         <marker
@@ -120,4 +121,6 @@
 defineOptions({
   name: 'GraphGraphics',
 });
+
+const props = defineProps(['graphWidth', 'graphHeight']);
 </script>
