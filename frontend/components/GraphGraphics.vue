@@ -3,8 +3,8 @@
     class="graphLog"
     xmlns="http://www.w3.org/2000/svg"
     version="1.1"
-    width="{{ graphWidth }}"
-    height="{{ graphHeight }}"
+    :width="graphWidth"
+    :height="graphHeight"
     >
     <defs>
         <marker
@@ -33,37 +33,33 @@
         </marker>
     </defs>
     <g>
-        <!-- ko if: commitNodeEdge -->
-        <g
+        <g v-if="commitNodeEdge"
         class="load-ahead-button"
         data-bind="attr: { opacity: commitOpacity, visible: commitNodeEdge}, click: loadAhead"
         >
-        <path
-            data-bind="attr: { d: commitNodeEdge }"
-            stroke="#4A4A4A"
-            stroke-width="8"
-            stroke-dasharray="10, 5"
-        />
-        <circle
-            data-bind="attr: { stroke: commitNodeColor }"
-            cx="610"
-            cy="35"
-            r="30"
-            stroke-dasharray="10, 7"
-            stroke-width="10"
-            fill="transparent"
-        />
-        <!-- ko if: skip() > 0 -->
-        <circle
-            class="loadAhead"
-            data-bind="attr: { fill: commitNodeColor }"
-            cx="610"
-            cy="35"
-            r="15"
-        />
-        <!-- /ko -->
+            <path
+                data-bind="attr: { d: commitNodeEdge }"
+                stroke="#4A4A4A"
+                stroke-width="8"
+                stroke-dasharray="10, 5"
+            />
+            <circle
+                data-bind="attr: { stroke: commitNodeColor }"
+                cx="610"
+                cy="35"
+                r="30"
+                stroke-dasharray="10, 7"
+                stroke-width="10"
+                fill="transparent"
+            />
+            <circle v-if="skip > 0"
+                class="loadAhead"
+                data-bind="attr: { fill: commitNodeColor }"
+                cx="610"
+                cy="35"
+                r="15"
+            />
         </g>
-        <!-- /ko -->
 
         <!-- ko with: hoverGraphActionGraphic -->
         <!-- ko foreach: bgEdges -->
@@ -122,5 +118,5 @@ defineOptions({
   name: 'GraphGraphics',
 });
 
-const props = defineProps(['graphWidth', 'graphHeight']);
+const props = defineProps(['graphWidth', 'graphHeight', 'commitNodeEdge', "loadAhead", "skip"]);
 </script>

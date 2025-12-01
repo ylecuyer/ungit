@@ -122,6 +122,9 @@ import Branches from '../../components/Branches.vue';
 import Gitignore from '../../components/Gitignore.vue';
 import Graph from '../../components/Graph.vue';
 import GraphGraphics from '../../components/GraphGraphics.vue';
+import FileDiff from '../../components/FileDiff.vue';
+import TextDiff from '../../components/TextDiff.vue';
+import ImageDiff from '../../components/ImageDiff.vue';
 
 function start() {
   server = new Server();
@@ -151,6 +154,9 @@ function start() {
   app.component('GitErrors', GitErrors);
   app.component('Stash', Stash);
   app.component('Staging', Staging);
+  app.component('FileDiff', FileDiff);
+  app.component('TextDiff', TextDiff);
+  app.component('ImageDiff', ImageDiff);
   app.component('StashItem', StashItem);
   app.component('Remotes', Remotes);
   app.component('Submodules', Submodules);

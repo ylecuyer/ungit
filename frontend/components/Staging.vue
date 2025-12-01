@@ -270,7 +270,8 @@ const inMerge = ref(false);
 const inCherry = ref(false);
 
 const canStashAll = computed(() => !amend.value);
-const canPush = computed(() => !!props.graph.currentRemote());
+// TODOD const canPush = computed(() => !!props.graph.currentRemote());
+const canPush = computed(() => true);
 
 const toggleSelectAllGlyphClass = computed(() => {
   if (allStageFlag.value) return 'glyphicon-unchecked';

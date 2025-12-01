@@ -1,6 +1,6 @@
 <template>
     <div class="graph" data-bind="scrolledToEnd: scrolledToEnd, click: handleBubbledClick">
-    <GraphGraphics :width="graphWidth" :height="graphHeight"/>
+    <GraphGraphics :graphWidth="graphWidth" :graphHeight="graphHeight" :commitNodeEdge="true" :loadAhead="true" :skip="3"/>
 
     <div class="nodes" data-bind="foreach: nodes">
         <div
