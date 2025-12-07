@@ -1,6 +1,6 @@
 <template>
     <div class="graph" data-bind="scrolledToEnd: scrolledToEnd, click: handleBubbledClick">
-    <GraphGraphics :graphWidth="graphWidth" :graphHeight="graphHeight" :commitNodeEdge="true" :loadAhead="true" :skip="3" :nodes="[]" :edges="[]"/>
+    <GraphGraphics :graphWidth="graphWidth" :graphHeight="graphHeight" :commitNodeEdge="true" :loadAhead="true" :skip="3" :nodes="nodes" :edges="edges"/>
 
     <div class="nodes" data-bind="foreach: nodes">
         <div
@@ -225,6 +225,7 @@ const isSamePayload = (value) => {
 
 
 const markNodesIdeologicalBranches = (_refs) => {
+    debugger
     _refs = _refs.filter((r) => !!r.node());
     _refs = _refs.sort((a, b) => {
         if (a.isLocal && !b.isLocal) return -1;
@@ -259,6 +260,7 @@ const traverseNodeLeftParents = (node, callback) => {
 }
 
 const computeNode = (_nodes) => {
+    debugger
     markNodesIdeologicalBranches(refs.value);
 
     const updateTimeStamp = moment().valueOf();
@@ -330,11 +332,13 @@ const getRef = (ref, constructIfUnavailable) => {
 }
 
 const getNode = (sha1, logEntry) => {
+    debugger
     let nodeViewModel = nodesById[sha1];
     if (!nodeViewModel) nodeViewModel = nodesById[sha1] = new GitNodeViewModel({
         currentActionContext: currentActionContext,
         hoverGraphAction: hoverGraphAction,
         checkedOutRef: checkedOutRef,
+        getRef: getRef,
     }, sha1);
     if (logEntry) nodeViewModel.setData(logEntry);
     return nodeViewModel;
@@ -351,6 +355,7 @@ const getEdge = (nodeAsha1, nodeBsha1) => {
 
 let _isLoadNodesFromApiRunning = false;
 const _loadNodesFromApi = async () => {
+    console.log("_loadNodesFromApi called");
     _isLoadNodesFromApiRunning = true;
     ungit.logger.debug('graph.loadNodesFromApi() triggered');
     const nodeSize = nodes.value.length;
@@ -365,6 +370,7 @@ const _loadNodesFromApi = async () => {
         if (isSamePayload(log)) {
             return;
         }
+        debugger
         const _nodes = computeNode(
             (log.nodes || []).map((logEntry) => {
                 return getNode(logEntry.sha1, logEntry); // convert to node object
@@ -403,23 +409,23 @@ const _loadNodesFromApi = async () => {
 const loadNodesFromApi = _.debounce(_loadNodesFromApi, 250, defaultDebounceOption);
 
 
-  const _updateBranches = async () => {
+const _updateBranches = async () => {
+    console.log("_updateBranches called");
     const checkout = await props.server.getPromise('/checkout', { path: props.repoPath });
-
     try {
-      ungit.logger.debug('setting checkedOutBranch', checkout);
-      checkedOutBranch.value  = checkout;
+        ungit.logger.debug('setting checkedOutBranch', checkout);
+        checkedOutBranch.value  = checkout;
     } catch (err) {
-      if (err.errorCode != 'not-a-repository') {
+        if (err.errorCode != 'not-a-repository') {
         props.server.unhandledRejection(err);
-      } else {
+        } else {
         ungit.logger.warn('updateBranches failed', err);
-      }
+        }
     }
-  }
+}
 
 
 const updateBranches = _.debounce(_updateBranches, 250, defaultDebounceOption);
-watchEffect(loadNodesFromApi);
 watchEffect(updateBranches);
+setTimeout(loadNodesFromApi, 1000);
 </script>

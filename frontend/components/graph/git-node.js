@@ -153,7 +153,6 @@ class GitNodeViewModel extends Animateable {
   }
 
   setData(logEntry) {
-    return; // TODO
     this.title(logEntry.message.split('\n')[0]);
     this.parents(logEntry.parents || []);
     this.commitTime = logEntry.commitDate;
