@@ -147,7 +147,7 @@ const render = () => {
 }
 
 const loadMore = () => {
-    loadCount += loadLimit;
+    loadCount.value += loadLimit.value;
     render();
 }
 
