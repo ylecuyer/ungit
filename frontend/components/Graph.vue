@@ -149,7 +149,7 @@ let nodesById = {};
 let _markIdeologicalStamp = 0;
 let edgesById = {};
 let refsByRefName = {};
-let heighstBranchOrder = 0;
+let heighstBranchOrder = ref(0);
 
 const currentRemote = ref(null);
 const nodes = ref([]);
@@ -223,9 +223,18 @@ const isSamePayload = (value) => {
     return false;
 }
 
+const traverseNodeParents = (node, callback) => {
+    if (!callback(node)) return false;
+    for (let i = 0; i < node.parents().length; i++) {
+        // if parent, travers parent
+        const parent = nodesById[node.parents()[i]];
+        if (parent) {
+            traverseNodeParents(parent, callback);
+        }
+    }
+}
 
 const markNodesIdeologicalBranches = (_refs) => {
-    debugger
     _refs = _refs.filter((r) => !!r.node());
     _refs = _refs.sort((a, b) => {
         if (a.isLocal && !b.isLocal) return -1;
@@ -251,16 +260,7 @@ const markNodesIdeologicalBranches = (_refs) => {
     });
 }
 
-const traverseNodeLeftParents = (node, callback) => {
-    callback(node);
-    const parent = nodesById[node.parents()[0]];
-    if (parent) {
-        traverseNodeLeftParents(parent, callback);
-    }
-}
-
 const computeNode = (_nodes) => {
-    debugger
     markNodesIdeologicalBranches(refs.value);
 
     const updateTimeStamp = moment().valueOf();
@@ -273,8 +273,8 @@ const computeNode = (_nodes) => {
     // Filter out nodes which doesn't have a branch (staging and orphaned nodes)
     _nodes = _nodes.filter(
         (node) => {
-            (node.ideologicalBranch() && !node.ideologicalBranch().isStash) ||
-            node.ancestorOfHEADTimeStamp == updateTimeStamp
+            var res = (node.ideologicalBranch() && !node.ideologicalBranch().isStash) || node.ancestorOfHEADTimeStamp == updateTimeStamp
+            return res;
         }
     );
 
@@ -284,7 +284,6 @@ const computeNode = (_nodes) => {
     for (let i = _nodes.length - 1; i >= 0; i--) {
         const node = _nodes[i];
         if (node.ancestorOfHEADTimeStamp == updateTimeStamp) continue;
-        /* TODO
         const ideologicalBranch = node.ideologicalBranch();
 
         // First occurrence of the branch, find an empty slot for the branch
@@ -294,10 +293,8 @@ const computeNode = (_nodes) => {
         }
 
         node.branchOrder(ideologicalBranch.branchOrder);
-        */
     }
 
-    /* TODO
     heighstBranchOrder.value = branchSlotCounter - 1;
     let prevNode;
     _nodes.forEach((node) => {
@@ -307,7 +304,8 @@ const computeNode = (_nodes) => {
         if (prevNode) prevNode.belowNode = node;
         prevNode = node;
     });
-    */
+
+    console.log("_nodes:", _nodes);
 
     return _nodes;
 }
@@ -332,7 +330,6 @@ const getRef = (ref, constructIfUnavailable) => {
 }
 
 const getNode = (sha1, logEntry) => {
-    debugger
     let nodeViewModel = nodesById[sha1];
     if (!nodeViewModel) nodeViewModel = nodesById[sha1] = new GitNodeViewModel({
         currentActionContext: currentActionContext,
@@ -370,7 +367,6 @@ const _loadNodesFromApi = async () => {
         if (isSamePayload(log)) {
             return;
         }
-        debugger
         const _nodes = computeNode(
             (log.nodes || []).map((logEntry) => {
                 return getNode(logEntry.sha1, logEntry); // convert to node object
@@ -379,12 +375,10 @@ const _loadNodesFromApi = async () => {
 
         // create edges
         _nodes.forEach((node) => {
-            /* TODO
             node.parents().forEach((parentSha1) => {
                 _edges.push(getEdge(node.sha1, parentSha1));
             });
             node.render();
-            */
         });
 
         edges.value = _edges;

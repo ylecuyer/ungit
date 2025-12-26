@@ -79,8 +79,8 @@
         <svg v-for="(node, index) in nodes" :element="node.element">
             <circle
                 data-bind="event: { mouseover: nodeMouseover, mouseout: nodeMouseout }, click: toggleSelected"
-                :r="node.r"
-                :fill="node.color"
+                :r="node.r()"
+                :fill="node.color()"
                 :data-ta-clickable="'node-clickable-' + index"
                 cx="30"
                 cy="30"

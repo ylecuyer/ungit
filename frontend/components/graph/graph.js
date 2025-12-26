@@ -105,16 +105,6 @@ class GraphViewModel extends ComponentRoot {
 
 
 
-  traverseNodeParents(node, callback) {
-    if (!callback(node)) return false;
-    for (let i = 0; i < node.parents().length; i++) {
-      // if parent, travers parent
-      const parent = this.nodesById[node.parents()[i]];
-      if (parent) {
-        this.traverseNodeParents(parent, callback);
-      }
-    }
-  }
 
   handleBubbledClick(elem, event) {
     // If the clicked element is bound to the current action context,

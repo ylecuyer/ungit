@@ -56,7 +56,7 @@ class CommitViewModel {
 
   setData(args) {
     setTimeout(() => {
-      this.vm._setData(args);
+      // this.vm._setData(args);
     }, 500);
   }
 
