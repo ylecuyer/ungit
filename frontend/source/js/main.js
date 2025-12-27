@@ -125,6 +125,8 @@ import GraphGraphics from '../../components/GraphGraphics.vue';
 import FileDiff from '../../components/FileDiff.vue';
 import TextDiff from '../../components/TextDiff.vue';
 import ImageDiff from '../../components/ImageDiff.vue';
+import Node from '../../components/Node.vue';
+import Edge from '../../components/Edge.vue';
 
 function start() {
   server = new Server();
@@ -157,6 +159,8 @@ function start() {
   app.component('FileDiff', FileDiff);
   app.component('TextDiff', TextDiff);
   app.component('ImageDiff', ImageDiff);
+  app.component('Node', Node);
+  app.component('Edge', Edge);
   app.component('StashItem', StashItem);
   app.component('Remotes', Remotes);
   app.component('Submodules', Submodules);

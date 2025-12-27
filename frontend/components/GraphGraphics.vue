@@ -69,12 +69,16 @@
         <!-- /ko -->
         <!-- /ko -->
 
+        <Edge v-for="edge in edges" />
+
         <path v-for="edge in edges"
             data-bind="element: element, event: { mouseover: edgeMouseOver, mouseout: edgeMouseOut }"
             :element="edge.element"
             stroke="#4A4A4A"
             stroke-width="8"
         />
+
+        <Node v-for="node in nodes" />
 
         <svg v-for="(node, index) in nodes" :element="node.element">
             <circle
