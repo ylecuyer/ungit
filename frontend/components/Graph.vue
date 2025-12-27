@@ -13,7 +13,7 @@
             :style="{ left: (node.cx() - 620) + 'px' }"
             v-if="true || node.commitContainerVisible"
         >
-            <Commit :logEntry="node.logEntry" :gitNode="node" :sha1="node.sha1" :pgpVerifiedString="node.pgpVerifiedString" :repoPath="repoPath" :server="server" :showDiffButtons="true"/>
+            <Commit :logEntry="node.logEntry" :gitNode="node" :sha1="node.sha1" :pgpVerifiedString="node.pgpVerifiedString()" :repoPath="repoPath" :server="server" :showDiffButtons="true"/>
         </div>
 
         <div class="rightSideContainer" data-bind="style: { left: cx() + r() - 433 + 'px' }">
