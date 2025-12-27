@@ -2,7 +2,7 @@
     <div class="graph" data-bind="scrolledToEnd: scrolledToEnd, click: handleBubbledClick">
     <GraphGraphics :graphWidth="graphWidth" :graphHeight="graphHeight" 
     :commitNodeEdge="commitNodeEdge" :commitNodeColor="commitNodeColor" :commitOpacity="commitOpacity"
-    :loadAhead="true" :skip="3" :nodes="nodes" :edges="edges" :getNode="getNode"/>
+    :loadAhead="true" :skip="skip" :nodes="nodes" :edges="edges" :getNode="getNode"/>
 
     <div v-for="node in nodes" class="nodes">
         <div
