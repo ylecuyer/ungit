@@ -138,6 +138,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import GitNodeViewModel from './graph/git-node.js';
 import GitRefViewModel from './graph/git-ref.js';
+import EdgeViewModel from './graph/edge.js';
 
 defineOptions({
     name: 'Graph',
@@ -336,6 +337,9 @@ const getNode = (sha1, logEntry) => {
         hoverGraphAction: hoverGraphAction,
         checkedOutRef: checkedOutRef,
         getRef: getRef,
+        isViewable: (node) => {
+            return nodes.value.includes(node);
+        }
     }, sha1);
     if (logEntry) nodeViewModel.setData(logEntry);
     return nodeViewModel;
@@ -345,7 +349,10 @@ const getEdge = (nodeAsha1, nodeBsha1) => {
     const id = `${nodeAsha1}-${nodeBsha1}`;
     let edge = edgesById[id];
     if (!edge) {
-        edge = edgesById[id] = new EdgeViewModel(this, nodeAsha1, nodeBsha1);
+        edge = edgesById[id] = new EdgeViewModel({
+            currentActionContext: currentActionContext,
+            getNode: getNode,
+        }, nodeAsha1, nodeBsha1);
     }
     return edge;
 }

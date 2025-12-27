@@ -323,7 +323,7 @@ class GitNodeViewModel extends Animateable {
   }
 
   isViewable() {
-    return this.graph.nodes().includes(this);
+    return this.graph.isViewable(this);
   }
 }
 
