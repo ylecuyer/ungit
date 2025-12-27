@@ -44,13 +44,12 @@
             >
             </span>
 
-            <!-- ko foreach: dropareaGraphActions -->
-            <span
+            <span v-for="action in node.dropareaGraphActions"
             class="graphAction"
             data-bind="css: cssClasses, visible: visible, attr: { 'data-ta-action': style }, event: { mouseover: mouseover, mouseout: mouseout }"
             >
-            <span data-bind="html: icon"></span>
-            <span data-bind="text: text"></span>
+            <span v-html="action.icon"></span>
+            <span v-text="action.text"></span>
             <div
                 class="dropmask"
                 tabindex="0"
@@ -58,10 +57,8 @@
                 data-bind="dropOver: visible, drop: doPerform, dragEnter: dragEnter, dragLeave: dragLeave, click: doPerform"
             ></div>
             </span>
-            <!-- /ko -->
 
-            <!-- ko if: showNewRefAction -->
-            <span class="ref-icons new-ref" data-bind="css: { editing: branchingFormVisible }">
+            <span v-if="node.showNewRefAction" class="ref-icons new-ref" data-bind="css: { editing: branchingFormVisible }">
             <button
                 class="showBranchingForm"
                 type="button"
@@ -71,8 +68,7 @@
                 title="Create a branch or tag"
                 data-aid="create-branch-or-tag-btn"
             ></button>
-            <!-- ko if: branchingFormVisible -->
-            <form
+            <form v-if="node.branchingFormVisible"
                 class="form-inline"
                 data-bind="hasfocus2: branchingFormVisible, submit: createBranch"
             >
@@ -100,12 +96,9 @@
                 Tag
                 </button>
             </form>
-            <!-- /ko -->
             </span>
-            <!-- /ko -->
 
-            <!-- ko if: showRefSearch -->
-            <span class="ref-icons" data-bind="css: { editing: branchingFormVisible }">
+            <span v-if="node.showRefSearch" class="ref-icons" data-bind="css: { editing: branchingFormVisible }">
             <button
                 class="showSearchForm"
                 type="button"
@@ -123,7 +116,6 @@
                 />
             </div>
             </span>
-            <!-- /ko -->
         </div>
         </div>
     </div>
