@@ -53,8 +53,7 @@
           </div>
         </div>
       </div>
-      <!-- ko if: selected() || nodeIsMousehover() -->
-      <div class="details">
+      <div class="details" v-if="selected || nodeIsMousehover">
         <div
           class="body"
           v-if="title.length > 72"
@@ -69,7 +68,6 @@
           <CommitDiff class="diff-inner" :sha1="sha1" :repoPath="repoPath" :showDiffButtons="true" :commitLineDiffs="commitDiff.fileLineDiffs" />
         </div>
       </div>
-      <!-- /ko -->
     </div>
   </div>
 </div>
@@ -84,6 +82,9 @@ import Octicon from './Octicon.vue';
 defineOptions({
     name: 'Commit',
 });
+
+const selected = ref(false);
+const nodeIsMousehover = ref(false);
 
 const authorEmail = computed(() => {
     return props.logEntry ? props.logEntry.authorEmail : '';
