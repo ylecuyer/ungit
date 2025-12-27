@@ -1,7 +1,8 @@
 <template>
     <div class="graph" data-bind="scrolledToEnd: scrolledToEnd, click: handleBubbledClick">
-    <GraphGraphics :graphWidth="graphWidth" :graphHeight="graphHeight" :commitNodeEdge="commitNodeEdge" :loadAhead="true"
-     :skip="3" :nodes="nodes" :edges="edges" :getNode="getNode"/>
+    <GraphGraphics :graphWidth="graphWidth" :graphHeight="graphHeight" 
+    :commitNodeEdge="commitNodeEdge" :commitNodeColor="commitNodeColor" :commitOpacity="commitOpacity"
+    :loadAhead="true" :skip="3" :nodes="nodes" :edges="edges" :getNode="getNode"/>
 
     <div v-for="node in nodes" class="nodes">
         <div
@@ -156,10 +157,16 @@ const checkedOutRef = computed(() => {
       return checkedOutBranch.value ? getRef(`refs/heads/${checkedOutBranch.value}`) : null;
 });
 const commitNodeColor = computed(() => {
-      return HEAD.value ? HEAD.value.color() : '#4A4A4A';
+    if (HEAD.value) {
+        if (HEAD.value.ideologicalBranch()) {
+            return HEAD.value.ideologicalBranch().color;
+        } else {
+            return '#666';
+        }
+    }
+    return '#4A4A4A';
 });
 const commitNodeEdge = computed(() => {
-    console.log("HEAD:", HEAD.value);
       if (!HEAD.value || !HEAD.value.cx() || !HEAD.value.cy()) return;
       return `M 610 68 L ${HEAD.value.cx()} ${HEAD.value.cy()}`;
 });

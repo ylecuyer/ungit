@@ -95,5 +95,5 @@ defineOptions({
   name: 'GraphGraphics',
 });
 
-const props = defineProps(['graphWidth', 'graphHeight', 'commitNodeEdge', "loadAhead", "skip", "edges", "nodes", "getNode"]);
+const props = defineProps(['graphWidth', 'graphHeight', 'commitNodeEdge', 'commitNodeColor', 'commitOpacity', "loadAhead", "skip", "edges", "nodes", "getNode"]);
 </script>
