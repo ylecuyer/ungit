@@ -128,6 +128,8 @@ import ImageDiff from '../../components/ImageDiff.vue';
 import Node from '../../components/Node.vue';
 import Edge from '../../components/Edge.vue';
 import Commit from '../../components/Commit.vue';
+import CommitDiff from '../../components/CommitDiff.vue';
+import CommitLineDiff from '../../components/CommitLineDiff.vue';
 
 function start() {
   server = new Server();
@@ -170,6 +172,8 @@ function start() {
   app.component('Graph', Graph);
   app.component('GraphGraphics', GraphGraphics);
   app.component('Commit', Commit);
+  app.component('CommitDiff', CommitDiff);
+  app.component('CommitLineDiff', CommitLineDiff);
   app.use(router);
   app.mount('#app-app');
   ungit.__app = app;

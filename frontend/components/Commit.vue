@@ -57,14 +57,16 @@
       <div class="details">
         <div
           class="body"
-          data-bind="visible: title().length > 72, text: '...' + title().substring(72)"
+          v-if="title.length > 72"
+          v-text="title.substring(72)"
         ></div>
-        <div class="body" data-bind="text: body, visible: body"></div>
+        <div class="body" v-if="body" v-text="body"></div>
         <div
           class="diff-wrapper"
           data-bind="visible: showCommitDiff, style: diffStyle, click: stopClickPropagation"
         >
           <div class="diff-inner" data-bind="component: commitDiff"></div>
+          <CommitDiff class="diff-inner" :sha1="sha1" :repoPath="repoPath" :showDiffButtons="true" :commitLineDiffs="commitDiff.fileLineDiffs" />
         </div>
       </div>
       <!-- /ko -->
