@@ -113,6 +113,7 @@ class GitNodeViewModel extends Animateable {
       new GraphActions.Revert(graph, this),
       new GraphActions.Squash(graph, this),
     ];
+    this.logEntry = null;
   }
 
   getGraphAttr() {
@@ -152,6 +153,7 @@ class GitNodeViewModel extends Animateable {
   }
 
   setData(logEntry) {
+    this.logEntry = logEntry;
     this.title(logEntry.message.split('\n')[0]);
     this.parents(logEntry.parents || []);
     this.commitTime = logEntry.commitDate;

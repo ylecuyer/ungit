@@ -83,47 +83,61 @@ defineOptions({
     name: 'Commit',
 });
 
-const authorEmail = ref('');
-const authorName = ref('');
+const authorEmail = computed(() => {
+    return props.logEntry ? props.logEntry.authorEmail : '';
+});
+const authorName = computed(() => {
+    return props.logEntry ? props.logEntry.authorName : '';
+});
 
 const authorGravatar = computed(() => {
     const email = authorEmail.value || '';
     return md5(email.trim().toLowerCase());
 });
 
-const props = defineProps(['gitNode', 'sha1', 'pgpVerifiedString', 'repoPath', 'server', 'showDiffButtons']);
-const message = ref('');
-const title = ref('');
-const body = ref('');
-const authorDate = ref(null);
-const authorDateFromNow = ref('');
-const numberOfAddedLines = ref(0);
-const numberOfRemovedLines = ref(0);
-const parents = ref([]);
-const fileLineDiffs = ref([]);
-const commitDiff = ref(null);
+const props = defineProps(['gitNode', 'sha1', 'pgpVerifiedString', 'repoPath', 'server', 'showDiffButtons', 'logEntry']);
 
-const _setData = (args) => {
-  const message = args.message.split('\n');
-  message.value = args.message;
-  title.value = message[0];
-  body.value = message.slice(message[1] ? 1 : 2).join('\n');
-  authorDate.value = moment(new Date(args.authorDate));
-  authorDateFromNow.value = authorDate.value.fromNow();
-  authorName.value = args.authorName;
-  authorEmail.value = args.authorEmail;
-  numberOfAddedLines.value = args.additions;
-  numberOfRemovedLines.value = args.deletions;
-  parents.value = args.parents || [];
-  fileLineDiffs.value = args.fileLineDiffs || [];
-  commitDiff.value = {
+const title = computed(() => {
+  return props.logEntry ? props.logEntry.message.split('\n')[0] : '';
+});
+
+const body = computed(() => {
+  if (!props.logEntry) return '';
+  const message = props.logEntry.message.split('\n');
+  return message.slice(message[1] ? 1 : 2).join('\n');
+});
+
+const authorDate = computed(() => {
+  return props.logEntry ? moment(new Date(props.logEntry.authorDate)) : moment();
+});
+const authorDateFromNow = computed(() => {
+  return authorDate.value.fromNow();
+});
+
+const numberOfAddedLines = computed(() => {
+  return props.logEntry ? props.logEntry.additions : 0;
+});
+const numberOfRemovedLines = computed(() => {
+  return props.logEntry ? props.logEntry.deletions : 0;
+});
+
+const parents = computed(() => {
+  return props.logEntry ? props.logEntry.parents || [] : [];
+});
+
+const fileLineDiffs = computed(() => {
+  return props.logEntry ? props.logEntry.fileLineDiffs || [] : [];
+});
+
+const commitDiff = computed(() => {
+  return {
     fileLineDiffs: fileLineDiffs.value,
     sha1: props.sha1,
     repoPath: props.repoPath,
     server: props.server,
     showDiffButtons: props.showDiffButtons,
   }
-}
+});
 
 const lastUpdatedAuthorDateFromNow = ref(0);
 const _updateLastAuthorDateFromNow = (deltaT) => {
@@ -136,7 +150,7 @@ const _updateLastAuthorDateFromNow = (deltaT) => {
 };
 
 defineExpose({
-    _setData, _updateLastAuthorDateFromNow
+  _updateLastAuthorDateFromNow
 })
 
 </script>

@@ -11,10 +11,9 @@
         <div
             class="commit-container animation"
             :style="{ left: (node.cx() - 620) + 'px' }"
-            v-if="node.commitContainerVisible"
+            v-if="true || node.commitContainerVisible"
         >
-            <!-- ko component: commitComponent -->
-            <!-- /ko -->
+            <Commit :logEntry="node.logEntry" :gitNode="node" :sha1="node.sha1" :pgpVerifiedString="node.pgpVerifiedString" :repoPath="repoPath" :server="server" :showDiffButtons="true"/>
         </div>
 
         <div class="rightSideContainer" data-bind="style: { left: cx() + r() - 433 + 'px' }">

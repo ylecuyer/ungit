@@ -127,6 +127,7 @@ import TextDiff from '../../components/TextDiff.vue';
 import ImageDiff from '../../components/ImageDiff.vue';
 import Node from '../../components/Node.vue';
 import Edge from '../../components/Edge.vue';
+import Commit from '../../components/Commit.vue';
 
 function start() {
   server = new Server();
@@ -168,6 +169,7 @@ function start() {
   app.component('Gitignore', Gitignore);
   app.component('Graph', Graph);
   app.component('GraphGraphics', GraphGraphics);
+  app.component('Commit', Commit);
   app.use(router);
   app.mount('#app-app');
   ungit.__app = app;
