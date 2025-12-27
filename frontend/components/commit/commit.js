@@ -54,12 +54,6 @@ class CommitViewModel {
     this.vm = this.app.mount("#commit-app-" + this.sha1);
   }
 
-  setData(args) {
-    setTimeout(() => {
-      // this.vm._setData(args);
-    }, 500);
-  }
-
   updateLastAuthorDateFromNow(deltaT) {
     if (this.vm) {
       this.vm._updateLastAuthorDateFromNow(deltaT);
