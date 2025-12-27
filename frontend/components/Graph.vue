@@ -16,36 +16,33 @@
             <Commit :logEntry="node.logEntry" :gitNode="node" :sha1="node.sha1" :pgpVerifiedString="node.pgpVerifiedString()" :repoPath="repoPath" :server="server" :showDiffButtons="true"/>
         </div>
 
-        <div class="rightSideContainer" data-bind="style: { left: cx() + r() - 433 + 'px' }">
-            <!-- ko foreach: branchesToDisplay -->
-            <span
+        <div class="rightSideContainer" :style="{ left: (node.cx() + node.r() - 433) + 'px' }"
+        >
+            <span v-for="branch in node.branchesToDisplay()"
             class="ref branch"
             draggable="true"
             tabIndex="-1"
             data-aid="branch"
-            data-bind="css: { current: current, remote: isRemoteBranch, dragging: isDragging, focused: selected },
-                html: displayHtml(true),
-                click: selected,
+            data-bind="click: selected,
                 event: { dblclick: checkout },
                 dragStart: dragStart, dragEnd: dragEnd, attr: { 'data-ta-name': localRefName, 'data-ta-local': isLocal }"
+            v-html="branch.displayHtml(true)"
+            :class="{ current: current, remote: isRemoteBranch, dragging: isDragging, focused: selected }"
             >
             </span>
-            <!-- /ko -->
 
-            <!-- ko foreach: tagsToDisplay -->
-            <span
+            <span v-for="tag in node.tagsToDisplay()"
             class="ref tag"
             draggable="true"
             tabIndex="0"
             data-aid="tag"
-            data-bind="css: { current: current, remote: isRemoteTag, dragging: isDragging, focused: selected },
-                html: displayHtml(true),
-                click: selected,
+            data-bind="click: selected,
                 event: { dblclick: checkout },
                 dragStart: dragStart, dragEnd: dragEnd, attr: { 'data-ta-name': localRefName }"
+                v-html="tag.displayHtml(true)"
+                :class="{ current: current, remote: isRemoteTag, dragging: isDragging, focused: selected }"
             >
             </span>
-            <!-- /ko -->
 
             <!-- ko foreach: dropareaGraphActions -->
             <span

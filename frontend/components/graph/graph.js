@@ -53,8 +53,6 @@ class GraphViewModel extends ComponentRoot {
     app.mount('#branches-app');
   }
 
-
-
   async _loadNodesFromApi() {
     this._isLoadNodesFromApiRunning = true;
     ungit.logger.debug('graph.loadNodesFromApi() triggered');
