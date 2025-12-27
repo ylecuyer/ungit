@@ -69,8 +69,7 @@
         <!-- /ko -->
         <!-- /ko -->
 
-        <Edge v-for="edge in edges" />
-
+        <Edge v-for="edge in edges" :nodeAsha1="edge.nodeAsha1" :nodeBsha1="edge.nodeBsha1" :getNode="getNode" />
 
         <Node v-for="node in nodes" :r="node.r()" :color="node.ideologicalBranch() ? node.ideologicalBranch().color : '#666'" :isNodeAccented="node.isNodeAccented()" :cx="node.cx()" :cy="node.cy()" :key="node.sha1" />
 
@@ -95,5 +94,5 @@ defineOptions({
   name: 'GraphGraphics',
 });
 
-const props = defineProps(['graphWidth', 'graphHeight', 'commitNodeEdge', "loadAhead", "skip", "edges", "nodes"]);
+const props = defineProps(['graphWidth', 'graphHeight', 'commitNodeEdge', "loadAhead", "skip", "edges", "nodes", "getNode"]);
 </script>

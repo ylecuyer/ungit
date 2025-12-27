@@ -4,6 +4,8 @@ import Animateable from './animateable.js';
 class EdgeViewModel extends Animateable {
   constructor(graph, nodeAsha1, nodeBsha1) {
     super(graph);
+    this.nodeAsha1 = nodeAsha1;
+    this.nodeBsha1 = nodeBsha1;
     this.nodeA = graph.getNode(nodeAsha1);
     this.nodeB = graph.getNode(nodeBsha1);
     this.getGraphAttr = ko.computed(() => {
