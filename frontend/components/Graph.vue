@@ -2,14 +2,16 @@
     <div class="graph" data-bind="scrolledToEnd: scrolledToEnd, click: handleBubbledClick">
     <GraphGraphics :graphWidth="graphWidth" :graphHeight="graphHeight" :commitNodeEdge="true" :loadAhead="true" :skip="3" :nodes="nodes" :edges="edges" :getNode="getNode"/>
 
-    <div class="nodes" data-bind="foreach: nodes">
+    <div v-for="node in nodes" class="nodes">
         <div
         class="nodeContainer animation"
-        data-bind="style: { left: '0px', top: cy() + 'px' }, attr: { 'data-ta-node-title': title }"
+        :style="{ left: '0px', top: node.cy() + 'px' }"
+        :data-ta-node-title="node.title"
         >
         <div
             class="commit-container animation"
-            data-bind="visible: commitContainerVisible, style: { left: cx() - 620 + 'px' }"
+            :style="{ left: (node.cx() - 620) + 'px' }"
+            v-if="node.commitContainerVisible"
         >
             <!-- ko component: commitComponent -->
             <!-- /ko -->
