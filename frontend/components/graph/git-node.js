@@ -158,7 +158,6 @@ class GitNodeViewModel extends Animateable {
     this.parents(logEntry.parents || []);
     this.commitTime = logEntry.commitDate;
     this.date = Date.parse(this.commitTime);
-    this.commitComponent.setData(logEntry);
     this.signatureMade(logEntry.signatureMade);
     this.signatureDate(logEntry.signatureDate);
 
