@@ -148,7 +148,6 @@ class GitNodeViewModel extends Animateable {
       this.cy(this.aboveNode.cy() + this.aboveNode.commitComponent.element().offsetHeight + 30);
     }
 
-    this.color(this.ideologicalBranch() ? this.ideologicalBranch().color : '#666');
     this.animate();
   }
 

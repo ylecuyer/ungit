@@ -71,33 +71,8 @@
 
         <Edge v-for="edge in edges" />
 
-        <path v-for="edge in edges"
-            data-bind="element: element, event: { mouseover: edgeMouseOver, mouseout: edgeMouseOut }"
-            :element="edge.element"
-            stroke="#4A4A4A"
-            stroke-width="8"
-        />
 
-        <Node v-for="node in nodes" />
-
-        <svg v-for="(node, index) in nodes" :element="node.element">
-            <circle
-                data-bind="event: { mouseover: nodeMouseover, mouseout: nodeMouseout }, click: toggleSelected"
-                :r="node.r()"
-                :fill="node.color()"
-                :data-ta-clickable="'node-clickable-' + index"
-                cx="30"
-                cy="30"
-            />
-            <circle v-if="node.isNodeAccented"
-                data-bind=" attr: { r: r() - 4 }, click: toggleSelected"
-                stroke="#252833"
-                stroke-width="4"
-                fill="transparent"
-                cx="30"
-                cy="30"
-            />
-        </svg>
+        <Node v-for="node in nodes" :r="node.r()" :color="node.ideologicalBranch() ? node.ideologicalBranch().color : '#666'" :isNodeAccented="node.isNodeAccented()" :cx="node.cx()" :cy="node.cy()" :key="node.sha1" />
 
         <!-- ko with: hoverGraphActionGraphic -->
         <!-- ko foreach: nodes -->
