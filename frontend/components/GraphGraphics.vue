@@ -35,16 +35,17 @@
     <g>
         <g v-if="commitNodeEdge"
         class="load-ahead-button"
-        data-bind="attr: { opacity: commitOpacity, visible: commitNodeEdge}, click: loadAhead"
+        :opacity="commitOpacity"
+        @click="loadAhead"
         >
             <path
-                data-bind="attr: { d: commitNodeEdge }"
+                :d="commitNodeEdge"
                 stroke="#4A4A4A"
                 stroke-width="8"
                 stroke-dasharray="10, 5"
             />
             <circle
-                data-bind="attr: { stroke: commitNodeColor }"
+                :stroke="commitNodeColor"
                 cx="610"
                 cy="35"
                 r="30"
@@ -54,7 +55,7 @@
             />
             <circle v-if="skip > 0"
                 class="loadAhead"
-                data-bind="attr: { fill: commitNodeColor }"
+                :fill="commitNodeColor"
                 cx="610"
                 cy="35"
                 r="15"

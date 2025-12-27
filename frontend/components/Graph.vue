@@ -1,6 +1,7 @@
 <template>
     <div class="graph" data-bind="scrolledToEnd: scrolledToEnd, click: handleBubbledClick">
-    <GraphGraphics :graphWidth="graphWidth" :graphHeight="graphHeight" :commitNodeEdge="true" :loadAhead="true" :skip="3" :nodes="nodes" :edges="edges" :getNode="getNode"/>
+    <GraphGraphics :graphWidth="graphWidth" :graphHeight="graphHeight" :commitNodeEdge="commitNodeEdge" :loadAhead="true"
+     :skip="3" :nodes="nodes" :edges="edges" :getNode="getNode"/>
 
     <div v-for="node in nodes" class="nodes">
         <div
@@ -158,6 +159,7 @@ const commitNodeColor = computed(() => {
       return HEAD.value ? HEAD.value.color() : '#4A4A4A';
 });
 const commitNodeEdge = computed(() => {
+    console.log("HEAD:", HEAD.value);
       if (!HEAD.value || !HEAD.value.cx() || !HEAD.value.cy()) return;
       return `M 610 68 L ${HEAD.value.cx()} ${HEAD.value.cy()}`;
 });
@@ -191,7 +193,10 @@ const hoverGraphAction = ref(null);
 const graphWidth = ref(null);
 const graphHeight = ref(800);
 
-const HEAD = ref(null);
+const HEADref = ref(null);
+const HEAD = computed(() => {
+    return HEADref.value ? HEADref.value.node() : undefined;
+});
 
 const defaultDebounceOption = {
     maxWait: 1500,
@@ -251,6 +256,14 @@ const markNodesIdeologicalBranches = (_refs) => {
     });
 }
 
+const traverseNodeLeftParents = (node, callback) => {
+    callback(node);
+    const parent = nodesById[node.parents()[0]];
+    if (parent) {
+        traverseNodeLeftParents(parent, callback);
+    }
+}
+
 const computeNode = (_nodes) => {
     markNodesIdeologicalBranches(refs.value);
 
@@ -300,8 +313,6 @@ const computeNode = (_nodes) => {
 
     return _nodes;
 }
-
-const HEADref = ref(null);
 
 const getRef = (ref, constructIfUnavailable) => {
     if (constructIfUnavailable === undefined) constructIfUnavailable = true;
