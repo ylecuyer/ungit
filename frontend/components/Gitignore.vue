@@ -29,8 +29,6 @@
 <script setup>
 import { ref, computed } from 'vue';
 import Octicon from './Octicon.vue';
-import programEvents from '/source/js/program-events.js';
-import components from '/source/js/components.js';
 
 defineOptions({ name: 'Gitignore' })
 

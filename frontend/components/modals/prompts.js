@@ -16,8 +16,6 @@ ungit.components.register(
   'toomanyfilesmodal',
   (args) => new TooManyFilesModalViewModel(args.title, args.details, args.closeFunc)
 );
-ungit.components.register('texteditmodal', (args) => new TextEditModal(args.title, args.content, args.closeFunc));
-
 
 /**
  * Prompt's receives decisions from users, such as 'yes' or 'no', based on 
@@ -75,23 +73,9 @@ class TooManyFilesModalViewModel extends PromptModalViewModel {
   }
 }
 
-class TextEditModal extends PromptModalViewModel {
-  constructor(title, details, closeFunc) {
-    super(
-      title,
-      'text-edit-modal',
-      `<textarea class="text-area-content form-control" spellcheck="false" style="height: 250px; width: 100%; font-family: monospace; resize: vertical;">${details}</textarea>`,
-      closeFunc
-    );
-    this.promptOptions.push(new PromptOptions('Save', true, 'save', this.closeYes.bind(this)));
-    this.promptOptions.push(new PromptOptions('Cancel', false, 'cancel', this.closeNo.bind(this)));
-  }
-}
-
 export {
   PromptModalViewModel,
   YesNoModalViewModel,
   YesNoMuteModalViewModel,
   TooManyFilesModalViewModel,
-  TextEditModal
 };
