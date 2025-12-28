@@ -39,13 +39,53 @@
           </div>
         </div>
       </div>
+
+      <dialog ref="alertDialog" class="dialog" aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+        <div>
+          <header>
+            <h2 id="alert-dialog-title">Add a new remote</h2>
+          </header>
+          
+          <section>
+            <form class="form grid gap-6">
+              <div class="grid gap-2">
+                <label for="demo-form-text">Name</label>
+                <input type="text" id="demo-form-text" v-model="name">
+              </div>
+              <div class="grid gap-2">
+                <label for="demo-form-text">URL</label>
+                <input type="text" id="demo-form-text" v-model="url">
+              </div>
+            </form>
+          </section>
+
+          <footer>
+            <button class="btn-outline" @click="alertDialog.close()">Cancel</button>
+            <button class="btn-primary" @click="saveRemote">Submit</button>
+          </footer>
+        </div>
+      </dialog>
+
+
+      <dialog ref="confirmDialog" class="dialog" aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+      <div>
+        <header>
+          <h2 id="alert-dialog-title">Are you sure?</h2>
+          <p>Remote {{ remoteToRemove?.name }} will be removed.</p>
+        </header>
+
+        <footer>
+          <button class="btn-outline" @click="confirmDialog.close()">Cancel</button>
+          <button class="btn-primary" @click="removeRemote">Continue</button>
+        </footer>
+      </div>
+    </dialog>
     </div>
 </template>
 
 <script setup>
 import { watchEffect, watch, computed, ref } from 'vue';
 import programEvents from '/source/js/program-events.js';
-import components from '/source/js/components.js';
 import _ from 'lodash';
 import Octicon from './Octicon.vue';
 
@@ -55,6 +95,12 @@ defineOptions({
 
 const props = defineProps(['repoPath']);
 const currentRemote = ref(null);
+const alertDialog = ref(null);
+const name = ref('');
+const url = ref('');
+
+const confirmDialog = ref(null);
+const remoteToRemove = ref(null);
 
 let shouldAutoFetch = ungit.config.autoFetch;
 
@@ -183,26 +229,41 @@ watchEffect(() => {
 });
 
 const remoteRemove = (remote) => {
-    components.showModal('yesnomodal', {
-      title: 'Are you sure?',
-      details: `Deleting ${remote.name} remote cannot be undone with ungit.`,
-      closeFunc: (isYes) => {
-        if (isYes) {
-          ungit.server
-            .delPromise(`/remotes/${remote.name}`, { path: props.repoPath })
-            .then(() => {
-              updateRemotes();
-            })
-            .catch((e) => ungit.server.unhandledRejection(e));
-        }
-      },
-    });
+    remoteToRemove.value = remote;
+    confirmDialog.value.showModal();
+};
+const removeRemote = async () => {
+  const remote = remoteToRemove.value;
+  try {
+    await ungit.server
+      .delPromise(`/remotes/${remote.name}`, { path: props.repoPath });
+    updateRemotes();
+  } catch (e) {
+    ungit.server.unhandledRejection(e);
   }
-
+  confirmDialog.value.close();
+};
 
 const showAddRemoteDialog = () => {
-    components.showModal('addremotemodal', { path: props.repoPath });
+  alertDialog.value.showModal()
 }
+
+const saveRemote = async () => {
+  try {
+    await ungit.server.postPromise(`/remotes/${encodeURIComponent(name.value)}`, {
+      path: props.repoPath,
+      url: url.value,
+    });
+    ungit.programEvents.dispatch({ event: 'update-remote' });
+  } catch (e) {
+    ungit.server.unhandledRejection(e);
+  }
+  finally {
+    alertDialog.value.close();
+    name.value = '';
+    url.value = '';
+  }
+};
 
 programEvents.add((event) => {
     if (event.event === 'request-app-content-refresh' || event.event === 'request-fetch-tags') {
