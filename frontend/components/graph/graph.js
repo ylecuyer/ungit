@@ -1,11 +1,8 @@
 import ko from 'knockout';
 import _ from 'lodash';
-import moment from 'moment';
 import octicons from '@primer/octicons';
 import components from '/source/js/components.js';
 import GitNodeViewModel from './git-node.js';
-import GitRefViewModel from './git-ref.js';
-import EdgeViewModel from './edge.js';
 import { ComponentRoot } from '../ComponentRoot.js';
 import graphTemplate from './graph.html?raw';
 import { createApp } from 'vue';
