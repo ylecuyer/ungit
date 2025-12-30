@@ -118,6 +118,10 @@ function start() {
       windowTitle.update();
     }
 
+    if (matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.classList.add('dark');
+    }
+
     app.onProgramEvent(event);
   });
   if (ungit.config.authentication) {
