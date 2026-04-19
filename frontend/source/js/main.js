@@ -1,5 +1,4 @@
 import '/components/app/app.js';
-import '/components/branches/branches.js';
 import '/components/commit/commit.js';
 import '/components/commitdiff/commitdiff.js';
 import '/components/crash/crash.js';
