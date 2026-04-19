@@ -9,7 +9,6 @@ import '/components/login/login.js';
 import '/components/modals/modals.js';
 import '/components/path/path.js';
 import '/components/repository/repository.js';
-import '/components/stash/stash.js';
 import '/components/textdiff/textdiff.js';
 
 import $ from 'jquery';
