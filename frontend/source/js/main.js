@@ -8,7 +8,6 @@ import '/components/imagediff/imagediff.js';
 import '/components/login/login.js';
 import '/components/modals/modals.js';
 import '/components/path/path.js';
-import '/components/remotes/remotes.js';
 import '/components/repository/repository.js';
 import '/components/staging/staging.js';
 import '/components/stash/stash.js';
