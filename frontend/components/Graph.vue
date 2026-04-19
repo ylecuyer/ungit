@@ -130,6 +130,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import GitNodeViewModel from './graph/git-node.js';
 import GitRefViewModel from './graph/git-ref.js';
+import Edge from './graph/edge.js';
 
 defineOptions({
     name: 'Graph',
