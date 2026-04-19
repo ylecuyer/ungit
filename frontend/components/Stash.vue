@@ -1,4 +1,5 @@
 <template>
+  <div>
     <div class="stash-toggle stash-toggle-text border" v-show="stashedChanges.length > 0 && !visible" @click="toggleShowStash" data-aid="show-stashes">
       <Octicon class="expand-icon" name="chevron-right" />
       Stash ({{  stashedChanges.length }})
@@ -14,10 +15,11 @@
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import storage from '/source/js/storage.js';
 import programEvents from '/source/js/program-events.js';
 
@@ -73,6 +75,11 @@ const _refresh = async () => {
         ungit.logger.debug('stash.refresh() finished');
     }
 }
+
+// call _refresh after the component is mounted to ensure we have the correct repoPath
+watchEffect(() => {
+    _refresh();
+});
 </script>
 
 <style>
