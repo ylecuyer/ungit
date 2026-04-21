@@ -87,6 +87,11 @@ const stagingRef = ref(null)
 const showLog = computed(() => {
     return isBareDir.value ? true : stagingRef.value?.isStageValid;
 });
+
+watchEffect(() => {
+    console.log("Watching repository path:", props.repoPath);
+    props.server.watchRepository(props.repoPath);
+});
 </script>
 
 <style>

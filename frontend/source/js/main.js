@@ -14,6 +14,7 @@ import ko from 'knockout';
 import './bootstrap.js';
 import './jquery-ui.js';
 import './knockout-bindings.js';
+import eventBus from './event-bus.js';
 import components from './components.js';
 import Server from './server.js';
 import programEvents from './program-events.js';
@@ -169,6 +170,27 @@ function start() {
   app.use(router);
   app.mount('#app-app');
   ungit.__app = app;
+
+  programEvents.add(async (event) => {
+    ungit.logger.info(`received event: ${event.event}`);
+    console.log("Event details:", event);
+    if (event.event == 'disconnected' || event.event == 'git-crash-error') {
+      console.error(`ungit crash: ${event.event}`, event.error, event.stacktrace);
+      const err =
+        event.event == 'disconnected' && (await adBlocker.detectAnyAdblocker())
+          ? 'adblocker'
+          : event.event;
+      appContainer.content(components.create('crash', err));
+      windowTitle.crash = true;
+      windowTitle.update();
+    } else if (event.event == 'connected') {
+      appContainer.content(app);
+      windowTitle.crash = false;
+      windowTitle.update();
+    }
+
+    //app.onProgramEvent(event);
+  }); 
 
   if (ungit.config.authentication) {
     var authenticationScreen = components.create('login', { server: server });

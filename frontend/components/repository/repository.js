@@ -15,10 +15,6 @@ class RepositoryViewModel {
     this.repoPath = path.repoPath;
     this.gitErrors = components.create('gitErrors', { server, repoPath: this.repoPath });
     this.graph = components.create('graph', { server, repoPath: this.repoPath });
-    this.repoPath.subscribe((value) => {
-      this.server.watchRepository(value);
-    });
-    this.server.watchRepository(this.repoPath());
   }
 
   updateNode(parentElement) {
