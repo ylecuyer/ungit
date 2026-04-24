@@ -4,7 +4,7 @@
     :commitNodeEdge="commitNodeEdge" :commitNodeColor="commitNodeColor" :commitOpacity="commitOpacity"
     :loadAhead="true" :skip="skip" :nodes="nodes" :edges="edges" :getNode="getNode"/>
 
-    <div v-for="node in nodes" class="nodes">
+    <div v-for="node in repositoryStore.nodes" class="nodes">
         <div
         class="nodeContainer animation"
         :style="{ left: '0px', top: node.cy() + 'px' }"
@@ -142,8 +142,6 @@ let refsByRefName = {};
 let heighstBranchOrder = ref(0);
 
 const currentRemote = ref(null);
-const nodes = ref([]);
-const edges = ref([]);
 const refs = ref([]);
 const numberOfNodesPerLoad = ungit.config.numberOfNodesPerLoad;
 const limit = ref(numberOfNodesPerLoad);
@@ -367,7 +365,7 @@ const _loadNodesFromApi = async () => {
     console.log("_loadNodesFromApi called");
     _isLoadNodesFromApiRunning = true;
     ungit.logger.debug('graph.loadNodesFromApi() triggered');
-    const nodeSize = nodes.value.length;
+    const nodeSize = repositoryStore.nodes.length;
     const _edges = [];
 
     try {
@@ -393,10 +391,11 @@ const _loadNodesFromApi = async () => {
             node.render();
         });
 
-        edges.value = _edges;
-        nodes.value = _nodes;
-        if (nodes.value.length > 0) {
-            // TODO graphHeight.value = nodes.value[nodes.value.length - 1].cy() + 80;
+        repositoryStore.nodes = _nodes;
+        repositoryStore.edges = _edges;
+
+        if (repositoryStore.nodes.length > 0) {
+            // TODO graphHeight.value = repositoryStore.nodes[repositoryStore.nodes.length - 1].cy() + 80;
             graphHeight.value = 2000;
         }
         // TODO graphWidth.value = 1000 + highestBranchOrder.value * 90;
@@ -404,7 +403,7 @@ const _loadNodesFromApi = async () => {
     } catch (e) {
         props.server.unhandledRejection(e);
     } finally {
-        if (window.innerHeight - graphHeight.value > 0 && nodeSize != nodes.value.length) {
+        if (window.innerHeight - graphHeight.value > 0 && nodeSize != repositoryStore.nodes.length) {
             scrolledToEnd();
         }
         _isLoadNodesFromApiRunning = false;

@@ -70,9 +70,9 @@
         <!-- /ko -->
         <!-- /ko -->
 
-        <Edge v-for="edge in edges" :nodeAsha1="edge.nodeAsha1" :nodeBsha1="edge.nodeBsha1" :getNode="getNode" />
+        <Edge v-for="edge in repositoryStore.edges" :nodeAsha1="edge.nodeAsha1" :nodeBsha1="edge.nodeBsha1" :getNode="getNode" />
 
-        <Node v-for="node in nodes" :r="node.r()" :color="node.ideologicalBranch() ? node.ideologicalBranch().color : '#666'" :isNodeAccented="node.isNodeAccented()" :cx="node.cx()" :cy="node.cy()" :key="node.sha1" />
+        <Node v-for="node in repositoryStore.nodes" :r="node.r()" :color="node.ideologicalBranch() ? node.ideologicalBranch().color : '#666'" :isNodeAccented="node.isNodeAccented()" :cx="node.cx()" :cy="node.cy()" :key="node.sha1" />
 
         <!-- ko with: hoverGraphActionGraphic -->
         <!-- ko foreach: nodes -->
@@ -91,9 +91,13 @@
 </template>
 
 <script setup>
+import { useRepositoryStore } from '../stores/repositoryStore.js';
+
 defineOptions({
   name: 'GraphGraphics',
 });
 
-const props = defineProps(['graphWidth', 'graphHeight', 'commitNodeEdge', 'commitNodeColor', 'commitOpacity', "loadAhead", "skip", "edges", "nodes", "getNode"]);
+const repositoryStore = useRepositoryStore();
+
+const props = defineProps(['graphWidth', 'graphHeight', 'commitNodeEdge', 'commitNodeColor', 'commitOpacity', "loadAhead", "skip", "getNode"]);
 </script>
