@@ -20,18 +20,11 @@
 
         <div class="rightSideContainer" :style="{ left: (node.cx() + node.r() - 433) + 'px' }"
         >
-            <span v-for="branch in node.branchesToDisplay()"
-            class="ref branch"
-            draggable="true"
-            tabIndex="-1"
-            data-aid="branch"
-            data-bind="click: selected,
-                event: { dblclick: checkout },
-                dragStart: dragStart, dragEnd: dragEnd, attr: { 'data-ta-name': localRefName, 'data-ta-local': isLocal }"
-            v-html="branch.displayHtml(true)"
-            :class="{ current: current, remote: isRemoteBranch, dragging: isDragging, focused: selected }"
+            <GraphBranch v-for="branch in node.branchesToDisplay()"
+            :key="branch.localRefName"
+            :branch="branch"
             >
-            </span>
+            </GraphBranch>
 
             <span v-for="tag in node.tagsToDisplay()"
             class="ref tag"
@@ -131,6 +124,7 @@ import moment from 'moment';
 import GitNodeViewModel from './graph/git-node.js';
 import GitRefViewModel from './graph/git-ref.js';
 import Edge from './graph/edge.js';
+import GraphBranch from './GraphBranch.vue';
 
 defineOptions({
     name: 'Graph',
