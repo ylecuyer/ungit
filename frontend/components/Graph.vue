@@ -118,6 +118,7 @@
 </template>
 
 <script setup>
+import { useRepositoryStore } from '../stores/repositoryStore.js';
 import { ref, computed, watchEffect } from 'vue';
 import _ from 'lodash';
 import moment from 'moment';
@@ -129,6 +130,8 @@ import GraphBranch from './GraphBranch.vue';
 defineOptions({
     name: 'Graph',
 });
+
+const repositoryStore = useRepositoryStore();
 
 const props = defineProps(['server', 'repoPath']);
 

@@ -92,7 +92,8 @@ AppContainerViewModel.prototype.templateChooser = function (data) {
 
 var app, appContainer, server;
 
-import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import { createApp } from 'vue';
 import { createWebHashHistory, createRouter } from 'vue-router'
 import Main from '../../components/Main.vue';
 import Crash from '../../components/Crash.vue';
@@ -131,6 +132,9 @@ function start() {
   let app = createApp(Main, {
     server: server
   });
+
+  let pinia = createPinia();
+
   const routes = [
     { path: '/', component: Home },
     { path: '/repository', component: Path, props: route => ({ server: server, repoPath: route.query.path }) }
@@ -167,6 +171,7 @@ function start() {
   app.component('Commit', Commit);
   app.component('CommitDiff', CommitDiff);
   app.component('CommitLineDiff', CommitLineDiff);
+  app.use(pinia);
   app.use(router);
   app.mount('#app-app');
   ungit.__app = app;
