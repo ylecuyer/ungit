@@ -1,7 +1,5 @@
 import '/components/app/app.js';
-import '/components/commit/commit.js';
 import '/components/commitdiff/commitdiff.js';
-import '/components/graph/graph.js';
 import '/components/imagediff/imagediff.js';
 import '/components/login/login.js';
 import '/components/modals/modals.js';

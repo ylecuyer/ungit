@@ -19,7 +19,7 @@
             <div  class="repository-actions flex gap-2">
                 <Remotes :repoPath="repoPath" />
                 <Submodules :repoPath="repoPath" />
-                <Branches :repoPath="repoPath" :graph="graphRef" />
+                <Branches :repoPath="repoPath" />
                 <Gitignore :repoPath="repoPath" />
             </div>
 

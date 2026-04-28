@@ -74,13 +74,15 @@ import components from '/source/js/components.js';
 import Octicon from './Octicon.vue';
 import _ from 'lodash';
 import storage from '/source/js/storage.js';
+import { useRepositoryStore } from '../stores/repositoryStore.js';
 
 defineOptions({
   name: 'Branches'
 })
 
-const props = defineProps(['repoPath', 'graph']);
+const props = defineProps(['repoPath']);
 const current = ref('');
+const repositoryStore = useRepositoryStore();
 
 const checkoutBranch = (branch) => {
     branch.checkout();
@@ -135,6 +137,8 @@ const branchesAndLocalTags = ref([]);
 const _updateRefs = async (forceRemoteFetch) => {
     forceRemoteFetch = forceRemoteFetch || shouldAutoFetch || '';
 
+  repositoryStore.initializeContext(ungit.server, props.repoPath);
+
     const branchesProm = ungit.server.getPromise('/branches', { path: props.repoPath });
     const refsProm = ungit.server.getPromise('/refs', {
       path: props.repoPath,
@@ -146,6 +150,7 @@ const _updateRefs = async (forceRemoteFetch) => {
       (await branchesProm).forEach((b) => {
         if (b.current) {
           current.value = b.name;
+          repositoryStore.setCheckedOutBranch(b.name);
         }
       });
     } catch (e) {
@@ -159,44 +164,10 @@ const _updateRefs = async (forceRemoteFetch) => {
       if (isSamePayload(refs)) {
         return;
       }
-
-      const version = Date.now();
-      const sorted = refs
-        .map((r) => {
-          const ref = props.graph.getRef(r.name.replace('refs/tags', 'tag: refs/tags'));
-          ref.node(props.graph.getNode(r.sha1));
-          ref.version = version;
-          return ref;
-        })
-        .sort((a, b) => {
-          if (a.current() || b.current()) {
-            return a.current() ? -1 : 1;
-          } else if (a.isRemoteBranch === b.isRemoteBranch) {
-            if (a.name < b.name) {
-              return -1;
-            }
-            if (a.name > b.name) {
-              return 1;
-            }
-            return 0;
-          } else {
-            return a.isRemoteBranch ? 1 : -1;
-          }
-        })
-        .filter((ref) => {
-          if (ref.localRefName == 'refs/stash') return false;
-          if (ref.localRefName.endsWith('/HEAD')) return false;
-          if (!isShowRemote.value && ref.isRemote) return false;
-          if (!isShowBranch.value && ref.isBranch) return false;
-          if (!isShowTag.value && ref.isTag) return false;
-          return true;
-        });
-      branchesAndLocalTags.value = sorted;
-      props.graph.refs().forEach((ref) => {
-        // ref was removed from another source
-        if (!ref.isRemoteTag && ref.value !== 'HEAD' && (!ref.version || ref.version < version)) {
-          ref.remove(true);
-        }
+      branchesAndLocalTags.value = repositoryStore.applyRefsPayload(refs, {
+        showRemote: isShowRemote.value,
+        showBranch: isShowBranch.value,
+        showTag: isShowTag.value,
       });
     } catch (e) {
       ungit.logger.error('error during branch update: ', e);

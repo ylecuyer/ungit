@@ -62,42 +62,39 @@
             />
         </g>
 
-        <!-- ko with: hoverGraphActionGraphic -->
-        <!-- ko foreach: bgEdges -->
-        <path
-        data-bind="attr: { d: d, stroke: stroke, 'stroke-width': strokeWidth, 'stroke-dasharray': strokeDasharray, 'marker-end': markerEnd }"
-        />
-        <!-- /ko -->
-        <!-- /ko -->
+        <Edge v-for="edge in edges" :key="edge.id" :edge="edge" :nodesById="nodesById" />
 
-        <Edge v-for="edge in repositoryStore.edges" :nodeAsha1="edge.nodeAsha1" :nodeBsha1="edge.nodeBsha1" :getNode="getNode" />
-
-        <Node v-for="node in repositoryStore.nodes" :r="node.r()" :color="node.ideologicalBranch() ? node.ideologicalBranch().color : '#666'" :isNodeAccented="node.isNodeAccented()" :cx="node.cx()" :cy="node.cy()" :key="node.sha1" />
-
-        <!-- ko with: hoverGraphActionGraphic -->
-        <!-- ko foreach: nodes -->
-        <circle
-        data-bind="attr: { cx: cx, cy: cy, r: r, fill: fill, stroke: stroke, 'stroke-width': strokeWidth, 'stroke-dasharray': strokeDasharray }"
+        <Node
+            v-for="node in nodes"
+            :key="node.sha1"
+            :r="node.r"
+            :color="node.ideologicalBranch ? node.ideologicalBranch.color : '#666'"
+            :isNodeAccented="node.isNodeAccented()"
+            :cx="node.cx"
+            :cy="node.cy"
+            :selected="node.selected"
+            @toggle="emit('toggle-node', node)"
         />
-        <!-- /ko -->
-        <!-- ko foreach: fgEdges -->
-        <path
-        data-bind="attr: { d: d, stroke: stroke, 'stroke-width': strokeWidth, 'stroke-dasharray': strokeDasharray, 'marker-end': markerEnd }"
-        />
-        <!-- /ko -->
-        <!-- /ko -->
     </g>
     </svg>
 </template>
 
 <script setup>
-import { useRepositoryStore } from '../stores/repositoryStore.js';
+import { computed } from 'vue';
 
 defineOptions({
   name: 'GraphGraphics',
 });
 
-const repositoryStore = useRepositoryStore();
+const emit = defineEmits(['toggle-node']);
 
-const props = defineProps(['graphWidth', 'graphHeight', 'commitNodeEdge', 'commitNodeColor', 'commitOpacity', "loadAhead", "skip", "getNode"]);
+const props = defineProps(['graphWidth', 'graphHeight', 'commitNodeEdge', 'commitNodeColor', 'commitOpacity', 'loadAhead', 'skip', 'nodes', 'edges']);
+
+const nodesById = computed(() => {
+    const byId = {};
+    (props.nodes || []).forEach((node) => {
+        byId[node.sha1] = node;
+    });
+    return byId;
+});
 </script>
