@@ -7,19 +7,34 @@
       <RouterView class="container-fluid" />
     </div>
 
-    <!-- ko if: modal -->
-    <!-- ko template: { name: templateChooser, data: modal } -->
-    <!-- /ko -->
-    <!-- /ko -->
-  </diV>
+    <FormModal
+      v-for="modal in (modalStore?.activeFormModals || [])"
+      v-if="modal"
+      :key="modal?.id"
+      :modal="modal"
+      :closeModal="modalStore?.closeModal"
+    />
+    <PromptModal
+      v-for="modal in (modalStore?.activePromptModals || [])"
+      v-if="modal"
+      :key="modal?.id"
+      :modal="modal"
+      :closeModal="modalStore?.closeModal"
+    />
+  </div>
 </template>
 
 <script setup>
+import { inject } from 'vue';
+import FormModal from './modals/FormModal.vue';
+import PromptModal from './modals/PromptModal.vue';
+
 defineOptions({
     name: 'App',
 });
 
 const props = defineProps(['server']);
+const modalStore = inject('modalStore', null);
 </script>
 
 <style>

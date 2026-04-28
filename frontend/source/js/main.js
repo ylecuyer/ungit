@@ -2,7 +2,6 @@ import '/components/app/app.js';
 import '/components/commitdiff/commitdiff.js';
 import '/components/imagediff/imagediff.js';
 import '/components/login/login.js';
-import '/components/modals/modals.js';
 import '/components/path/path.js';
 import '/components/repository/repository.js';
 import '/components/textdiff/textdiff.js';
@@ -96,6 +95,7 @@ import { createWebHashHistory, createRouter } from 'vue-router'
 import Main from '../../components/Main.vue';
 import Crash from '../../components/Crash.vue';
 import App from '../../components/App.vue';
+import useModals from '../../composables/useModals.js';
 import Home from '../../components/Home.vue';
 import Sidebar from '../../components/Sidebar.vue';
 import Header from '../../components/Header.vue';
@@ -171,6 +171,11 @@ function start() {
   app.component('CommitLineDiff', CommitLineDiff);
   app.use(pinia);
   app.use(router);
+  
+  const modalStore = useModals();
+  app.provide('modalStore', modalStore);
+  ungit.modalStore = modalStore;
+  
   app.mount('#app-app');
   ungit.__app = app;
 
