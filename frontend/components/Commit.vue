@@ -78,83 +78,81 @@
 import { ref, computed } from 'vue';
 import moment from 'moment';
 import Octicon from './Octicon.vue';
+import CommitDiff from './CommitDiff.vue';
 
 defineOptions({
     name: 'Commit',
 });
 
-const selected = ref(false);
-const nodeIsMousehover = ref(false);
+const props = defineProps(['gitNode', 'sha1', 'pgpVerifiedString', 'repoPath', 'server', 'showDiffButtons', 'logEntry']);
+
+const selected = computed(() => {
+    return !!(props.gitNode && props.gitNode.selected);
+});
+
+const nodeIsMousehover = computed(() => {
+    return !!(props.gitNode && props.gitNode.nodeIsMousehover);
+});
 
 const authorEmail = computed(() => {
     return props.logEntry ? props.logEntry.authorEmail : '';
 });
+
 const authorName = computed(() => {
     return props.logEntry ? props.logEntry.authorName : '';
 });
 
-const authorGravatar = computed(() => {
-    const email = authorEmail.value || '';
-    return md5(email.trim().toLowerCase());
-});
-
-const props = defineProps(['gitNode', 'sha1', 'pgpVerifiedString', 'repoPath', 'server', 'showDiffButtons', 'logEntry']);
-
 const title = computed(() => {
-  return props.logEntry ? props.logEntry.message.split('\n')[0] : '';
+    return props.logEntry ? props.logEntry.message.split('\n')[0] : '';
 });
 
 const body = computed(() => {
-  if (!props.logEntry) return '';
-  const message = props.logEntry.message.split('\n');
-  return message.slice(message[1] ? 1 : 2).join('\n');
+    if (!props.logEntry) return '';
+    const message = props.logEntry.message.split('\n');
+    return message.slice(message[1] ? 1 : 2).join('\n');
 });
 
 const authorDate = computed(() => {
-  return props.logEntry ? moment(new Date(props.logEntry.authorDate)) : moment();
+    return props.logEntry ? moment(new Date(props.logEntry.authorDate)) : moment();
 });
+
 const authorDateFromNow = computed(() => {
-  return authorDate.value.fromNow();
+    return authorDate.value.fromNow();
 });
 
 const numberOfAddedLines = computed(() => {
-  return props.logEntry ? props.logEntry.additions : 0;
-});
-const numberOfRemovedLines = computed(() => {
-  return props.logEntry ? props.logEntry.deletions : 0;
+    return props.logEntry ? props.logEntry.additions : 0;
 });
 
-const parents = computed(() => {
-  return props.logEntry ? props.logEntry.parents || [] : [];
+const numberOfRemovedLines = computed(() => {
+    return props.logEntry ? props.logEntry.deletions : 0;
 });
 
 const fileLineDiffs = computed(() => {
-  return props.logEntry ? props.logEntry.fileLineDiffs || [] : [];
+    return props.logEntry ? props.logEntry.fileLineDiffs || [] : [];
 });
 
 const commitDiff = computed(() => {
-  return {
-    fileLineDiffs: fileLineDiffs.value,
-    sha1: props.sha1,
-    repoPath: props.repoPath,
-    server: props.server,
-    showDiffButtons: props.showDiffButtons,
-  }
+    return {
+        fileLineDiffs: fileLineDiffs.value,
+        sha1: props.sha1,
+        repoPath: props.repoPath,
+        server: props.server,
+        showDiffButtons: props.showDiffButtons,
+    };
 });
 
 const lastUpdatedAuthorDateFromNow = ref(0);
 const _updateLastAuthorDateFromNow = (deltaT) => {
-  lastUpdatedAuthorDateFromNow.value = lastUpdatedAuthorDateFromNow.value || 0;
-  lastUpdatedAuthorDateFromNow.value += deltaT;
-  if (lastUpdatedAuthorDateFromNow.value > 60 * 1000) {
-    lastUpdatedAuthorDateFromNow.value = 0;
-    authorDateFromNow.value = authorDate.value.fromNow();
-  }
+    lastUpdatedAuthorDateFromNow.value += deltaT;
+    if (lastUpdatedAuthorDateFromNow.value > 60 * 1000) {
+        lastUpdatedAuthorDateFromNow.value = 0;
+    }
 };
 
 defineExpose({
-  _updateLastAuthorDateFromNow
-})
+    _updateLastAuthorDateFromNow,
+});
 
 </script>
 

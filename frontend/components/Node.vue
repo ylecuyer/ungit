@@ -1,8 +1,8 @@
 <template>
     <g>
-        <circle @click="emit('toggle')"
+        <circle @click.stop="emit('toggle')"
             :r="r" :fill="color" :data-ta-clickable="clickable" :cx="cx" :cy="cy" />
-        <circle v-if="isNodeAccented || selected" :r="r - 4" @click="emit('toggle')"
+        <circle v-if="isNodeAccented || selected" :r="r - 4" @click.stop="emit('toggle')"
             stroke="#252833" stroke-width="4" fill="transparent" :cx="cx" :cy="cy" />
     </g>
 </template>
