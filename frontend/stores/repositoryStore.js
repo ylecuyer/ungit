@@ -321,6 +321,16 @@ function createRefModel(store, fullRefName) {
                 store.server.unhandledRejection(err);
             }
         },
+        async squash() {
+            try {
+                await store.server.postPromise('/squash', {
+                    path: store.repoPath,
+                    target: this.refName,
+                });
+            } catch (err) {
+                store.server.unhandledRejection(err);
+            }
+        },
     };
 
     refModel.isRemoteTag = refModel.name.indexOf('remote-tag: ') === 0;

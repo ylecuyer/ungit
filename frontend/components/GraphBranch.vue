@@ -32,6 +32,13 @@
     data-aid="reset-branch-btn"
     @click.stop="branch.reset()"
   >Reset</button>
+  <button
+    v-if="branch.selected() && branch.isLocalBranch"
+    class="graphAction squash"
+    type="button"
+    data-aid="squash-branch-btn"
+    @click.stop="branch.squash()"
+  >Squash</button>
 </template>
 
 <script setup>

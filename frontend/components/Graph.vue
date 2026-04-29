@@ -63,6 +63,21 @@
                         @dragend="tag.dragEnd()"
                     />
 
+                    <template v-if="branchContext && branchContext.node() !== node">
+                        <button
+                            class="graphAction move"
+                            type="button"
+                            data-aid="move-branch-btn"
+                            @click.stop="moveContextToNode(node)"
+                        >Move here</button>
+                        <button
+                            class="graphAction rebase"
+                            type="button"
+                            data-aid="rebase-branch-btn"
+                            @click.stop="rebaseContextOntoNode(node)"
+                        >Rebase onto</button>
+                    </template>
+
                     <span v-if="node.showNewRefAction()" class="ref-icons new-ref" :class="{ editing: node.branchingFormVisible }">
                         <button
                             v-if="!node.branchingFormVisible"
@@ -157,6 +172,38 @@ const commitNodeEdge = computed(() => {
     if (!headNode.value || !headNode.value.cx || !headNode.value.cy) return '';
     return `M 610 68 L ${headNode.value.cx} ${headNode.value.cy}`;
 });
+
+const branchContext = computed(() =>
+    repositoryStore.currentActionContext?.isBranch ? repositoryStore.currentActionContext : null
+);
+
+const moveContextToNode = async (node) => {
+    const branch = branchContext.value;
+    if (!branch) return;
+    try {
+        await props.server.postPromise('/branches', {
+            path: props.repoPath,
+            name: branch.refName,
+            sha1: node.sha1,
+            force: true,
+        });
+    } catch (err) {
+        props.server.unhandledRejection(err);
+    }
+};
+
+const rebaseContextOntoNode = async (node) => {
+    const branch = branchContext.value;
+    if (!branch) return;
+    try {
+        await props.server.postPromise('/rebase', {
+            path: props.repoPath,
+            onto: node.sha1,
+        });
+    } catch (err) {
+        props.server.unhandledRejection(err);
+    }
+};
 
 const isSamePayload = (value) => {
     const jsonString = JSON.stringify(value);
