@@ -64,3 +64,9 @@ const submitPath = () => {
     navigation.browseTo(`repository?path=${encodePath(path.value)}`);
 };
 </script>
+
+<style scoped>
+header {
+    background-color: #fff;
+}
+</style>
