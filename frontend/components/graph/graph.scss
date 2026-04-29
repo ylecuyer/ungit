@@ -29,6 +29,11 @@
     left: 30px;
     top: 120px;
     width: 100%;
+    z-index: 1;
+
+    &.selected {
+      z-index: 40;
+    }
 
     .commit-container {
       position: absolute;

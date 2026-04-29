@@ -16,6 +16,7 @@
         <div v-for="node in repositoryStore.nodes" :key="node.sha1" class="nodes">
             <div
                 class="nodeContainer animation"
+                :class="{ selected: node.selected }"
                 :style="{ left: '0px', top: node.cy + 'px' }"
                 :data-ta-node-title="node.title"
             >

@@ -1,6 +1,7 @@
 <template>
 <div
   class="commit"
+  :class="{ highlighted, hover: nodeIsMousehover, selected }"
   data-bind="css: { highlighted: highlighted, hover: nodeIsMousehover, selected: selected }"
 >
   <div
@@ -94,6 +95,10 @@ const nodeIsMousehover = computed(() => {
     return !!(props.gitNode && props.gitNode.nodeIsMousehover);
 });
 
+const highlighted = computed(() => {
+  return !!(props.gitNode && props.gitNode.isEdgeHighlighted);
+});
+
 const authorEmail = computed(() => {
     return props.logEntry ? props.logEntry.authorEmail : '';
 });
@@ -183,6 +188,8 @@ defineExpose({
   }
 
   &.selected {
+    z-index: 30;
+
     .details {
       .diff-wrapper {
         margin-bottom: 5px;
