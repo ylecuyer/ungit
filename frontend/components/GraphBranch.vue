@@ -18,6 +18,20 @@
     @dragstart="branch.dragStart()"
     @dragend="branch.dragEnd()"
   />
+  <button
+    v-if="branch.selected() && branch.isLocalBranch"
+    class="graphAction push"
+    type="button"
+    data-aid="push-branch-btn"
+    @click.stop="branch.push()"
+  >Push</button>
+  <button
+    v-if="branch.selected()"
+    class="graphAction reset"
+    type="button"
+    data-aid="reset-branch-btn"
+    @click.stop="branch.reset()"
+  >Reset</button>
 </template>
 
 <script setup>

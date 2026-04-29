@@ -299,6 +299,28 @@ function createRefModel(store, fullRefName) {
                 }
             }
         },
+        async push() {
+            try {
+                await store.server.postPromise('/push', {
+                    path: store.repoPath,
+                    remote: store.currentRemote,
+                    refSpec: this.refName,
+                });
+            } catch (err) {
+                store.server.unhandledRejection(err);
+            }
+        },
+        async reset() {
+            try {
+                await store.server.postPromise('/reset', {
+                    path: store.repoPath,
+                    to: this.name,
+                    mode: 'hard',
+                });
+            } catch (err) {
+                store.server.unhandledRejection(err);
+            }
+        },
     };
 
     refModel.isRemoteTag = refModel.name.indexOf('remote-tag: ') === 0;
